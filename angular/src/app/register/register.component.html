@@ -1,0 +1,168 @@
+<div class="container-fluid padding-0" (click)="onClick($event)">
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header></app-header>
+  <div #divToScroll class="register-page">
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div *ngIf="!update">
+          <div class="page-title">NEW USER REGISTRATION</div>
+          <div class="page-info">
+            <div class="page-info-icon">
+              <p></p>
+            </div>
+            <div class="page-info-content">This page was created using the <a
+                href="https://developer.idaptive.com/reference#post_cdirectoryservice-createuser"
+                target="_blank">CDirectoryService/CreateUser</a>.
+              For more information, please visit the <a
+                href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
+                User Management</a> guide on the developer portal.</div>
+          </div>
+        </div>
+        <div *ngIf="update">
+          <div class="page-title">MY ACCOUNT</div>
+          <p class="text-justify breaktext_now">Access User Portal <a
+                  href="<YOUR_TENANT_URL>" target="_blank">here</a>.</p>
+          <div class="page-info">
+            <div class="page-info-icon">
+              <p></p>
+            </div>
+            <div class="page-info-content breaktext_now">This page was created using the <a
+                href="https://developer.idaptive.com/reference#post_cdirectoryservice-getuser"
+                target="_blank">CDirectoryService/GetUser</a>
+              API. For more information, please visit the <a
+                href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
+                User Management</a> guide on the developer portal.</div>
+          </div>
+          <div *ngIf="socialUser" class="page-info">
+            <div class="page-warning-icon">
+              <p></p>
+            </div>
+            <div class="page-info-content">Your account information was populated from your Social Media Account. To
+              make changes, please update information directly in your Social Media platform.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 margin-top-2p">
+        <form [formGroup]="registerForm" class="register-form" autocomplete="off">
+          <div *ngIf="errorMessage != ''" class="user-error">
+            <div class="error-image"><img
+                [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+            </div>
+            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+          </div>
+          <div class="form-group">
+            <label class="required">Username</label>
+            <input class="form-control" formControlName="Name" required>
+            <span *ngIf="hasError('Name', 'required')">Login Name is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">Email Address</label>
+            <input class="form-control" formControlName="Mail" type="email" required>
+            <span *ngIf="hasError('Mail', 'required')">Email Address is required</span>
+            <span *ngIf="hasError('Mail', 'email')">Must be valid email. EXAMPLE@YOURDOMAIN.COM</span>
+          </div>
+          <div class="form-group">
+            <label class="required">Display Name</label>
+            <input class="form-control" formControlName="DisplayName" required>
+            <span *ngIf="hasError('DisplayName', 'required')">Display Name is required</span>
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label class="required">Password</label>
+            <input class="form-control" formControlName="Password" type="password" (blur)="matchPasswords()" required>
+            <span *ngIf="hasError('Password', 'required')">Password is required</span>
+            <span *ngIf="hasError('Password', 'minlength')">Password must be at least 8 characters long</span>
+            <span *ngIf="hasError('Password', 'maxlength')">Password should not be longer than 64 characters</span>
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label class="required">Confirm Password</label>
+            <input class="form-control" formControlName="ConfirmPassword" type="password" (blur)="matchPasswords()"
+              required>
+            <span *ngIf="hasError('ConfirmPassword', 'required')">Confirm Password is required</span>
+            <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input class="form-control" formControlName="MobileNumber" name="mobileNumber">
+            <!-- <span *ngIf="hasError('MobileNumber', 'pattern')">Mobile Number pattern does not match</span> -->
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>Street Line 1</label>
+            <input class="form-control" formControlName="street_line_1" name="street_line_1">
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>Street Line 2</label>
+            <input class="form-control" formControlName="street_line_2" name="street_line_2">
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>City</label>
+            <input class="form-control" formControlName="address_city" name="address_city">
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>Postal Code</label>
+            <input class="form-control" formControlName="postal_code" name="postal_code">
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>State</label>
+            <input class="form-control" formControlName="state_code" name="state_code">
+          </div>
+          <div *ngIf="!update" class="form-group">
+            <label>Country</label>
+            <input class="form-control" formControlName="country_code" name="country_code">
+          </div>
+          <section *ngIf="!update" class="section-container checkbox-section form-group">
+            <div>
+              <input class="form-control" type="checkbox" formControlName="MFA" />Activate MFA
+            </div>
+          </section>
+          <section class="register-button-section">
+            <button [disabled]="socialUser" class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
+              data-target="#userConsent" type="submit"
+              (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
+            <button class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
+              (click)="cancelRegister()">Cancel</button>
+          </section>
+        </form>
+      </div>
+    </div>
+    <div [ngClass]="{'show': showConsent}" class="modal fade modal-info" id="userConsent">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">User Consent</h4>
+            <button type="button" class="close" data-dismiss="modal fade"
+              (click)="toggleUserConsentDialog()">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <p><i>The purpose of multi-factor authentication (MFA) is to confirm a user's claimed identity by utilizing
+                something they know (password) and a second factor other than something they have or something they
+                are.</i></p>
+            <p><i>The CyberArk Identity API demo allows you to use SMS messages and email as a secondary authentication factor.
+                By
+                selecting this option, you agree to receive one-time access codes and links via SMS messages or email.
+                Your
+                wireless carrier's standard messaging rates apply to SMS correspondence.</i></p>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal fade"
+              (click)="toggleUserConsentDialog(); registerUser(registerForm.value);">Yes</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal fade"
+              (click)="toggleUserConsentDialog()">No</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showConsent" [ngClass]="{'show': showConsent}" class="modal-backdrop fade in"></div>
+  </div>
+  <app-footer></app-footer>
+</div>

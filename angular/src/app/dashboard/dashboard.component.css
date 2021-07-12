@@ -1,0 +1,106 @@
+.dashboard-page {
+  margin-bottom: 30px !important;
+  margin-top: 113px !important;
+  height: calc(100vh - 143px) !important;
+  overflow: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.page-title {
+  color: #4a4a4a;
+  font-family: "Roboto";
+  font-weight: 700;
+  font-size: 20px;
+  margin-top: 2%;
+}
+
+.page-info {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 18px;
+  opacity: 1;
+  border: 1px #e9e5e5;
+  box-shadow: 0px 2px 4px;
+  color: #4a4a4a;
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.page-info-icon p:before {
+  font-family: Icon-Set;
+  font-size: 25px;
+  margin-right: 10px;
+  vertical-align: middle;
+  content: "I";
+}
+
+.page-info-icon p {
+  margin: 15px 0 0 11px;
+}
+
+.page-info-icon {
+  width: 50px;
+  color: #fff;
+  background: #0078d4;
+}
+
+.page-info-content {
+  width: 100%;
+  padding: 20px;
+}
+
+.app-block {
+  margin: 0 0 16px 0;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  color: #363a40;
+  font-family: "Roboto";
+  font-weight: 400;
+  /* font-size: 20px; */
+}
+
+.app-image {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  left: 50%;
+  margin-left: -35px;
+  border: 1px solid #ccc;
+  border-radius: 11px;
+}
+
+.app-name {
+  display: table-cell;
+  vertical-align: top;
+  padding: 0 8px;
+  height: 60px;
+  display: table;
+  width: 110px;
+  color: #474747;
+  font-size: 15px;
+  line-height: 18px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-height: 36px;
+}
+
+@media screen and (max-width: 767px) {
+  .page-info-content {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .page-info-icon p {
+    margin: 30px 0 0 11px;
+  }
+}

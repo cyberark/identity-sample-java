@@ -1,0 +1,45 @@
+<div class="container-fluid padding-0">
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header></app-header>
+  <div class="login-page">
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="page-title">LOGIN</div>
+      </div>
+    </div>
+    <div class="row margin-0">
+      <div class="col-12 col-sm-8 col-md-7 col-lg-6 col-xl-6 margin-top-2p">
+        <form [formGroup]="loginForm" class="login-form" autocomplete="off">
+          <div *ngIf="authMessage != ''" class="login-error">
+            <div><img class="error-image"
+                [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
+            </div>
+            <p class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#000' : '#cc3300'">
+              {{authMessage}}</p>
+          </div>
+          <div class="form-group">
+            <div class="username-block">
+              <label class="required username-label">Username</label>
+            </div>
+            <input class="form-control" formControlName="username" required>
+            <span *ngIf="hasError('username', 'required')">Username is required</span>
+            <span *ngIf="hasError('username', 'email')">Username pattern does not match</span>
+          </div>
+          <div class="form-group">
+            <label class="required">Password</label>
+            <input class="form-control" formControlName="password" type="password" required>
+            <span *ngIf="hasError('password', 'required')">Password is required</span>
+          </div>
+            <button class="btn btn-primary btn-sm margin-right-15 margin-bottom-10"
+              data-target="#userConsent" type="submit" (click)="loginUser(loginForm.value)">Login</button>
+          <div style="margin-top:18px;">Need an account? <a
+              href="/register">Register</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

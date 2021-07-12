@@ -1,0 +1,117 @@
+.custom-page {
+    margin-bottom: 30px !important;
+    margin-top: 113px !important;
+    height: calc(100vh - 143px) !important;
+    overflow: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.page-title {
+    color: #4a4a4a;
+    font-family: "Roboto";
+    font-weight: 700;
+    font-size: 20px;
+    margin-top: 2%;
+}
+
+.custom-form {
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.custom-form .form-control,
+.custom-button-section {
+    width: 90%;
+    height: 100%;
+}
+
+.user-error {
+    display: flex;
+    align-items: flex-start;
+    font-family: "Roboto";
+    font-weight: 400;
+    font-size: 14px;
+    color: #cc3300;
+}
+
+.error-image {
+    order: 1;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.user-error p {
+    order: 2;
+    margin-top: 2px;
+}
+
+label.required::after {
+    content: '*';
+    color: #f44336;
+    font-weight: bold;
+    margin-left: .25em;
+}
+
+form span {
+    color: #f44336;
+    font-size: 75%;
+    margin-top: .5em;
+}
+
+form section>label {
+    font-weight: bold !important;
+}
+
+.custom-button-section {
+    margin-top: 20px;
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-info .modal-header {
+    background-color: #0bb2d4;
+    color: #FFF;
+}
+
+.image-upload-button {
+    height: 30px;
+    padding: 0 15px;
+    margin-right: 8px;
+    border-radius: 3px;
+    background-color: #fdfdfd;
+    border: 1px solid #d7d7d7;
+}
+
+.image-upload-button:hover {
+    background-image: none;
+    background-color: #e8e8e8;
+}
+
+.colorpalette-container span {
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    margin: 0;
+    border: 1px solid #d7d7d7;
+}
+
+.colorpalette-container input {
+    display: inline-block;
+    width: 200px !important;
+    margin-left: 30px;
+    vertical-align: top;
+}
+
+.colorpalette-container #accent-colorpalette,
+.colorpalette-container #ribbon-colorpalette {
+    display: inline-block;
+    width: 200px;
+    margin-left: 30px;
+    vertical-align: top;
+    height: 32px;
+}

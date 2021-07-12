@@ -1,0 +1,98 @@
+@import'~bootstrap/dist/css/bootstrap.min.css';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  margin: 0;
+}
+
+@font-face {
+  font-family: Icon-Set;
+  src: url(/assets/images/icons.woff2) format('woff2'),
+    url(/assets/images/icons.woff) format('woff'),
+    url(/assets/images/icons.eot) format('embedded-opentype'),
+    url(/assets/images/icons.ttf) format('truetype'),
+    url(/assets/images/icons.svg) format('svg');
+}
+
+/* utility classes */
+
+.padding-0 {
+  padding: 0 !important;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.margin-top-2p {
+  margin-top: 2% !important;
+}
+
+.margin-right-15 {
+  margin-right: 15px !important;
+}
+
+.margin-bottom-30 {
+  margin-bottom: 30px !important;
+}
+
+.margin-bottom-60 {
+  margin-bottom: 60px !important;
+}
+
+.breaktext_now {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -moz-hyphens: auto;
+  hyphens: auto;
+  white-space: normal;
+  width: 100%;
+}
+
+.loader {
+  position: fixed;
+  top: 40%;
+  left: 45%;
+  height: 128px !important;
+  width: 128px !important;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+}
+
+.loader-screen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #000;
+  opacity: .4;
+  z-index: 1499;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+}
+
+/* application specific common CSS */
+
+
+/* media Queries */
+
+@media screen and (max-width: 767px) {}

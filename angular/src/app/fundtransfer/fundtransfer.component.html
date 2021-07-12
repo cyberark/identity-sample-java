@@ -1,0 +1,41 @@
+<div class="container-fluid padding-0" (click)="onClick($event)">
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header></app-header>
+  <div class="fundtransfer-page">
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="page-title">Fund Transfer</div>
+        <div class="page-info">
+          <div class="page-info-icon">
+            <p></p>
+          </div>
+          <div class="page-info-content breaktext_now">This page is created to show case the step-up MFA capabilities.</div>
+        </div>
+      </div>
+    </div>
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 margin-top-2p">
+        <form [formGroup]="fundTransferForm" class="fundTransfer-form" autocomplete="off">
+          <div *ngIf="errorMessage != ''" class="user-error">
+            <div class="error-image"><img
+                [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+            </div>
+            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'"><b>{{errorMessage}}</b></p>
+          </div>
+          <div class="form-group">
+            <label class="required">Amount</label>
+            <input class="form-control fundTransfer" formControlName="amount" required (keypress)="numberOnly($event)">
+            <span *ngIf="hasError('amount', 'required')">Amount is required</span>
+          </div>
+          <section class="fundTransfer-button-section">
+            <button class="btn btn-primary btn-sm" type="submit"
+              (click)="transferFunds(fundTransferForm.value)">{{submitButtonText}}</button>
+          </section>
+        </form>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

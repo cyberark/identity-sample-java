@@ -1,0 +1,121 @@
+<div class="container-fluid padding-0" (click)="onClick($event)">
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header></app-header>
+  <div #divToScroll class="custom-page">
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="page-title">ACCOUNT CUSTOMIZATION</div>
+      </div>
+    </div>
+    <div class="row margin-0">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 margin-top-2p">
+        <form [formGroup]="customForm" class="custom-form" autocomplete="off">
+          <div *ngIf="errorMessage != ''" class="user-error">
+            <div class="error-image">
+              <img
+                [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+            </div>
+            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+          </div>
+          <div class="form-group">
+            <label class="required">Portal Ribbon Accent Color</label>
+            <div class="colorpalette-container">
+              <span [style.background-color]=accentColor.value></span>
+              <input type="text" class="form-control" formControlName="accentColor" #accentColor required />
+              <div id="accent-colorpalette"></div>
+            </div>
+            <span *ngIf="hasError('accentColor', 'required')">Portal Ribbon Accent Color is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">Portal Ribbon Color</label>
+            <div class="colorpalette-container">
+              <span [style.background-color]=ribbonColor.value></span>
+              <input type="text" class="form-control" formControlName="ribbonColor" #ribbonColor required />
+              <div id="ribbon-colorpalette"></div>
+            </div>
+            <span *ngIf="hasError('ribbonColor', 'required')">Portal Ribbon Color is required</span>
+          </div>
+          <div class=" form-group">
+            <label class="required">Application Image</label>
+            <div>
+              <input hidden formControlName="appImage" required>
+              <input hidden type="file" accept=".png,.jpg,.gif,.ico,.bmp" (change)="onImageUpload($event)"
+                class="form-control" #selectFile>
+              <button class="image-upload-button" (click)="selectFile.click()">Upload</button>
+              <img [attr.src]="imagePreview" width="128px;" height="32px;" alt="Image preview...">
+            </div>
+            <!-- <span *ngIf="hasError('appImage', 'required')">Application Image is required</span>
+            <span *ngIf="incorrectImageType">{{appImage}} is not a valid file. Only files with following extension are allowed: png , jpg , gif , ico , bmp.</span> -->
+          </div>
+          <div class="form-group">
+            <label class="required">Customer ID</label>
+            <input class="form-control" formControlName="customerId" required>
+            <span *ngIf="hasError('customerId', 'required')">Customer ID is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">Tenant</label>
+            <input class="form-control" formControlName="tenant" required>
+            <span *ngIf="hasError('tenant', 'required')">Tenant is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">OAuth App ID</label>
+            <input class="form-control" formControlName="oauthAppId" required>
+            <span *ngIf="hasError('oauthAppId', 'required')">OAuth App ID is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">OAuth User ID</label>
+            <input class="form-control" formControlName="oauthUser" required>
+            <span *ngIf="hasError('oauthUser', 'required')">OAuth User ID is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">OAuth User Password</label>
+            <input class="form-control" formControlName="oauthPassword" required>
+            <span *ngIf="hasError('oauthPassword', 'required')">OAuth User Password is required</span>
+          </div>
+          <div class="form-group">
+            <label class="required">MFA Role</label>
+            <input class="form-control" formControlName="mfaRole" required>
+            <span *ngIf="hasError('mfaRole', 'required')">MFA Role is required</span>
+          </div>
+          <section class="custom-button-section">
+            <button class="btn btn-primary btn-sm margin-right-15 margin-top-2p margin-bottom-30" type="submit"
+              (click)="validateCustom(customForm.value)">Save</button>
+            <button class="btn btn-primary btn-sm margin-right-15 margin-top-2p margin-bottom-30"
+              (click)="setCustomData()">Reset</button>
+          </section>
+        </form>
+      </div>
+    </div>
+    <div [ngClass]="{'show': showModal}" class="modal fade modal-info" id="customModal">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Account Customization</h4>
+            <button type="button" class="close" data-dismiss="modal fade" (click)="toggleCustomModal()">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <p><i>Change in Customer Id or Tenant value will lead to a force Sign Out. Please confirm if you want to
+                proceed?</i></p>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal fade"
+              (click)="toggleCustomModal(); saveCustom(customForm.value);">Yes</button>
+            <button type="button" class="btn btn-light" data-dismiss="modal fade"
+              (click)="toggleCustomModal()">No</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="showModal" [ngClass]="{'show': showModal}" class="modal-backdrop fade in"></div>
+  </div>
+  <app-footer></app-footer>
+</div>

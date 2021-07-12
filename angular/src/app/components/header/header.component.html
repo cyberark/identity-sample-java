@@ -1,0 +1,58 @@
+<header class="apidemo-header" [style.border-color]="accentColor" [style.background-color]="ribbonColor">
+  <nav class="navbar navbar-expand-md navbar-light">
+    <a class="navbar-brand"><img [attr.src]="imageSource" alt="My Corp Logo"></a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsList"
+      aria-controls="navbarsList" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleHomeMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="navbar-collapse collapse" id="navbarsList" [class.show]="this.homeMenu">
+      <ul class="navbar-nav ml-auto" *ngIf="checkPage('home')">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/')" href="/" (click)="onTabClick('/')">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/login')" href="login"
+            (click)="onTabClick('login')">Login</a>
+        </li>
+        <li class="nav-item">
+          <a [class.btn]="this.notRegister()" [class.btn-sm]="this.notRegister()"
+            [class.register-btn]="this.notRegister()" [class.nav-link]="this.checkSelectedTab('/register')"
+            [class.active]="this.checkSelectedTab('/register')" href="register" role="button">Register</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ml-auto" *ngIf="checkPage('dashboard')">
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/dashboard')" href="dashboard"
+            (click)="onTabClick('dashboard')">Applications</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/fundtransfer')" *ngIf="isMFAWidgetFlowEnabled()" href="fundtransfer"
+            (click)="onTabClick('fundtransfer')">Fund Transfer</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/user')" href="user"
+            (click)="onTabClick('user')">My Account</a>
+        </li>
+        <li *ngIf="custom" class="nav-item">
+          <a class="nav-link" [class.active]="this.checkSelectedTab('/custom')" href="custom"
+            (click)="onTabClick('custom')">Customization</a>
+        </li>
+        <li class="nav-item">
+          <div class="dropdown">
+            <button id="signOutButton" type="button" class="btn btn-primary btn-sm register-btn dropdown-toggle"
+              (click)="toggleSignOutMenu()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{name}}
+            </button>
+            <div class="dropdown-menu" [class.show]="this.signOutMenu">
+              <button class="dropdown-item padding-0" type="button" (click)="logout()">Sign Out</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

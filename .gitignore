@@ -1,0 +1,10 @@
+.DS_STORE
+
+auth.*
+.c9
+.idea/
+.settings/
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+.project
