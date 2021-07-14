@@ -92,7 +92,12 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>2.5.0</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>3.1</version>
+        </dependency>
+    </dependencies>
 
 	<dependencyManagement>
 		<dependencies>

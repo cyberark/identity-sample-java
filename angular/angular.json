@@ -64,7 +64,7 @@
             "sslCert": "ssl/server.crt",
             "sslKey": "ssl/server.key",
             "host": "apidemo.cyberark.app",
-            "port": 443
+            "port": 4200
           },
           "configurations": {
             "production": {

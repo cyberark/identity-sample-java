@@ -71,6 +71,7 @@ export class HeaderComponent implements OnInit {
       case "/dashboard":
       case "/fundtransfer":
       case "/fundtransfer?isFundTransferSuccessful=true":
+      case "/mfawidget?fromFundTransfer=true":
       case "/user":
       case "/custom":
         this.page = "dashboard";
