@@ -23,7 +23,7 @@ export class MFAWidgetComponent implements OnInit {
     var me = this;
 
     LaunchLoginView({
-      "containerSelector": ".cyberark-login",
+      "containerSelector": "#cyberark-login",
       "initialTitle": "Login",
       "defaultTitle": "Authentication",
       "allowSocialLogin": true,
@@ -53,12 +53,12 @@ export class MFAWidgetComponent implements OnInit {
               }
 
             } else {
-              context.router.navigate(['login']);
+              context.router.navigate(['basiclogin']);
             }
           },
           error => {
             console.error(error);
-            context.router.navigate(['login']);
+            context.router.navigate(['basiclogin']);
           });
       },
       error => {

@@ -62,9 +62,6 @@ public class AuthService {
 	@Value("${jwtKey}")
 	private String jwtKey;
 
-	@Value("${enableMFAWidgetFlow}")
-	private Boolean enableMFAWidgetFlow;
-
 	@Value("${oauthAuthCodeFlowAppId}")
 	private String applicationID;
 
@@ -95,7 +92,7 @@ public class AuthService {
 		return httpHeaders;
 	}
 
-	public ResponseEntity<JsonNode> startAuthenticationWithObject(AuthRequest authRequest, HttpServletResponse response)
+	public ResponseEntity<JsonNode> startAuthenticationWithObject(AuthRequest authRequest, HttpServletResponse response, Boolean enableMFAWidgetFlow)
 			throws JsonProcessingException {
 		String tenant = tenantPrefix + "/Security/StartAuthentication";
 		HttpHeaders httpHeaders = setHeaders();
@@ -118,7 +115,7 @@ public class AuthService {
 					success = true;
 					responseObj = new ResponseEntity<>(idaptiveResponse.getBody(), responseHeaders, HttpStatus.OK);
 				} else {
-					logout(auth, response);
+					logout(auth, response, enableMFAWidgetFlow);
 				}
 			} else {
 				success = true;
@@ -194,7 +191,7 @@ public class AuthService {
 		return false;
 	}
 
-	public ResponseEntity<JsonNode> logout(String authToken, HttpServletResponse respose) {
+	public ResponseEntity<JsonNode> logout(String authToken, HttpServletResponse respose, Boolean enableMFAWidgetFlow) {
 		String tenant = tenantPrefix + "/Security/Logout";
 		HttpHeaders headers = setHeaders();
 		headers.set("Authorization", "Bearer " + authToken);

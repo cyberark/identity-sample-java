@@ -19,7 +19,12 @@ export class HomeComponent implements OnInit {
   }
 
   onFlow1Start() {
+    document.cookie = 'flow=flow1';
     this.router.navigate(['flow1'])
   }
 
+  onFlow2Start() {
+    document.cookie = 'flow=flow2';
+    this.router.navigate(['flow2'])
+  }
 }

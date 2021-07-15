@@ -104,7 +104,7 @@ export class RegisterComponent implements OnInit {
       this.submitButtonText = "Update";
     } else {
       this.update = false;
-      this.submitButtonText = "Sign Up";
+      this.submitButtonText = "Sign up";
       this.registerForm.reset();
     }
   }
@@ -195,7 +195,11 @@ export class RegisterComponent implements OnInit {
                   localStorage.setItem("registerMessageType", "info");
                   localStorage.setItem("registerMessage", "User " + user.Name + " registered successfully. Enter your credentials here to proceed.")
                 }
-                this.router.navigate(['/login']);
+                if (document.cookie.includes('flow1'))
+                  this.router.navigate(['/login']);
+                else
+                  this.router.navigate(['/basiclogin']);
+
               } else {
                 this.setMessage("error", data.Message);
               }
@@ -239,8 +243,9 @@ export class RegisterComponent implements OnInit {
     this.loginService.logout().subscribe(
       data => {
         if (data.success == true) {
+          const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
           localStorage.clear();
-          this.router.navigate(['flow1']);
+          this.router.navigate([routeToNavigate]);
         }
       },
       error => {

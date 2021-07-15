@@ -50,11 +50,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     });
 
     if (localStorage.getItem("username") !== null) {
-      this.router.navigate(['dashboard']);
-    }
-    if (environment.enableMFAWidgetFlow) {
-        this.router.navigate(['basiclogin']);
-        return;
+      this.router.navigate(['user']);
     }
 
     this.route.queryParamMap.subscribe(

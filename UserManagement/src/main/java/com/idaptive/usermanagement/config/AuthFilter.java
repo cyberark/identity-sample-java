@@ -24,9 +24,6 @@ public class AuthFilter extends OncePerRequestFilter {
     @Autowired
     private AuthService authService;
 
-    @Value("${enableMFAWidgetFlow}")
-    private Boolean enableMFAWidgetFlow;
-
     public AuthFilter(AuthService authService) {
         this.authService = authService;
     }
@@ -35,6 +32,7 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        Boolean enableMFAWidgetFlow = readServletCookie(request,"flow").get().equals("flow2");
         if (enableMFAWidgetFlow) {
             String xAuth = readServletCookie(request,".ASPXAUTH").get();
             TokenStore token = authService.GetTokenStore(xAuth);
@@ -51,7 +49,7 @@ public class AuthFilter extends OncePerRequestFilter {
         return !path.startsWith("/userops");
     }
 
-    private Optional<String> readServletCookie(HttpServletRequest request, String name){
+    public static Optional<String> readServletCookie(HttpServletRequest request, String name){
         return Arrays.stream(request.getCookies())
                 .filter(cookie->name.equals(cookie.getName()))
                 .map(Cookie::getValue)

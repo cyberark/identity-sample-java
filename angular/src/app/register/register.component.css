@@ -122,8 +122,7 @@ label.required::after {
 
 form span {
   color: #f44336;
-  font-size: 75%;
-  margin-top: .5em;
+  font-size: 0.75rem;
 }
 
 form section>label {

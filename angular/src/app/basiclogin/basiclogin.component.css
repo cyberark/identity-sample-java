@@ -1,7 +1,7 @@
 .login-page {
   margin-bottom: 30px !important;
-  margin-top: 113px !important;
-  max-height: calc(100vh - 143px) !important;
+  margin-top: 85px !important;
+  max-height: calc(100vh - 105px) !important;
   overflow: auto;
   padding-left: 30px;
   padding-right: 30px;
@@ -13,6 +13,8 @@
   font-weight: 700;
   font-size: 20px;
   margin-top: 2%;
+  display: flex;
+  justify-content: center;
 }
 
 .page-info {

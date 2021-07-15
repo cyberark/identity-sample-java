@@ -9,4 +9,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'CyberArk Identity API Demo';
+
+  ngOnInit() {
+    document.cookie = document.cookie.includes('flow2') ? 'flow=flow2' : 'flow=flow1';
+  }
 }

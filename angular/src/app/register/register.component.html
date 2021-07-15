@@ -2,178 +2,97 @@
   <div *ngIf="loading" class="loader-screen">
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
-  <div *ngIf="update">
-    <app-header></app-header>
-  </div>
-  <div *ngIf="!update">
-    <app-header isLoginVisible=true></app-header>
-  </div>
-  <div #divToScroll class="register-page">
-    <div class="row margin-0">
-      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-        <div *ngIf="!update">
-          <div class="d-flex flex-column justify-content-center align-items-center">
-            <h1>Flow 1</h1>
-            <h3>Sign Up</h3>
-          </div>
-          <!-- <div class="page-info">
-            <div class="page-info-icon">
-              <p></p>
+  <app-header *ngIf="update"></app-header>
+  <app-header *ngIf="!update" isLoginVisible=true></app-header>
+  <div #divToScroll class="app-page">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="wrap d-md-flex">
+            <div class="text-wrap p-4 p-lg-5 d-flex img d-flex align-items-end" 
+              style="background-image: url('https://preview.colorlib.com/theme/bootstrap/signup-form-20/images/xbg.jpg.pagespeed.ic.BLG_36p58o.webp')">
+              <div class="text w-100" *ngIf="!update">
+                <h2 class="mb-4">Welcome to Sign up form</h2>
+                <p>Create a new user account</p>
+              </div>
             </div>
-            <div class="page-info-content">This page was created using the <a
-                href="https://developer.idaptive.com/reference#post_cdirectoryservice-createuser"
-                target="_blank">CDirectoryService/CreateUser</a>.
-              For more information, please visit the <a
-                href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
-                User Management</a> guide on the developer portal.</div>
-          </div> -->
-        </div>
-        <div *ngIf="update">
-          <div class="page-title d-flex justify-content-center">User Profile</div>
-          <!-- <p class="text-justify breaktext_now">Access User Portal <a
-                  href="<YOUR_TENANT_URL>" target="_blank">here</a>.</p>
-          <div class="page-info">
-            <div class="page-info-icon">
-              <p></p>
+            <div class="login-wrap p-4 p-md-5">
+              <div class="mb-3" *ngIf="!update">
+                <h3 class="text-center">Sign up</h3>
+              </div>
+              <h3 class="mb-3 text-center" *ngIf="update">User Profile</h3>
+              <form [formGroup]="registerForm" autocomplete="off" class="signup-form">
+                <div class="row">
+                  <div *ngIf="errorMessage != ''" class="user-error">
+                    <div class="error-image"><img
+                        [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+                    </div>
+                    <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group d-flex align-items-center">
+                      <label class="label required">Username</label>
+                      <input class="form-control" formControlName="Name" required>
+                      <div class="label"></div>
+                      <span style="display:block;" *ngIf="hasError('Name', 'required')">Required</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group d-flex align-items-center">
+                      <label class="label required">Email Address</label>
+                      <input class="form-control" formControlName="Mail" type="email" required>
+                      <span *ngIf="hasError('Mail', 'required')">Required</span>
+                      <span *ngIf="hasError('Mail', 'email')">Must be valid email. EXAMPLE@YOURDOMAIN.COM</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group d-flex align-items-center">
+                      <label class="label required">Display Name</label>
+                      <input class="form-control" formControlName="DisplayName" required>
+                      <span *ngIf="hasError('DisplayName', 'required')">Required</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div *ngIf="!update" class="form-group d-flex align-items-center">
+                      <label class="label required">Password</label>
+                      <input class="form-control" formControlName="Password" type="password" (blur)="matchPasswords()" required>
+                      <span *ngIf="hasError('Password', 'required')">Required</span>
+                      <span *ngIf="hasError('Password', 'minlength')">Password must be at least 8 characters long</span>
+                      <span *ngIf="hasError('Password', 'maxlength')">Password should not be longer than 64 characters</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div *ngIf="!update" class="form-group d-flex align-items-center">
+                      <label class="label required">Confirm Password</label>
+                      <input class="form-control" formControlName="ConfirmPassword" type="password" (blur)="matchPasswords()"
+                        required>
+                      <span *ngIf="hasError('ConfirmPassword', 'required')">Required</span>
+                      <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group d-flex align-items-center">
+                      <label class="label required">Mobile Number</label>
+                      <input class="form-control" formControlName="MobileNumber" name="mobileNumber" required>
+                      <span *ngIf="hasError('MobileNumber', 'required')">Required</span>
+                    </div>
+                  </div>
+                  <div class="col-md-12 mt-3">
+                    <div class="d-flex">
+                      <button [disabled]="socialUser" class="container btn btn-secondary submit "
+                        data-target="#userConsent" type="submit"
+                        (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
+                      <button *ngIf="update" class="container btn btn-outline-secondary submit ml-5"
+                      (click)="onLogOut()">Log out</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-            <div class="page-info-content breaktext_now">This page was created using the <a
-                href="https://developer.idaptive.com/reference#post_cdirectoryservice-getuser"
-                target="_blank">CDirectoryService/GetUser</a>
-              API. For more information, please visit the <a
-                href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
-                User Management</a> guide on the developer portal.</div>
-          </div> -->
-          <div *ngIf="socialUser" class="page-info">
-            <div class="page-warning-icon">
-              <p></p>
-            </div>
-            <div class="page-info-content">Your account information was populated from your Social Media Account. To
-              make changes, please update information directly in your Social Media platform.</div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col mt-1">
-        <form [formGroup]="registerForm" class="register-form" autocomplete="off">
-          <div *ngIf="errorMessage != ''" class="user-error">
-            <div class="error-image"><img
-                [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
-            </div>
-            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
-          </div>
-          <div class="form-group">
-            <label class="required">Username</label>
-            <input class="form-control" formControlName="Name" required>
-            <span *ngIf="hasError('Name', 'required')">Login Name is required</span>
-          </div>
-          <div class="form-group">
-            <label class="required">Email Address</label>
-            <input class="form-control" formControlName="Mail" type="email" required>
-            <span *ngIf="hasError('Mail', 'required')">Email Address is required</span>
-            <span *ngIf="hasError('Mail', 'email')">Must be valid email. EXAMPLE@YOURDOMAIN.COM</span>
-          </div>
-          <div class="form-group">
-            <label class="required">Display Name</label>
-            <input class="form-control" formControlName="DisplayName" required>
-            <span *ngIf="hasError('DisplayName', 'required')">Display Name is required</span>
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label class="required">Password</label>
-            <input class="form-control" formControlName="Password" type="password" (blur)="matchPasswords()" required>
-            <span *ngIf="hasError('Password', 'required')">Password is required</span>
-            <span *ngIf="hasError('Password', 'minlength')">Password must be at least 8 characters long</span>
-            <span *ngIf="hasError('Password', 'maxlength')">Password should not be longer than 64 characters</span>
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label class="required">Confirm Password</label>
-            <input class="form-control" formControlName="ConfirmPassword" type="password" (blur)="matchPasswords()"
-              required>
-            <span *ngIf="hasError('ConfirmPassword', 'required')">Confirm Password is required</span>
-            <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
-          </div>
-          <div class="form-group">
-            <label class="required">Mobile Number</label>
-            <input class="form-control" formControlName="MobileNumber" name="mobileNumber" required>
-            <span *ngIf="hasError('MobileNumber', 'required')">Mobile Number is required</span>
-          </div>
-          <!-- <div *ngIf="!update" class="form-group">
-            <label>Street Line 1</label>
-            <input class="form-control" formControlName="street_line_1" name="street_line_1">
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label>Street Line 2</label>
-            <input class="form-control" formControlName="street_line_2" name="street_line_2">
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label>City</label>
-            <input class="form-control" formControlName="address_city" name="address_city">
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label>Postal Code</label>
-            <input class="form-control" formControlName="postal_code" name="postal_code">
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label>State</label>
-            <input class="form-control" formControlName="state_code" name="state_code">
-          </div>
-          <div *ngIf="!update" class="form-group">
-            <label>Country</label>
-            <input class="form-control" formControlName="country_code" name="country_code">
-          </div>
-          <section *ngIf="!update" class="section-container checkbox-section form-group">
-            <div>
-              <input class="form-control" type="checkbox" formControlName="MFA" />Activate MFA
-            </div>
-          </section> -->
-          <section class="register-button-section d-flex">
-            <button [disabled]="socialUser" class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
-              data-target="#userConsent" type="submit"
-              (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
-            <div *ngIf="update">
-              <button class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
-              (click)="onLogOut()">Log out</button>
-            </div>
-          </section>
-        </form>
-      </div>
-      <div class="col border-left"></div>
-    </div>
-    <div [ngClass]="{'show': showConsent}" class="modal fade modal-info" id="userConsent">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">User Consent</h4>
-            <button type="button" class="close" data-dismiss="modal fade"
-              (click)="toggleUserConsentDialog()">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            <p><i>The purpose of multi-factor authentication (MFA) is to confirm a user's claimed identity by utilizing
-                something they know (password) and a second factor other than something they have or something they
-                are.</i></p>
-            <p><i>The CyberArk Identity API demo allows you to use SMS messages and email as a secondary authentication factor.
-                By
-                selecting this option, you agree to receive one-time access codes and links via SMS messages or email.
-                Your
-                wireless carrier's standard messaging rates apply to SMS correspondence.</i></p>
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal fade"
-              (click)="toggleUserConsentDialog(); registerUser(registerForm.value);">Yes</button>
-            <button type="button" class="btn btn-light btn-sm" data-dismiss="modal fade"
-              (click)="toggleUserConsentDialog()">No</button>
-          </div>
-
         </div>
       </div>
-    </div>
-    <div *ngIf="showConsent" [ngClass]="{'show': showConsent}" class="modal-backdrop fade in"></div>
+    </div>    
   </div>
   <app-footer></app-footer>
 </div>

@@ -1,26 +1,46 @@
 <div class="container-fluid padding-0">
     <app-header></app-header>
-    <div class="col" style="margin-top: 85px;">
-        <div class="d-flex flex-column justify-content-center align-items-center">  
-            <h1>Flow 1</h1>
-            <h3>Login Protocols</h3>
-        </div>
-        <div class="card-deck margin-top-2p">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">API only</h5>
-                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <button class="btn btn-primary btn-sm" (click)="onApiOnlyClick()">Continue</button>
+    <div class="app-page">
+        <div class="container">
+
+            <h3 class="text-white text-center">Login Protocols</h3>
+            <div class="card-deck margin-top-2p">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">API only</h5>
+                        <div class="card-text">
+                            Login functionality uses the following APIs.
+                            <ul class="px-3">
+                                <li><a target="_blank" href="https://identity-developer.cyberark.com/reference#post_security-startauthentication">/Security/StartAuthentication</a> - The authentication package returned is a complex structure that guides the caller through the authentication process. Multiple calls to AdvanceAuthentication
+                                    may be required to complete the process.</li>
+                                <li> <a target="_blank" href="https://identity-developer.cyberark.com/reference#post_security-advanceauthentication">/Security/AdvanceAuthentication</a> - Attempt to advance the state of an authentication session. When things are going smoothly, you can expect to get a 'StartNextChallenge' or 'LoginSuccess' as response.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-3 w-50 align-self-center">
+                        <button class="container btn btn-secondary" (click)="onApiOnlyClick()">Continue</button>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">API + OIDC</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.
-                        This content is a little bit longer.
-                    </p>
-                    <button class="btn btn-primary btn-sm" (click)="onApiOidcClick()">Continue</button>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">API + OIDC</h5>
+                        <div class="card-text">
+                            Login functionality uses the 
+                            <a target="_blank" href="https://identity-developer.cyberark.com/reference#post_security-startauthentication">/Security/StartAuthentication</a> and
+                            <a target="_blank" href="https://identity-developer.cyberark.com/reference#post_security-advanceauthentication">/Security/AdvanceAuthentication</a>  along with OIDC SDK.
+                            <br>
+                            <b>OIDC SDK Methods</b>
+                            <ul class="px-3">
+                                <li><b>authorizeUrl</b> - Builds the URL for Authorize endpoint</li>
+                                <li><b>requestToken</b> - Creates a request to get tokens by exchanging the authorization code</li>
+                                <li><b>userInfo</b> - Creates a request to get the user information associated to the access token</li>
+                                <li><b>claims</b> - Get claims associated to the id_token</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="p-3 w-50 align-self-center">
+                        <button class="container btn btn-secondary" (click)="onApiOidcClick()">Continue</button>
+                    </div>
                 </div>
             </div>
         </div>

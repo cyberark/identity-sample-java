@@ -37,13 +37,16 @@
 }
 
 .page-info-icon p {
-  margin: 15px 0 0 11px;
+  margin: 5px 0 0 11px;
 }
 
 .page-info-icon {
   width: 50px;
   color: #fff;
-  background: #0078d4;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .page-info-content {
@@ -59,15 +62,12 @@
   font-family: "Roboto";
   font-weight: 400;
   font-size: 14px;
-  
-  width: calc(100% - 60px);
   display: inline-block;
   vertical-align: top;
 }
 
 .fundTransfer-form .form-control,
 .fundTransfer-button-section {
-  width: 90%;
   height: 100%;
 }
 

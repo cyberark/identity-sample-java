@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment';
+
+const imgSrc = "../../../assets/images/acme_logo.png";
+const accentcolor = "#313131";
 
 @Component({
   selector: 'app-header',
@@ -22,8 +24,8 @@ export class HeaderComponent implements OnInit {
   loading = false;
   custom = localStorage.getItem("custom") == "true";
   imageSource: string;
-  accentColor = "#ffffff";
-  ribbonColor = "#ffffff";
+  accentColor = accentcolor;
+  ribbonColor = accentcolor;
 
   constructor(
     private loginService: LoginService,
@@ -39,8 +41,7 @@ export class HeaderComponent implements OnInit {
         data => {
           this.loading = false;
           if (data.appImage) {
-            // let logo = this.getTrimmedImageData(data.appImage);
-            this.imageSource = "../../../assets/images/jclogo.png";
+            this.imageSource = imgSrc;
             localStorage.setItem("logo", this.imageSource);
             localStorage.setItem("accent", data.accentColor);
             this.accentColor = data.accentColor;
@@ -55,9 +56,9 @@ export class HeaderComponent implements OnInit {
         }
       );
     } else {
-      this.imageSource = "../../../assets/images/jclogo.png";
-      this.accentColor = localStorage.getItem("accent") || "#ffffff";
-      this.ribbonColor = localStorage.getItem("ribbon") || "#ffffff";
+      this.imageSource = imgSrc;
+      this.accentColor = localStorage.getItem("accent") || accentcolor;
+      this.ribbonColor = localStorage.getItem("ribbon") || accentcolor;
     }
 
     if (localStorage.getItem("displayName") !== null && localStorage.getItem("displayName") !== "") {
@@ -78,7 +79,7 @@ export class HeaderComponent implements OnInit {
       case "/mfawidget?fromFundTransfer=true":
       case "/user":
       case "/custom":
-        this.page = "dashboard";
+        this.page = "user";
         break;
     }
   }
@@ -91,8 +92,8 @@ export class HeaderComponent implements OnInit {
     return this.page == page;
   }
 
-  isMFAWidgetFlowEnabled(){
-    return environment.enableMFAWidgetFlow;
+  checkFlow2UserPage() {
+    return document.cookie.includes('flow2') && this.page === 'user';
   }
 
   checkSelectedTab(href: String) {
@@ -106,6 +107,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onTabClick(href: String) {
+    if (href === 'login' && document.cookie.includes('flow2')) href = 'basiclogin';
     this.router.navigate([href]);
     return false;
   }

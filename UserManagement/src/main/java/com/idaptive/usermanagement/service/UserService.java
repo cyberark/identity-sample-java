@@ -69,9 +69,6 @@ public class UserService {
 	@Value("${mfaRole}")
 	private String roleName;
 
-	@Value("${enableMFAWidgetFlow}")
-	private Boolean enableMFAWidgetFlow;
-
 //
 //	@Value("${spring.cloud.config.username}")
 //	private String configUsername;
@@ -140,7 +137,7 @@ public class UserService {
 		return setHeaders(token);
 	}
 
-	public ResponseEntity<JsonNode> createUser(User user, boolean isMfa) {
+	public ResponseEntity<JsonNode> createUser(User user, boolean isMfa, boolean enableMFAWidgetFlow) {
 		String userJson = "";
 		try {
 			userJson = getJson(user);

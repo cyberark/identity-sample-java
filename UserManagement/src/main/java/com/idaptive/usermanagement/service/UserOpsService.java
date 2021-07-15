@@ -64,9 +64,6 @@ public class UserOpsService {
 	@Value("${mfaRole}")
 	private String roleName;
 
-	@Value("${enableMFAWidgetFlow}")
-	private Boolean enableMFAWidgetFlow;
-
 	@Autowired
 	private UserRepository repo;
 
@@ -136,7 +133,7 @@ public class UserOpsService {
 	}
 
 	//This method updates user information in Idaptive Cloud directory.
-	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user) throws JsonProcessingException {
+	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user, Boolean enableMFAWidgetFlow) throws JsonProcessingException {
 		user.setUuid(uuid);
 		String userJson = getJson(user);
 		HttpHeaders headers = prepareForRequest(token);

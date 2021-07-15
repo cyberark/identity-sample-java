@@ -16,7 +16,7 @@ export class LoginProtocolComponent implements OnInit {
   }
 
   onApiOnlyClick() {
-    this.router.navigate(['apionly'])
+    this.router.navigate(['user'])
   }
 
   onApiOidcClick(){

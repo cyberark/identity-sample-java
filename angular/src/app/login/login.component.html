@@ -3,99 +3,62 @@
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
   <app-header isSignUpVisible=true></app-header>
-  <div class="login-page">
-    <div class="d-flex flex-column justify-content-center align-items-center">
-      <h1>Flow 1</h1>
-      <h3>LOGIN</h3>
-    </div>
-    <div class="row margin-0">
-        <!-- <div class="page-info">
-          <div class="page-info-icon">
-            <p></p>
-          </div>
-          <div class="page-info-content breaktext_now">This page was created using the <a
-              href="https://developer.idaptive.com/reference#post_security-startauthentication"
-              target="_blank">Security/StartAuthentication</a>
-            API and the <a href="https://developer.idaptive.com/reference#post_security-advanceauthentication"
-              target="_blank">Security/AdvanceAuthentication</a>
-            API. For more information, please visit the <a
-              href="https://developer.idaptive.com/docs/adaptive-authentication" target="_blank">Adaptive
-              Authentication</a>
-            guide on the developer portal.</div>
-        </div> -->
-    </div>
-    <div class="row h-75">
-      <div class="col">
-        <div class="mt-3">
-          <form [formGroup]="loginForm" class="login-form" autocomplete="off">
-            <div *ngIf="authMessage != ''" class="login-error">
-              <div><img class="error-image"
-                  [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
-              </div>
-              <p class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#000' : '#cc3300'">
-                {{authMessage}}</p>
-            </div>
-            <div class="form-group">
-              <div class="username-block">
-                <label class="required username-label">Username</label>
-                <div *ngIf="!showLoginComponent('username')" class="start-over">
-                  <a href="/login" (click)="startOver()">Start Over</a>
+  <div class="app-page">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="text-center font-weight-light mb-3">Login</h3>
+            <form [formGroup]="loginForm" class="" autocomplete="off">
+              <div *ngIf="authMessage != ''" class="login-error">
+                <div><img class="error-image"
+                    [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
                 </div>
+                <p class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#000' : '#cc3300'">
+                  {{authMessage}}</p>
               </div>
-              <input class="form-control" formControlName="username" required>
-              <span *ngIf="hasError('username', 'required')">Username is required</span>
-              <span *ngIf="hasError('username', 'email')">Username pattern does not match</span>
-            </div>
-          <div *ngIf="showLoginComponent('challenge')" class="form-group">
-            <label class="required">Authentication Method</label>
-            <select class="form-control" formControlName="authMethod" (change)="authMethodChange()" [value]="0" required>
-              <option *ngFor="let mechanism of mechanisms; let i = index" [value]="i">
-                {{mechanism.PromptSelectMech}}
-              </option>
-            </select>
-            <span *ngIf="hasError('authMethod', 'required')">Authentication Method is required</span>
-          </div>
-          <div *ngIf="textAnswer" class="form-group">
-            <label class="required">{{answerLabel}}</label>
-            <input class="form-control" formControlName="answer" type="password" required>
-            <span *ngIf="hasError('answer', 'required')">{{answerErrorText}} is required</span>
-          </div>
-          <div *ngIf="showLoginComponent('reset')" class="form-group">
-            <label class="required">Confirm New Password</label>
-            <input class="form-control" formControlName="confirmPassword" (blur)="matchPasswords()" type="password"
-              required>
-            <span *ngIf="hasError('confirmPassword', 'required')">Confirm New Password is required</span>
-            <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
-          </div>
-          <section class="login-button-section">
-            <div *ngIf="showForgotPassword('password')" class="forgot-password-anchor">
-              <a href="/login" (click)="forgotPassword()">Forgot Password?</a>
-            </div>
-              <button class="btn btn-primary btn-sm" type="submit"
+              <div class="form-group d-flex align-items-center">
+                <label class="required label">Username</label>                    
+                <input class="form-control" formControlName="username" required>
+                <span *ngIf="hasError('username', 'required')">Required</span>
+                <span *ngIf="hasError('username', 'email')">Username pattern does not match</span>
+              </div>
+              <div *ngIf="showLoginComponent('challenge')" class="form-group d-flex align-items-center">
+                <label class="required label">Authentication Method</label>
+                <select class="form-control" formControlName="authMethod" (change)="authMethodChange()" [value]="0"
+                  required>
+                  <option *ngFor="let mechanism of mechanisms; let i = index" [value]="i">
+                    {{mechanism.PromptSelectMech}}
+                  </option>
+                </select>
+                <span *ngIf="hasError('authMethod', 'required')">Required</span>
+              </div>
+              <div *ngIf="textAnswer" class="form-group d-flex align-items-center">
+                <label class="required label">{{answerLabel}}</label>
+                <input class="form-control" formControlName="answer" type="password" required>
+                <span *ngIf="hasError('answer', 'required')">{{answerErrorText}} is required</span>
+              </div>
+              <div *ngIf="showLoginComponent('reset')" class="form-group">
+                <label class="required label">Confirm New Password</label>
+                <input class="form-control" formControlName="confirmPassword" (blur)="matchPasswords()" type="password"
+                  required>
+                <span *ngIf="hasError('confirmPassword', 'required')">Required</span>
+                <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
+              </div>
+              <div class="d-flex mt-4">
+                <div *ngIf="showForgotPassword('password')" class="forgot-password-anchor">
+                  <a href="/login" (click)="forgotPassword()">Forgot Password?</a>
+                </div>
+                <button type="button" *ngIf="!showLoginComponent('username')" class="container btn btn-outline-secondary mr-5" (click)="startOver()">
+                  Start Over
+                </button>
+                <button class="container btn btn-secondary" type="submit"
                 (click)="loginUser(loginForm.value)">{{loginButtonText}}</button>
-            </section>
-          </form>
-        </div>
-        <!-- <div class="login-partition margin-top-2p">
-          <div class="horizontal-line"></div>
-          <div class="circle">OR</div>
-        </div> -->
-  
-        <!-- <div class="margin-top-2p">
-          <div class="col-10 social-login-block">
-            <div class="text-center"><button class="social-login-button facebook" (click)="socialLogin('Facebook')"><span
-                  class="hideonly-sm visbleonly-xs">Login with Facebook</span></button></div>
-            <div class="text-center"><button class="social-login-button google" (click)="socialLogin('Google')"><span
-                  class="hideonly-sm visbleonly-xs">Login with Google</span></button></div>
-            <div class="text-center"><button class="social-login-button linkedin" (click)="socialLogin('LinkedIn')"><span
-                  class="hideonly-sm visbleonly-xs">Login with LinkedIn</span></button></div>
-            <div class="text-center"><button class="social-login-button microsoft"
-                (click)="socialLogin('Microsoft')"><span class="hideonly-sm visbleonly-xs">Login with
-                  Microsoft</span></button></div>
+              </div>
+            </form>
           </div>
-        </div> -->
+        </div>
       </div>
-      <div class="col border-left"></div>
     </div>
   </div>
   <app-footer></app-footer>

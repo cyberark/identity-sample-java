@@ -12,6 +12,7 @@ import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
 import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
+import { Flow2Component } from './flow2/flow2.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'loginprotocols', component: LoginProtocolComponent },
   { path: 'apionly', component: ApionlyComponent },
   { path: 'api&oidc', component: ApiPlusOidc },
+  { path: 'flow2', component: Flow2Component },
 ];
 
 @NgModule({

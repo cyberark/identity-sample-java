@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.idaptive.usermanagement.service.UserOpsService;
+import com.idaptive.usermanagement.config.AuthFilter;
 
 @RestController
 public class UserOpsController {
@@ -30,10 +31,11 @@ public class UserOpsController {
 	@PutMapping("/userops/{uuid}")
 	public ResponseEntity<JsonNode> updateUser(HttpServletRequest request, @RequestBody User user,
 			@PathVariable String uuid) throws JsonProcessingException {
+		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");	
 		Cookie[] cookieArray = request.getCookies();
 		for (Cookie cookie : cookieArray) {
 			if (cookie.getName().equals(".ASPXAUTH")) {
-				return userOpsService.updateUser(cookie.getValue(), uuid, user);
+				return userOpsService.updateUser(cookie.getValue(), uuid, user, enableMFAWidgetFlow);
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);

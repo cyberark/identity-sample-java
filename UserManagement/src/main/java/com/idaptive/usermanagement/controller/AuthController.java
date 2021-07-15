@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.idaptive.usermanagement.config.AuthFilter;
 import com.idaptive.usermanagement.entity.*;
 import com.idaptive.usermanagement.service.AuthService;
 import javax.servlet.http.Cookie;
@@ -40,7 +41,8 @@ public class AuthController {
 	public ResponseEntity<JsonNode> beginAuth(@RequestBody AuthRequest authRequest,HttpServletResponse response) {
 		logger.info("AuthRequest is as follow: -");
 		try {
-			return this.authService.startAuthenticationWithObject(authRequest,response);
+			Boolean enableMFAWidgetFlow = false; //flow1 endpoint so setting to false
+			return this.authService.startAuthenticationWithObject(authRequest,response, enableMFAWidgetFlow);
 		} catch (JsonProcessingException e) {
 			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -55,9 +57,10 @@ public class AuthController {
 	@PostMapping("auth/out")
 	public ResponseEntity<JsonNode> logout(HttpServletRequest request,HttpServletResponse response) {
 		Cookie[] cookieArray = request.getCookies();
+		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
 		for (Cookie cookie : cookieArray) {
 			if (cookie.getName().equals(".ASPXAUTH")) {
-				return this.authService.logout(cookie.getValue(),response);
+				return this.authService.logout(cookie.getValue(),response,enableMFAWidgetFlow);
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);

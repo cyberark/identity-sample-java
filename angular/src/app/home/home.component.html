@@ -1,77 +1,44 @@
-<div class="container-fluid padding-0">
-  <!-- <app-header isHomeVisible=true></app-header> -->
-  <div class="home-page row margin-0">
+<div class="container-fluid">
+  <div class="app-page">
     <div class="container">
-      <div class="d-flex flex-column justify-content-center align-items-center">
-        <h1>CyberArk Demo Apps (CIAM)</h1>
-        <h3>Home Page</h3>
-        <h5>JC is an example company which demonstrates the following flows.</h5>
-        <!-- <h5>My corp is demo company with which we are demonstrating the below flows</h5> -->
+      <div class="text-white text-center">
+        <h1 class="text-white ">CyberArk Identity Demo Applications</h1>
+        <h5 class="text-white ">ACME is a sample company which uses CyberArk Identity APIs, SDKs and widgets to secure its web applications.</h5>
       </div>
-      <div class="home-main-content">
-        <!-- <p class="text-justify breaktext_now">The purpose of this demonstration is to show a simple integration of
-          the CyberArk Identity platform features with your website or web applications.</p>
-        <p class="text-justify breaktext_now">The CyberArk Identity REST APIs expose all features of the CyberArk Identity platform,
-          including the ability to
-          programmatically execute all functions of the CyberArk Identity User Portal. This site shows you how to use REST APIs
-          to:</p>
-        <ul class="text-justify breaktext_now">
-          <li>Integrate registration functionality with a web-based application.</li>
-          <li>Add option for a self-service password reset.</li>
-          <li>Allow users to register and log in with their social profiles.</li>
-          <li>Enable single sign-on for multiple web applications.</li>
-          <li>Require users to pass multi-factor authentication challenges to gain access.</li>
-          <li>Customize features of CyberArk Identity platform.</li>
-        </ul>
-        <p class="text-justify breaktext_now">This site has been programmed as a Single Page Application using Angular
-          and Java. This demo is completely
-          open source and can be used in integration projects or simply to learn. The source code can be found on our
-          <a href="https://github.com/idaptive/idaptive-api-demo" target="_blank">GitHub</a>.</p>
-        <p class="text-justify breaktext_now"> To learn more about the CyberArk Identity API's, please visit the <a
-            href="https://identity-developer.cyberark.com" target="_blank">CyberArk Identity Developer Portal</a>.</p> -->
-            <div class="row justify-content-center">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Flow 1</h5>
-                  <h6 class="card-subtitle mb-2 text-muted"></h6>
-                  <ul class="card-text">
-                    <li>Customer hosted login</li>
-                    <li>Java spring angular web app</li>
-                    <li>Cyberark identity auth APIs</li>
-                  </ul>
-                  <button class="btn btn-primary btn-sm" (click)="onFlow1Start()">Start</button>
-                </div>
-              </div>
-              <!-- <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                  <h5 class="card-title">Flow 2</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">Some quick example text to build on the card title.</p>
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                  <h5 class="card-title">Flow 3</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">Some quick example text to build on the card title.</p>
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div>
-              <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                  <h5 class="card-title">Flow 4</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                  <p class="card-text">Some quick example text to build on the card title.</p>
-                  <a href="#" class="card-link">Card link</a>
-                  <a href="#" class="card-link">Another link</a>
-                </div>
-              </div> -->
+      <div class="home-main-content">        
+        <div class="card-deck">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">ACME UI + APIs</h5>
+              <ul class="card-text">
+                <li>Simulation of a customer hosted web application</li>
+                <li>Java spring backend, Angular front end web application</li>
+                <li>CyberArk Identity stores the identity of end users signing up to ACME</li>
+                <li>Sign up, Login, Profile update, and MFA powered by CyberArk Identity APIs</li>
+              </ul>
             </div>
+            <div class="w-50 align-self-center p-3">
+              <div class="container btn btn-secondary p-3" (click)="onFlow1Start()">Start</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title text-center">ACME UI + MFA Widget</h5>
+              <ul class="card-text">
+                <li>This demo web app simulates a Acme.com securing their end user facing website using CyberArk MFA</li>
+                <li>Acme handles the login and Cyberark manages the multi-factor authentication mechanism</li>
+                <li>This also mimics a real world in-app step up authentication e.g Fund transfer</li>
+                <li>The backend is driven by Java spring, while Angular JS is used for the front-end of the application.</li>
+              </ul>
+            </div>
+            <div class="w-50 align-self-center p-3">
+              <div class="container btn btn-secondary p-3" (click)="onFlow2Start()">Start</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>    
+
+    </div>
   </div>
   <app-footer></app-footer>
 </div>

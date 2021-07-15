@@ -20,6 +20,7 @@ import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
 import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
+import { Flow2Component } from './flow2/flow2.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
     LoginProtocolComponent,
     ApionlyComponent,
     ApiPlusOidc,
+    Flow2Component,
   ],
   imports: [
     BrowserModule,

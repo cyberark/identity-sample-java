@@ -1,37 +1,118 @@
 <div class="container-fluid padding-0">
+    <div *ngIf="loading" class="loader-screen">
+      <img class="loader" src="../../assets/images/Spinner.svg">
+    </div>
     <app-header></app-header>
-    <div class="col" style="margin-top: 85px">
-        <div class="d-flex justify-content-center">
-            <h1>Login with APIs & OIDC</h1>
-        </div>
-        <div class="row">
-            <div class="col border-right">
-                <h3>OIDC details</h3>
-                <table class="table table-sm">
-                    <tbody>
-                      <tr>
-                        <th scope="row">access_token</th>
-                        <td>Labore officia mollit pariatur culpa ipsum enim labore velit laboris. Consectetur nostrud est minim id nulla commodo cupidatat culpa aliquip. Dolor officia sint duis minim amet do pariatur nisi sint. Dolor non aute ullamco magna aliquip amet consequat duis.
-Lorem reprehenderit proident excepteur ipsum aliquip consequat. Magna aliqua labore proident eiusmod. Culpa esse magna deserunt sit laborum. Dolor tempor cupidatat veniam quis consectetur anim ullamco eu.</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">token_type</th>
-                        <td>Bearer</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">expires_at</th>
-                        <td>1234567890</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">scope</th>
-                        <td>openid email</td>
-                      </tr>
-                    </tbody>
-                </table>
-                <button class="btn btn-primary btn-sm" (click)="onNext()">Next</button>
+    <div class="app-page">
+      <div class="container">
+          <div class="row justify-content-center">
+            <div class="accordion w-50" id="accordionExample">
+              <div class="card">
+                <h3 class="text-center font-weight-light m-3">OIDC Metadata</h3>
+                <div class="card-header" id="headingOne">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Token Set (/Token Endpoint)
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <table class="table table-sm">
+                        <tbody>
+                          <tr>
+                            <th scope="row">access_token</th>
+                            <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">token_type</th>
+                            <td class="text-break">Bearer</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">expires_at</th>
+                            <td>1234567890</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">scope</th>
+                            <td>openid email</td>
+                          </tr>
+                        </tbody>
+                    </table>                 
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      Claims (Base64 Decoded id_token)
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <table class="table table-sm">
+                      <tbody>
+                        <tr>
+                          <th scope="row">access_token</th>
+                          <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">token_type</th>
+                          <td class="text-break">Bearer</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">expires_at</th>
+                          <td>1234567890</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">scope</th>
+                          <td>openid email</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingThree">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                      User Info (/UserInfo Endpoint)
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <table class="table table-sm">
+                      <tbody>
+                        <tr>
+                          <th scope="row">access_token</th>
+                          <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">token_type</th>
+                          <td class="text-break">Bearer</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">expires_at</th>
+                          <td>1234567890</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">scope</th>
+                          <td>openid email</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <div class="card p-3">
+                <button class="container btn btn-secondary p-3 w-50 align-self-center" (click)="onNext()">Next</button>
+              </div>
             </div>
-            <div class="col"></div>
-        </div>
+          </div>
+      </div>
     </div>
     <app-footer></app-footer>
 </div>

@@ -31,7 +31,6 @@ server:
     key-store-password: <PASSWORD>
     key-store: classpath:<KEYSTORE_NAME>.p12
 
-enableMFAWidgetFlow: true
 tenant: <YOUR_TENANT_URL>
 customerId: <YOUR_TENANT_PREFIX>
 podurl: https://<YOUR_POD_URL>/Security/ResumeFromExtIdpAuth?ExtIdpAuthChallengeState=

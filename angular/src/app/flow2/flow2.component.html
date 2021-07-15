@@ -1,0 +1,48 @@
+<div class="container-fluid padding-0">
+    <app-header isHomeVisible=true></app-header>
+    <div class="app-page">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">ACME UI + MFA Widget</h2>
+                        <ul class="container">
+                            <li>This demo web app simulates a Acme.com securing their end user facing website using
+                                CyberArk MFA</li>
+                            <li>ACME stores the identity of end users in its own database</li>
+                            <li>Sign-up and Profile update powered by CyberArk APIs</li>
+                            <li>MFA challenges and set-up MFA served by CyberArk Identity MFA widget</li>
+                            <li>The backend is driven by Java spring, while Angular JS is used for the front-end of the
+                                application.</li>
+                        </ul>
+                        <div class="diagram"></div>
+                        <p>The following APIs are used in this web applicaiton -</p>
+                        <h5><b>Sign up</b></h5>
+                        <p>
+                            <a target="_blank"
+                                href="https://identity-developer.cyberark.com/reference#post_cdirectoryservice-signup">/CDirectoryService/Signup</a>
+                            - Create user in the cloud directory service
+                        </p>
+                        <h5><b>Profile Update</b></h5>
+                        <p>
+                            <a target="_blank"
+                                href="https://identity-developer.cyberark.com/reference#post_cdirectoryservice-changeuser">/CDirectoryService/ChangeUser</a>
+                            - Change cloud user properties.
+                        </p>
+                        <h5><b>Logout</b></h5>
+                        <p>
+                            <a target="_blank"
+                                href="https://identity-developer.cyberark.com/reference#post_security-logout">/Security/Logout</a>
+                            - Logout current user.
+                        </p>
+                    </div>
+                    <div class="d-flex p-3">
+                        <div class="container btn btn-secondary p-3 mr-5" (click)="onSignUpClick()">Sign up</div>
+                        <div class="container btn btn-secondary p-3" (click)="onLoginClick()">Login</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>
