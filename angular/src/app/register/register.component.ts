@@ -167,6 +167,7 @@ export class RegisterComponent implements OnInit {
         data => {
           this.loading = false;
           if (data.success == true) {
+            localStorage.setItem("mfaUsername", data.UserName);
             this.setMessage("info", "User information updated successfully");
             this.router.navigate(['/user']);
           } else {

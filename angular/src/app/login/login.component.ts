@@ -41,12 +41,21 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   ) { }
 
   ngOnInit() {
+
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      authMethod: ['', Validators.required],
+      answer: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
+    });
+
     if (localStorage.getItem("username") !== null) {
       this.router.navigate(['dashboard']);
     }
     if (environment.enableMFAWidgetFlow) {
         this.router.navigate(['basiclogin']);
-     }
+        return;
+    }
 
     this.route.queryParamMap.subscribe(
       param => {
@@ -75,13 +84,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.authMessage = localStorage.getItem("registerMessage");
       localStorage.setItem("registerMessage", "");
     }
-
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      authMethod: ['', Validators.required],
-      answer: ['', Validators.required],
-      confirmPassword: ['', Validators.required]
-    });
 
     if (this.loginPage == null) {
       this.loginPage = "username";
@@ -244,6 +246,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
             this.loginPage = "password";
           } else {
             this.loginPage = "firstChallenge";
+            this.formControls.authMethod.setValue(0);
+            this.authMethodChange();
           }
 
           if (challengeCount > 1) {
@@ -337,6 +341,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.textAnswer = false;
     }
     this.resetFormFields(this.getFormFieldsArray(this.loginPage));
+    if(this.loginPage == "secondChallenge"){
+      this.formControls.authMethod.setValue(0);
+      this.authMethodChange();
+    }
     this.router.navigate(['login']);
   }
 

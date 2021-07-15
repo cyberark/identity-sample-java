@@ -46,8 +46,7 @@
           </div>
           <div *ngIf="showLoginComponent('challenge')" class="form-group">
             <label class="required">Authentication Method</label>
-            <select class="form-control" formControlName="authMethod" (change)="authMethodChange()" required>
-              <option disabled hidden [value]="" [selected]></option>
+            <select class="form-control" formControlName="authMethod" (change)="authMethodChange()" [value]="0" required>
               <option *ngFor="let mechanism of mechanisms; let i = index" [value]="i">
                 {{mechanism.PromptSelectMech}}
               </option>

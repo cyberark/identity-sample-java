@@ -9,7 +9,6 @@ import com.idaptive.usermanagement.Repos.UserRepository;
 import com.idaptive.usermanagement.entity.DBUser;
 import com.idaptive.usermanagement.entity.TokenStore;
 import com.idaptive.usermanagement.entity.User;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.context.request.RequestContextHolder;
-
-import javax.servlet.http.Cookie;
 
 @Service
 @RefreshScope
@@ -95,8 +92,15 @@ public class UserOpsService {
 	private String getJson(User user) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String name = user.getName();
-		user.setName(name + "@" + tenantID);
-		return mapper.writeValueAsString(user);
+		user.setName(GetMFAUserName(name));
+		try {
+			String json =  mapper.writeValueAsString(user);
+			user.setName(name);
+			return json;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	private String receiveOAuthTokenCC() {
@@ -133,15 +137,17 @@ public class UserOpsService {
 
 	//This method updates user information in Idaptive Cloud directory.
 	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user) throws JsonProcessingException {
+		user.setUuid(uuid);
 		String userJson = getJson(user);
 		HttpHeaders headers = prepareForRequest(token);
-		ObjectMapper mapper = new ObjectMapper();
-		user.setUuid(uuid);
-		userJson = mapper.writeValueAsString(user);
 		HttpEntity<String> request = new HttpEntity<>(userJson, headers);
 		String updateUserUrl = tenant + "/CDirectoryService/ChangeUser";
 		try {
 			ResponseEntity<JsonNode> result = restTemplate.exchange(updateUserUrl, HttpMethod.POST, request, JsonNode.class);
+			JsonNode response = result.getBody();
+			ObjectNode objNode = (ObjectNode) response;
+			objNode.put("UserName",  GetMFAUserName(user.getName()));
+
 			if(enableMFAWidgetFlow) {
 				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", 1);
 				DBUser dbUser = repo.getOne(tokenStore.getUserId());
@@ -151,7 +157,7 @@ public class UserOpsService {
 				dbUser.setMobileNumber((user.getMobileNumber()));
 				repo.save(dbUser);
 			}
-			return  result;
+			return new ResponseEntity<JsonNode>(response, HttpStatus.OK);
 		} catch (RestClientException e) {
 			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -208,6 +214,10 @@ public class UserOpsService {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode response = mapper.convertValue(appInfo, JsonNode.class);
 		return new ResponseEntity<JsonNode>(response, HttpStatus.OK);
+	}
+
+	public String GetMFAUserName(String name){
+		return name + "@" + this.tenantID;
 	}
 
 //	//Update configuration files of all services.This method calls config-server URL.

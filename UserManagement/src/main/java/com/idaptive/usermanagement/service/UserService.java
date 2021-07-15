@@ -98,8 +98,15 @@ public class UserService {
 	private String getJson(User user) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		String name = user.getName();
-		user.setName(name + "@" + tenantID);
-		return mapper.writeValueAsString(user);
+		user.setName(GetMFAUserName(name));
+		try {
+			String json =  mapper.writeValueAsString(user);
+			user.setName(name);
+			return json;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	private String receiveOAuthTokenCC() {
@@ -150,7 +157,7 @@ public class UserService {
 					JsonNode createUserResponseBody = createUserResponse.getBody();
 					ObjectNode objNode = (ObjectNode) createUserResponseBody;
 					objNode.remove("Message");
-					objNode.put("Message", "User name " + user.getName().split("@")[0] + " is already in use.");
+					objNode.put("Message", "User name " + user.getName() + " is already in use.");
 					return createUserResponse;
 				}
 			} else {
@@ -217,6 +224,10 @@ public class UserService {
 	}
 	public DBUser Get(Integer id) {
 		return repo.findById(id).get();
+	}
+
+	public String GetMFAUserName(String name){
+		return name + "@" + this.tenantID;
 	}
 
 //	public ResponseEntity<JsonNode> getConfig() {

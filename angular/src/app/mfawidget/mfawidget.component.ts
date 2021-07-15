@@ -39,32 +39,36 @@ export class MFAWidgetComponent implements OnInit {
   loginSuccessHandler(AuthData, context) {
 
     this.loginService.authorize(AuthData.Auth).subscribe(
-    data => {
-      this.loginService.completeLoginUser(localStorage.getItem("sessionUuid"), data.Result.AuthorizationCode).subscribe(
-        data => {
-          if (data && data.Success == true) {
-            context.setUserDetails(AuthData);
-            context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
+      data => {
+        this.loginService.completeLoginUser(localStorage.getItem("sessionUuid"), data.Result.AuthorizationCode).subscribe(
+          data => {
+            if (data && data.Success == true) {
+              context.setUserDetails(AuthData);
+              context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
 
-            if (context.fromFundTransfer) {
-              context.router.navigate(['fundtransfer'], { queryParams: { isFundTransferSuccessful: true } });
+              if (context.fromFundTransfer) {
+                context.router.navigate(['fundtransfer'], { queryParams: { isFundTransferSuccessful: true } });
+              } else {
+                context.router.navigate(['user']);
+              }
+
             } else {
-              context.router.navigate(['user']);
+              context.router.navigate(['login']);
             }
-
-          } else {
+          },
+          error => {
+            console.error(error);
             context.router.navigate(['login']);
-          }
-        },
-        error => {
-          console.error(error);
-          context.router.navigate(['login']);
-        });
-    },
-    error => {
-      console.error(error);
-      context.router.navigate(['login']);
-    });
+          });
+      },
+      error => {
+        if (error.error.Success == false) {
+          localStorage.setItem("registerMessageType", "error");
+          localStorage.setItem("registerMessage", error.error.ErrorMessage);
+        }
+        console.error(error);
+        context.router.navigate(['login']);
+      });
   }
   setUserDetails(result: any) {
     localStorage.setItem("userId", result.UserId);

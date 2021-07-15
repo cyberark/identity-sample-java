@@ -295,7 +295,7 @@ public class AuthService {
 		TokenStore token =  tokenStoreRepository.findBySession(advanceLoginRequest.getSessionUuid());
 		DBUser dbuser = userService.Get(token.getUserId());
 
-		if(dbuser.getName().equalsIgnoreCase(mfaUser)){
+		if(userService.GetMFAUserName(dbuser.getName()).equalsIgnoreCase(mfaUser)){
 
 			token.setMfaToken(accessToken);
 			tokenStoreRepository.save(token);

@@ -44,7 +44,7 @@ public class AuthController {
 		} catch (JsonProcessingException e) {
 			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 	}
 
 	@PostMapping("auth/advanceAuth")
@@ -84,7 +84,7 @@ public class AuthController {
 				ObjectMapper objectMapper = new ObjectMapper();
 				ObjectNode objectNode = objectMapper.createObjectNode();
 				objectNode.put("SessionUuid",sessionUuid);
-				objectNode.put("MFAUserName",user.getName());
+				objectNode.put("MFAUserName",userService.GetMFAUserName(user.getName()));
 				response.Result = objectNode;
 			}else{
 				response.Success = false;
@@ -114,10 +114,19 @@ public class AuthController {
 	@GetMapping("/RedirectResource")
 	public ResponseEntity<Response> RedirectResource(HttpServletRequest request, HttpServletResponse httpServletResponse) {
 		Response response = new Response();
-		ObjectMapper objectMapper = new ObjectMapper();
-		ObjectNode objectNode = objectMapper.createObjectNode();
-		objectNode.put("AuthorizationCode", request.getParameterMap().get("code")[0]);
-		response.Result = objectNode;
-		return new ResponseEntity(response, HttpStatus.OK);
+		try {
+			if (request.getParameter("error") != null){
+				throw new Exception(request.getParameter("error_description"));
+			}
+			ObjectMapper objectMapper = new ObjectMapper();
+			ObjectNode objectNode = objectMapper.createObjectNode();
+			objectNode.put("AuthorizationCode", request.getParameterMap().get("code")[0]);
+			response.Result = objectNode;
+			return new ResponseEntity(response, HttpStatus.OK);
+		}catch(Exception ex){
+			response.Success = false;
+			response.ErrorMessage = ex.getMessage();
+			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
