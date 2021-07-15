@@ -14,8 +14,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     if (localStorage.getItem("username") !== null) {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['user']);
     }
+  }
+
+  onFlow1Start() {
+    this.router.navigate(['flow1'])
   }
 
 }

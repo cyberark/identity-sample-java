@@ -2,13 +2,21 @@
   <div *ngIf="loading" class="loader-screen">
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
-  <app-header></app-header>
+  <div *ngIf="update">
+    <app-header></app-header>
+  </div>
+  <div *ngIf="!update">
+    <app-header isLoginVisible=true></app-header>
+  </div>
   <div #divToScroll class="register-page">
     <div class="row margin-0">
       <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div *ngIf="!update">
-          <div class="page-title">NEW USER REGISTRATION</div>
-          <div class="page-info">
+          <div class="d-flex flex-column justify-content-center align-items-center">
+            <h1>Flow 1</h1>
+            <h3>Sign Up</h3>
+          </div>
+          <!-- <div class="page-info">
             <div class="page-info-icon">
               <p></p>
             </div>
@@ -18,11 +26,11 @@
               For more information, please visit the <a
                 href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
                 User Management</a> guide on the developer portal.</div>
-          </div>
+          </div> -->
         </div>
         <div *ngIf="update">
-          <div class="page-title">MY ACCOUNT</div>
-          <p class="text-justify breaktext_now">Access User Portal <a
+          <div class="page-title d-flex justify-content-center">User Profile</div>
+          <!-- <p class="text-justify breaktext_now">Access User Portal <a
                   href="<YOUR_TENANT_URL>" target="_blank">here</a>.</p>
           <div class="page-info">
             <div class="page-info-icon">
@@ -34,7 +42,7 @@
               API. For more information, please visit the <a
                 href="https://developer.idaptive.com/reference#cloud-user-management" target="_blank">Cloud
                 User Management</a> guide on the developer portal.</div>
-          </div>
+          </div> -->
           <div *ngIf="socialUser" class="page-info">
             <div class="page-warning-icon">
               <p></p>
@@ -45,8 +53,8 @@
         </div>
       </div>
     </div>
-    <div class="row margin-0">
-      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 margin-top-2p">
+    <div class="row">
+      <div class="col mt-1">
         <form [formGroup]="registerForm" class="register-form" autocomplete="off">
           <div *ngIf="errorMessage != ''" class="user-error">
             <div class="error-image"><img
@@ -89,7 +97,7 @@
             <input class="form-control" formControlName="MobileNumber" name="mobileNumber" required>
             <span *ngIf="hasError('MobileNumber', 'required')">Mobile Number is required</span>
           </div>
-          <div *ngIf="!update" class="form-group">
+          <!-- <div *ngIf="!update" class="form-group">
             <label>Street Line 1</label>
             <input class="form-control" formControlName="street_line_1" name="street_line_1">
           </div>
@@ -117,16 +125,19 @@
             <div>
               <input class="form-control" type="checkbox" formControlName="MFA" />Activate MFA
             </div>
-          </section>
-          <section class="register-button-section">
+          </section> -->
+          <section class="register-button-section d-flex">
             <button [disabled]="socialUser" class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
               data-target="#userConsent" type="submit"
               (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
-            <button class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
-              (click)="cancelRegister()">Cancel</button>
+            <div *ngIf="update">
+              <button class="btn btn-primary btn-sm margin-right-15 margin-bottom-60"
+              (click)="onLogOut()">Log out</button>
+            </div>
           </section>
         </form>
       </div>
+      <div class="col border-left"></div>
     </div>
     <div [ngClass]="{'show': showConsent}" class="modal fade modal-info" id="userConsent">
       <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -153,9 +164,9 @@
 
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal fade"
+            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal fade"
               (click)="toggleUserConsentDialog(); registerUser(registerForm.value);">Yes</button>
-            <button type="button" class="btn btn-light" data-dismiss="modal fade"
+            <button type="button" class="btn btn-light btn-sm" data-dismiss="modal fade"
               (click)="toggleUserConsentDialog()">No</button>
           </div>
 

@@ -1,7 +1,7 @@
 .register-page {
   margin-bottom: 30px !important;
-  margin-top: 113px !important;
-  max-height: calc(100vh - 143px) !important;
+  margin-top: 85px !important;
+  max-height: calc(100vh - 105px) !important;
   overflow: auto;
   padding-left: 30px;
   padding-right: 30px;
@@ -215,6 +215,13 @@ form section>label {
 .modal-info .modal-header {
   background-color: #0bb2d4;
   color: #FFF;
+}
+
+.divider {
+  border-left: 2px solid #cccccc;
+  height: 990px;
+  margin-left: 28px;
+  top: 30px;
 }
 
 @media screen and (max-width: 767px) {

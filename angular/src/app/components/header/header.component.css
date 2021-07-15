@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 109px;
+  height: 75px;
   width: 100%;
   background: #ffffff;
   z-index: 1;
@@ -13,7 +13,7 @@
 }
 
 .apidemo-header img {
-  width: 256px;
+  width: 100px;
   height: 64px;
 }
 
@@ -28,11 +28,11 @@
 }
 
 .apidemo-header .navbar {
-  height: 105px;
+  height: 60px;
 }
 
 .apidemo-header .navbar-nav {
-  margin-top: 54px;
+  margin-top: 25px;
 }
 
 .apidemo-header .navbar-expand-md .navbar-nav .nav-item .btn {
@@ -50,7 +50,7 @@
 }
 
 .apidemo-header .navbar-expand-md .navbar-nav .nav-item .btn.register-btn {
-  border: 2px solid #26e5c2;
+  /* border: 2px solid #26e5c2; */
   background: none;
   font-family: "Roboto";
   color: #363a40;

@@ -1,0 +1,29 @@
+<div class="container-fluid padding-0">
+    <app-header></app-header>
+    <div class="col" style="margin-top: 85px;">
+        <div class="d-flex flex-column justify-content-center align-items-center">  
+            <h1>Flow 1</h1>
+            <h3>Login Protocols</h3>
+        </div>
+        <div class="card-deck margin-top-2p">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">API only</h5>
+                    <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                    <button class="btn btn-primary btn-sm" (click)="onApiOnlyClick()">Continue</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">API + OIDC</h5>
+                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.
+                        This content is a little bit longer.
+                    </p>
+                    <button class="btn btn-primary btn-sm" (click)="onApiOidcClick()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

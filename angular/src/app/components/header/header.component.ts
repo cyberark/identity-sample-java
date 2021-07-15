@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
@@ -11,13 +11,17 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  @Input() isLoginVisible: boolean = false;
+  @Input() isSignUpVisible: boolean = false;
+  @Input() isHomeVisible: boolean = false;
+
   page = "home";
   name = "";
   signOutMenu = false;
   homeMenu = false;
   loading = false;
   custom = localStorage.getItem("custom") == "true";
-  imageSource: SafeResourceUrl;
+  imageSource: string;
   accentColor = "#ffffff";
   ribbonColor = "#ffffff";
 
@@ -35,9 +39,9 @@ export class HeaderComponent implements OnInit {
         data => {
           this.loading = false;
           if (data.appImage) {
-            let logo = this.getTrimmedImageData(data.appImage);
-            localStorage.setItem("logo", logo);
-            this.imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(logo);
+            // let logo = this.getTrimmedImageData(data.appImage);
+            this.imageSource = "../../../assets/images/jclogo.png";
+            localStorage.setItem("logo", this.imageSource);
             localStorage.setItem("accent", data.accentColor);
             this.accentColor = data.accentColor;
             localStorage.setItem("ribbon", data.ribbonColor);
@@ -51,7 +55,7 @@ export class HeaderComponent implements OnInit {
         }
       );
     } else {
-      this.imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(localStorage.getItem("logo")) || "../../../assets/images/logo.png";
+      this.imageSource = "../../../assets/images/jclogo.png";
       this.accentColor = localStorage.getItem("accent") || "#ffffff";
       this.ribbonColor = localStorage.getItem("ribbon") || "#ffffff";
     }

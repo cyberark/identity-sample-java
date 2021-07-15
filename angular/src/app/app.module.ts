@@ -16,6 +16,10 @@ import { CustomComponent } from './custom/custom.component';
 import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
 import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
+import { Flow1Component } from './flow1/flow1.component';
+import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
+import { ApionlyComponent } from './apionly/apionly.component';
+import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +34,10 @@ import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
     BasicLoginComponent,
     MFAWidgetComponent,
     FundTransferComponent,
+    Flow1Component,
+    LoginProtocolComponent,
+    ApionlyComponent,
+    ApiPlusOidc,
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,11 @@
 .login-page {
   margin-bottom: 30px !important;
-  margin-top: 113px !important;
-  max-height: calc(100vh - 143px) !important;
+  margin-top: 85px !important;
+  max-height: calc(100vh - 105px) !important;
   overflow: auto;
   padding-left: 30px;
   padding-right: 30px;
+  height: calc(100vh - 105px);
 }
 
 .page-title {
@@ -132,9 +133,11 @@ label.required::after {
 
 .login-partition {
   text-align: center;
-  width: 60px;
-  display: inline-block;
-  position: relative;
+  width: 80%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .vertical-line {
@@ -142,6 +145,11 @@ label.required::after {
   height: 250px;
   margin-left: 28px;
   top: 30px;
+}
+
+.horizontal-line {
+  border-bottom: 2px solid #cccccc;
+  width: 100%;
 }
 
 .circle {
@@ -152,13 +160,11 @@ label.required::after {
   border-radius: 100%;
   display: inline-block;
   line-height: 60px;
-  margin-top: -160px;
   color: #aaa;
   font-family: "Roboto";
   font-weight: 400;
   font-size: 20px;
   position: absolute;
-  left: 0px;
 }
 
 .social-login-block {

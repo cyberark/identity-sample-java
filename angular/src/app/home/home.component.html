@@ -1,11 +1,15 @@
 <div class="container-fluid padding-0">
-  <app-header></app-header>
+  <!-- <app-header isHomeVisible=true></app-header> -->
   <div class="home-page row margin-0">
-    <div class="col-12 col-sm-7 col-md-8 col-lg-9 col-xl-9">
-      <div class="home-title">CyberArk Identity API Demo</div>
-      <div class="home-tagline">Explore CyberArk Identity RESTful API capabilities.</div>
+    <div class="container">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <h1>CyberArk Demo Apps (CIAM)</h1>
+        <h3>Home Page</h3>
+        <h5>JC is an example company which demonstrates the following flows.</h5>
+        <!-- <h5>My corp is demo company with which we are demonstrating the below flows</h5> -->
+      </div>
       <div class="home-main-content">
-        <p class="text-justify breaktext_now">The purpose of this demonstration is to show a simple integration of
+        <!-- <p class="text-justify breaktext_now">The purpose of this demonstration is to show a simple integration of
           the CyberArk Identity platform features with your website or web applications.</p>
         <p class="text-justify breaktext_now">The CyberArk Identity REST APIs expose all features of the CyberArk Identity platform,
           including the ability to
@@ -24,21 +28,50 @@
           open source and can be used in integration projects or simply to learn. The source code can be found on our
           <a href="https://github.com/idaptive/idaptive-api-demo" target="_blank">GitHub</a>.</p>
         <p class="text-justify breaktext_now"> To learn more about the CyberArk Identity API's, please visit the <a
-            href="https://identity-developer.cyberark.com" target="_blank">CyberArk Identity Developer Portal</a>.</p>
+            href="https://identity-developer.cyberark.com" target="_blank">CyberArk Identity Developer Portal</a>.</p> -->
+            <div class="row justify-content-center">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Flow 1</h5>
+                  <h6 class="card-subtitle mb-2 text-muted"></h6>
+                  <ul class="card-text">
+                    <li>Customer hosted login</li>
+                    <li>Java spring angular web app</li>
+                    <li>Cyberark identity auth APIs</li>
+                  </ul>
+                  <button class="btn btn-primary btn-sm" (click)="onFlow1Start()">Start</button>
+                </div>
+              </div>
+              <!-- <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Flow 2</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                  <p class="card-text">Some quick example text to build on the card title.</p>
+                  <a href="#" class="card-link">Card link</a>
+                  <a href="#" class="card-link">Another link</a>
+                </div>
+              </div>
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Flow 3</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                  <p class="card-text">Some quick example text to build on the card title.</p>
+                  <a href="#" class="card-link">Card link</a>
+                  <a href="#" class="card-link">Another link</a>
+                </div>
+              </div>
+              <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Flow 4</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                  <p class="card-text">Some quick example text to build on the card title.</p>
+                  <a href="#" class="card-link">Card link</a>
+                  <a href="#" class="card-link">Another link</a>
+                </div>
+              </div> -->
+            </div>
       </div>
-    </div>
-    <div class="col-12 col-sm-5 col-md-4 col-lg-3 col-xl-3">
-      <div class="home-contact">
-        <h6 class="home-contact-heading">Contact Us
-        </h6>
-        <div class="home-contact-content">
-          <a href="mailto:support@cyberark.com" target="_top">support@cyberark.com</a>
-          <p class="breaktext_now">Email us if you have any questions or would like to speak to us regarding the
-            CyberArk Identity API's, custom developement, or custom integration.
-          </p>
-        </div>
-      </div>
-    </div>
+    </div>    
   </div>
   <app-footer></app-footer>
 </div>

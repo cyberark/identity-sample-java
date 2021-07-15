@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
+    private loginService: LoginService,
     private formBuilder: FormBuilder
   ) { }
 
@@ -102,7 +104,7 @@ export class RegisterComponent implements OnInit {
       this.submitButtonText = "Update";
     } else {
       this.update = false;
-      this.submitButtonText = "Register";
+      this.submitButtonText = "Sign Up";
       this.registerForm.reset();
     }
   }
@@ -182,7 +184,7 @@ export class RegisterComponent implements OnInit {
       user = Object.assign({}, form);
       this.userService.getClientIP().subscribe(
         ipData => {
-          this.userService.register(user, ipData.ip, this.registerForm.controls.MFA.value).subscribe(
+          this.userService.register(user, ipData.ip, true).subscribe(
             data => {
               this.loading = false;
               if (data.success == true) {
@@ -231,6 +233,19 @@ export class RegisterComponent implements OnInit {
       return;
     }
     this.header.signOutMenu = false;
+  }
+
+  onLogOut() {
+    this.loginService.logout().subscribe(
+      data => {
+        if (data.success == true) {
+          localStorage.clear();
+          this.router.navigate(['flow1']);
+        }
+      },
+      error => {
+        console.log(error);
+      });
   }
 
   // #TODO Move in common util

@@ -420,7 +420,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
 
   redirectToDashboard(result: any) {
     this.setUserDetails(result);
-    this.router.navigate(['dashboard']);
+    this.router.navigate(['loginprotocols']);
   }
 
   setUserDetails(result: any) {
