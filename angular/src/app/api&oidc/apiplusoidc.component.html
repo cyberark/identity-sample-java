@@ -19,24 +19,12 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                   <div class="card-body">
                     <table class="table table-sm">
-                        <tbody>
-                          <tr>
-                            <th scope="row">access_token</th>
-                            <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">token_type</th>
-                            <td class="text-break">Bearer</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">expires_at</th>
-                            <td>1234567890</td>
-                          </tr>
-                          <tr>
-                            <th scope="row">scope</th>
-                            <td>openid email</td>
-                          </tr>
-                        </tbody>
+                      <tbody>
+                        <tr *ngFor = "let key of dataKeys(tokenSet)">
+                          <th scope="row">{{key}}</th>
+                          <td class="text-break">{{tokenSet[key]}}</td>
+                        </tr>
+                      </tbody>
                     </table>                 
                   </div>
                 </div>
@@ -53,24 +41,12 @@
                   <div class="card-body">
                     <table class="table table-sm">
                       <tbody>
-                        <tr>
-                          <th scope="row">access_token</th>
-                          <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">token_type</th>
-                          <td class="text-break">Bearer</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">expires_at</th>
-                          <td>1234567890</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">scope</th>
-                          <td>openid email</td>
+                        <tr *ngFor = "let key of dataKeys(claims)">
+                          <th scope="row"> {{key}}</th>
+                          <td class="text-break">{{claims[key]}}</td>
                         </tr>
                       </tbody>
-                  </table>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -86,21 +62,9 @@
                   <div class="card-body">
                     <table class="table table-sm">
                       <tbody>
-                        <tr>
-                          <th scope="row">access_token</th>
-                          <td class="text-break">Laboreofficiamollitpariaturculpaipsumenimlaborevelitlaboris.Consecteturnostrudestminimidnullacommodocupidatatculpaaliquip.Dolorofficiasintduisminimametdopariaturnisisint.Dolornonauteullamcomagnaaliquipametconsequatduis.Loremreprehenderitproidentexcepteuripsumaliquipconsequat.Magnaaliqualaboreproidenteiusmod.Culpaessemagnadeseruntsitlaborum.Dolortemporcupidatatveniamquisconsecteturanimullamcoeu.</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">token_type</th>
-                          <td class="text-break">Bearer</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">expires_at</th>
-                          <td>1234567890</td>
-                        </tr>
-                        <tr>
-                          <th scope="row">scope</th>
-                          <td>openid email</td>
+                        <tr *ngFor = "let key of dataKeys(userInfo)">
+                          <th scope="row"> {{key}}</th>
+                          <td class="text-break">{{userInfo[key]}}</td>
                         </tr>
                       </tbody>
                   </table>

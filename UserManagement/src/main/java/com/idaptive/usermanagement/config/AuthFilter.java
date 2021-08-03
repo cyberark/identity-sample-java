@@ -17,6 +17,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.util.StringUtils;
 
 @Component
 public class AuthFilter extends OncePerRequestFilter {
@@ -54,5 +58,16 @@ public class AuthFilter extends OncePerRequestFilter {
                 .filter(cookie->name.equals(cookie.getName()))
                 .map(Cookie::getValue)
                 .findAny();
+    }
+
+    /**
+     *  Remove escape characters like Html/Js scripts from input if present
+     * @param str Input string
+     * @return sanitize string
+     */
+    public static String cleanIt(String str) {
+        return Jsoup.clean(
+                StringEscapeUtils.escapeHtml4(StringEscapeUtils.escapeEcmaScript(StringUtils.replace(str, "'", "''")))
+                , Whitelist.basic());
     }
 }

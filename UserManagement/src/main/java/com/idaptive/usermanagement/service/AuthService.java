@@ -1,6 +1,5 @@
 package com.idaptive.usermanagement.service;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -62,10 +58,10 @@ public class AuthService {
 	@Value("${jwtKey}")
 	private String jwtKey;
 
-	@Value("${oauthAuthCodeFlowAppId}")
+	@Value("${oauthAppId}")
 	private String applicationID;
 
-	@Value("${oauthAuthCodeFlowScope}")
+	@Value("${scope}")
 	private String scope;
 
 	@Value("${oauthAuthCodeFlowGrantType}")
@@ -139,11 +135,14 @@ public class AuthService {
 				if (value.split(";")[0].split("=")[0].equals(".ASPXAUTH")) {
 					token = value.split(";")[0].split("=")[1];
 					Cookie aspxauthCookie = new Cookie(".ASPXAUTH", token);
-					aspxauthCookie.setHttpOnly(true);
 					aspxauthCookie.setSecure(true);
 					aspxauthCookie.setPath("/");
-			//		aspxauthCookie.setDomain("idaptive.app");
 					response.addCookie(aspxauthCookie);
+
+					Cookie authCookie = new Cookie("AUTH", token);
+					authCookie.setSecure(true);
+					authCookie.setPath("/");
+					response.addCookie(authCookie);
 				}
 			}
 			//boolean access = hasUpdateAccess(uuid, token);
@@ -279,7 +278,7 @@ public class AuthService {
 
 	public JsonNode CompleteLogin(AdvanceLoginRequest advanceLoginRequest, HttpServletResponse httpServletResponse) throws Exception {
 
-		String accessToken = receiveOAuthTokenCCForUser(advanceLoginRequest.getAuthorizationCode());
+		String accessToken = receiveOAuthTokenCCForUser(advanceLoginRequest);
 
 		HttpHeaders headers = setHeaders(accessToken);
 		HttpEntity<String> request = new HttpEntity<>(headers);
@@ -327,16 +326,18 @@ public class AuthService {
 		return jwttoken;
 	}
 
-	private String receiveOAuthTokenCCForUser(String authorizationCode) {
+	private String receiveOAuthTokenCCForUser(AdvanceLoginRequest advanceLoginRequest) {
 		try {
 			String url = tenantPrefix + "/oauth2/token//" + applicationID;
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.set("Content-Type", "application/x-www-form-urlencoded");
 
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-			map.add("code", authorizationCode);
+			map.add("code", advanceLoginRequest.getAuthorizationCode());
 			map.add("grant_type", grantType);
 			map.add("redirect_uri", "https://apidemo.cyberark.app:8080/RedirectResource");
+			map.add("client_id", advanceLoginRequest.getClientId());
+			map.add("code_verifier", advanceLoginRequest.getCodeVerifier());
 
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, httpHeaders);
 			ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);

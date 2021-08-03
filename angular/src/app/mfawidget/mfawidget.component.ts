@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BasicLoginService } from '../basiclogin/basiclogin.service';
+import { OIDCService } from '../api&oidc/oidc.service';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -16,7 +17,8 @@ export class MFAWidgetComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private loginService: BasicLoginService
+    private loginService: BasicLoginService,
+    private oidcService: OIDCService
   ) { }
 
   ngOnInit() {
@@ -38,37 +40,40 @@ export class MFAWidgetComponent implements OnInit {
   }
   loginSuccessHandler(AuthData, context) {
 
-    this.loginService.authorize(AuthData.Auth).subscribe(
-      data => {
-        this.loginService.completeLoginUser(localStorage.getItem("sessionUuid"), data.Result.AuthorizationCode).subscribe(
+    this.oidcService.getPKCEMetadata().subscribe(
+      pkceMetadata => {
+        this.loginService.authorize(AuthData.Auth, localStorage.getItem('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe(
           data => {
-            if (data && data.Success == true) {
-              context.setUserDetails(AuthData);
-              context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
+            this.loginService.completeLoginUser(localStorage.getItem("sessionUuid"), data.Result.AuthorizationCode, localStorage.getItem('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe(
+              data => {
+                if (data && data.Success == true) {
+                  context.setUserDetails(AuthData);
+                  context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
 
-              if (context.fromFundTransfer) {
-                context.router.navigate(['fundtransfer'], { queryParams: { isFundTransferSuccessful: true } });
-              } else {
-                context.router.navigate(['user']);
-              }
+                  if (context.fromFundTransfer) {
+                    context.router.navigate(['fundtransfer'], { queryParams: { isFundTransferSuccessful: true } });
+                  } else {
+                    context.router.navigate(['user']);
+                  }
 
-            } else {
-              context.router.navigate(['basiclogin']);
-            }
+                } else {
+                  context.router.navigate(['basiclogin']);
+                }
+              },
+              error => {
+                console.error(error);
+                context.router.navigate(['basiclogin']);
+              });
           },
           error => {
+            if (error.error.Success == false) {
+              localStorage.setItem("registerMessageType", "error");
+              localStorage.setItem("registerMessage", error.error.ErrorMessage);
+            }
             console.error(error);
             context.router.navigate(['basiclogin']);
           });
-      },
-      error => {
-        if (error.error.Success == false) {
-          localStorage.setItem("registerMessageType", "error");
-          localStorage.setItem("registerMessage", error.error.ErrorMessage);
-        }
-        console.error(error);
-        context.router.navigate(['login']);
-      });
+    });
   }
   setUserDetails(result: any) {
     localStorage.setItem("userId", result.UserId);
