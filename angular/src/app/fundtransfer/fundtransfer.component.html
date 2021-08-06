@@ -18,8 +18,8 @@
               <b>Note:</b> This functionality is not a real-world fund transfer case, it showcases how such scanarios can be protected by Multi-Factor authentication.</div>
             </div>
             <div class="row margin-0">
-              <div class="container margin-top-2p w-50">
-                <form [formGroup]="fundTransferForm" class="" autocomplete="off">
+              <div class="col margin-top-2p">
+                <form [formGroup]="fundTransferForm" class="col-8" autocomplete="off">
                   <div *ngIf="errorMessage != ''" class="user-error">
                     <div class="error-image"><img
                         [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
@@ -31,8 +31,8 @@
                     <input class="form-control " placeholder="Enter Transfer Amount" formControlName="amount" required (keypress)="numberOnly($event)">
                     <span *ngIf="hasError('amount', 'required')">Required</span>
                   </div>
-                  <div class="d-flex align-items-center mt-4">
-                    <button class="container btn btn-secondary w-50" type="submit"
+                  <div class="d-flex align-items-center justify-content-end mt-4">
+                    <button class="btn btn-secondary w-50" type="submit"
                     (click)="transferFunds(fundTransferForm.value)">{{submitButtonText}}</button>
                   </div>  
                 </form>

@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 75px;
+  height: 52px;
   width: 100%;
   z-index: 1;
   padding-left: 30px;
@@ -13,7 +13,7 @@
 
 .apidemo-header img {
   width: 100%;
-  height: 65px;
+  height: 48px;
 }
 
 .apidemo-header .nav-link,
@@ -27,11 +27,7 @@
 }
 
 .apidemo-header .navbar {
-  height: 60px;
-}
-
-.apidemo-header .navbar-nav {
-  margin-top: 25px;
+  height: 52px;
 }
 
 .apidemo-header .navbar-expand-md .navbar-nav .nav-item .btn {
@@ -85,7 +81,7 @@
   }
 
   .apidemo-header .navbar-collapse.show {
-    background: #fff;
+    background: #000;
     border: 1px solid #ccc;
     margin-right: 0px;
     margin-left: 50%;
@@ -106,6 +102,6 @@
 @media screen and (max-width: 576px) {
   .apidemo-header img {
     width: 100%;
-    height: 50px;
+    height: 48px;
   }
 }
