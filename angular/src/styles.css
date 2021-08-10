@@ -28,7 +28,7 @@ body {
 /* utility classes */
 .app-page {
   margin-top: 60px;
-  max-height: calc(100vh - 97px);
+  height: calc(100vh - 97px);
   overflow-y: auto;
   overflow-x: hidden;
 }

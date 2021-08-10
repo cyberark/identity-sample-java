@@ -134,10 +134,6 @@ public class AuthService {
 			for (String value : advAuthHeader.get("Set-Cookie")) {
 				if (value.split(";")[0].split("=")[0].equals(".ASPXAUTH")) {
 					token = value.split(";")[0].split("=")[1];
-					Cookie aspxauthCookie = new Cookie(".ASPXAUTH", token);
-					aspxauthCookie.setSecure(true);
-					aspxauthCookie.setPath("/");
-					response.addCookie(aspxauthCookie);
 
 					Cookie authCookie = new Cookie("AUTH", token);
 					authCookie.setSecure(true);

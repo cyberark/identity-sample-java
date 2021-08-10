@@ -172,6 +172,9 @@ export class LoginComponent implements OnInit, AfterContentChecked {
         data => {
           this.loading = false;
           if (data.success == true) {
+            if (this.pollChallenge) {
+              this.pollChallenge.unsubscribe();
+            }
             if (data.Result.Summary == "LoginSuccess") {
               this.redirectToDashboard(data.Result);
             } else {

@@ -34,6 +34,7 @@ export class MFAWidgetComponent implements OnInit {
       "allowForgotUsername": false,
       "apiFqdn": environment.apiFqdn,
       "username": localStorage.getItem('mfaUsername'),
+      "hideBackgroundImage" : true,
       autoSubmitUsername: true,
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
     });
