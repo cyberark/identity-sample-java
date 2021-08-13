@@ -8,3 +8,7 @@ auth.*
 .vscode/settings.json
 .vscode/tasks.json
 .project
+
+server.crt
+server.key
+sslkeystore.p12

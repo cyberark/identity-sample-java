@@ -1,6 +1,6 @@
 package com.idaptive.usermanagement.service;
 
-import com.cyberark.client.CyberArkIdentityAuth;
+import com.cyberark.client.CyberArkIdentityOIDCClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
 import com.cyberark.exception.CyberArkIdentityException;
@@ -24,8 +24,11 @@ public class OIDCService {
 
     private final Logger logger = LoggerFactory.getLogger(OIDCService.class);
 
-    @Value("${oidcIssuerURL}")
-    private String oidcIssuerURL;
+    @Value("${tenant}")
+    private String tenantURL;
+
+    @Value("${oidcAppId}")
+    private String oidcAppId;
 
     @Value("${oidcClientId}")
     private String oidcClientId;
@@ -49,7 +52,7 @@ public class OIDCService {
         String authorizeUrl;
         try
         {
-            CyberArkIdentityAuth identityAuth = new CyberArkIdentityAuth(oidcIssuerURL, oidcClientId);
+            CyberArkIdentityOIDCClient identityAuth = new CyberArkIdentityOIDCClient(tenantURL, oidcAppId, oidcClientId);
 
             authorizeUrl = identityAuth.authorizeUrl(oidcRedirectURL)
                     .setResponseType(responseType)
@@ -92,7 +95,7 @@ public class OIDCService {
     public TokenHolder getTokenSet(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            CyberArkIdentityAuth identityAuth = new CyberArkIdentityAuth(oidcIssuerURL, oidcClientId);
+            CyberArkIdentityOIDCClient identityAuth = new CyberArkIdentityOIDCClient(tenantURL, oidcAppId, oidcClientId);
 
             tokenHolder = identityAuth.requestToken(tokenMetadataRequest.authorizationCode, oidcRedirectURL)
                     .setGrantType("authorization_code")
@@ -114,7 +117,7 @@ public class OIDCService {
     public JsonNode getClaims(String idToken) throws IOException {
         JsonNode claims;
         try {
-            CyberArkIdentityAuth identityAuth = new CyberArkIdentityAuth(oidcIssuerURL, oidcClientId);
+            CyberArkIdentityOIDCClient identityAuth = new CyberArkIdentityOIDCClient(tenantURL, oidcAppId, oidcClientId);
             claims = identityAuth.claims(idToken);
             return claims;
         } catch (CyberArkIdentityException ex) {
@@ -131,7 +134,7 @@ public class OIDCService {
     public UserInfo getUserInfo(String accessToken) throws IOException {
         UserInfo userInfo;
         try {
-            CyberArkIdentityAuth identityAuth = new CyberArkIdentityAuth(oidcIssuerURL, oidcClientId);
+            CyberArkIdentityOIDCClient identityAuth = new CyberArkIdentityOIDCClient(tenantURL, oidcAppId, oidcClientId);
             userInfo = identityAuth.userInfo(accessToken).execute();
             return userInfo;
         } catch (CyberArkIdentityException ex) {

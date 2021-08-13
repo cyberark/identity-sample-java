@@ -113,7 +113,7 @@
 			<artifactId>oidc</artifactId>
 			<scope>system</scope>
 			<version>1.0-SNAPSHOT</version>
-			<systemPath>${project.basedir}/libs/oidc-1.0-SNAPSHOT.jar</systemPath>
+			<systemPath>${project.basedir}/libs/Authorization-1.0-SNAPSHOT.jar</systemPath>
 		</dependency>
         <dependency>
             <groupId>org.jsoup</groupId>

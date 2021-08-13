@@ -42,7 +42,7 @@ scope: <YOUR_OAUTH_SCOPE>
 oauthAppId: <YOUR_OAUTH_AAPLICATION_ID>
 oauthUser: <YOUR_OAUTH_CLIENT_ID>
 oauthPassword: <YOUR_OAUTH_CLIENT_SECRET>
-oidcIssuerURL: <YOUR_OIDC_ISSUER_URL>
+oidcAppId: <YOUR_OIDC_AAPLICATION_ID>
 oidcClientId: <YOUR_OIDC_CLIENT_ID>
 oidcScopesSupported: openid email profile
 oidcRedirectURL: https://apidemo.cyberark.app:8080/RedirectResource
