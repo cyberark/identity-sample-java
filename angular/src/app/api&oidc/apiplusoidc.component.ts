@@ -12,7 +12,10 @@ export class ApiPlusOidc implements OnInit {
   tokenSet = {};
   claims = {};
   userInfo = {};
+  authResponse = {};
   loading = false;
+  hideAccordian = false; 
+  hideTokensAccordian = false;
 
   constructor(
     private router: Router,
@@ -20,33 +23,33 @@ export class ApiPlusOidc implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loading = true;
-    this.oidcService.getPKCEMetadata().subscribe(
-      pkceMetadata => {
-        this.oidcService.buildAuthorizeURL(pkceMetadata.Result.codeChallenge).subscribe(
-          data => {
-            this.oidcService.authorize(data.Result.authorizeUrl).subscribe(
-              data => {
-                this.oidcService.getTokenSet(data.Result.AuthorizationCode, pkceMetadata.Result.codeVerifier).subscribe(
-                  data => {
-                    this.loading = false;
-                    if (data && data.Success == true) {
-                        this.tokenSet = data.Result;
-                        this.getClaims(data.Result.id_token);
-                        this.getUserInfo(data.Result.access_token);
-                    } 
-                  })
-              },
-              error => {
-                console.error(error);
-                this.loading = false;
-              })
-          })
-      });
+    const state = history.state;
+    delete state.navigationId;
+    this.authResponse = state;
+
+    if (this.authResponse['error']) {
+      this.hideAccordian = true;
+      return;
+    }
+
+    if (this.authResponse['code']) {
+      this.oidcService.getTokenSet(this.authResponse['code'], localStorage.getItem('codeVerifier')).subscribe(
+        data => {
+          this.tokenSet = data.Result;
+          this.getClaims(this.tokenSet['id_token']);
+          this.getUserInfo(this.tokenSet['access_token']);
+        }
+      )
+    } else {
+      //implicit flow
+      this.hideTokensAccordian = true;
+      this.getClaims(this.authResponse['id_token']);
+      this.getUserInfo(this.authResponse['id_token']);
+    }
+
   }
   
   getClaims(idToken : string) {
-
     this.oidcService.getClaims(idToken).subscribe(
       data => {
         if (data && data.Success == true) {

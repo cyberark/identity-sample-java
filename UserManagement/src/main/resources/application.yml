@@ -44,8 +44,9 @@ oauthUser: <YOUR_OAUTH_CLIENT_ID>
 oauthPassword: <YOUR_OAUTH_CLIENT_SECRET>
 oidcAppId: <YOUR_OIDC_AAPLICATION_ID>
 oidcClientId: <YOUR_OIDC_CLIENT_ID>
+oidcClientSecret: <YOUR_OIDC_CLIENT_SECRET>
 oidcScopesSupported: openid email profile
-oidcRedirectURL: https://apidemo.cyberark.app:8080/RedirectResource
+oidcRedirectURL: https://apidemo.cyberark.app:4200/RedirectResource
 mfaRole: <YOUR_MFA_ROLE>
 accentColor: /#FFFFFF
 ribbonColor: /#FFFFFF

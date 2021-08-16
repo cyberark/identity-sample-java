@@ -45,14 +45,14 @@ public class OIDCController {
     }
 
     @GetMapping("oidc/buildAuthorizeURL")
-    public ResponseEntity<JsonNode> buildAuthorizeURL(@RequestParam String codeChallenge) {
+    public ResponseEntity<JsonNode> buildAuthorizeURL(@RequestParam String codeChallenge, @RequestParam String responseType) {
 
         logger.info("Invoking Get AuthorizeUrl Request");
         Response response = new Response();
         try
         {
             String codeChallengeString = AuthFilter.cleanIt(codeChallenge);
-            String authorizeUrl = this.oidcService.buildAuthorizeURL(codeChallengeString);
+            String authorizeUrl = this.oidcService.buildAuthorizeURL(codeChallengeString, responseType);
             ObjectNode objectNode = new ObjectMapper().createObjectNode();
             objectNode.put("authorizeUrl", authorizeUrl);
             response.Result = objectNode;
@@ -61,6 +61,29 @@ public class OIDCController {
         }
         catch (IOException ex) {
             logger.error("Exception at buildAuthorizeURL() : ", ex);
+            response.Success = false;
+            response.ErrorMessage = ex.getMessage();
+            return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("oidc/buildImplicitAuthURL")
+    public ResponseEntity<JsonNode> buildImplicitAuthURL(@RequestParam String responseType) {
+
+        logger.info("Invoking Get Implicit AuthorizeUrl Request");
+        Response response = new Response();
+        try
+        {
+            String responseTypeString = AuthFilter.cleanIt(responseType);
+            String authorizeUrl = this.oidcService.buildImplicitAuthURL(responseTypeString);
+            ObjectNode objectNode = new ObjectMapper().createObjectNode();
+            objectNode.put("authorizeUrl", authorizeUrl);
+            response.Result = objectNode;
+
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        catch (IOException ex) {
+            logger.error("Exception at buildImplicitAuthURL() : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
             return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);

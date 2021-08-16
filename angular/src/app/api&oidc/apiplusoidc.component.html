@@ -9,6 +9,27 @@
             <div class="accordion w-50" id="accordionExample">
               <div class="card">
                 <h3 class="text-center font-weight-light m-3">OIDC Metadata</h3>
+                <div class="card-header" id="headingFour">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                      Authorize Response
+                    </button>
+                  </h2>
+                </div>
+                <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <table class="table table-sm">
+                      <tbody>
+                        <tr *ngFor = "let key of dataKeys(authResponse)">
+                          <th scope="row">{{key}}</th>
+                          <td class="text-break text-truncate">{{authResponse[key]}}</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                </div>
+              </div>
+              <div class="card" *ngIf="!(hideAccordian || hideTokensAccordian)" >
                 <div class="card-header" id="headingOne">
                   <h2 class="mb-0">
                     <button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -16,20 +37,20 @@
                     </button>
                   </h2>
                 </div>
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                   <div class="card-body">
                     <table class="table table-sm">
                       <tbody>
                         <tr *ngFor = "let key of dataKeys(tokenSet)">
                           <th scope="row">{{key}}</th>
-                          <td class="text-break">{{tokenSet[key]}}</td>
+                          <td class="text-break text-truncate">{{tokenSet[key]}}</td>
                         </tr>
                       </tbody>
                     </table>                 
                   </div>
                 </div>
               </div>
-              <div class="card">
+              <div class="card" *ngIf="!hideAccordian">
                 <div class="card-header" id="headingTwo">
                   <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
@@ -43,14 +64,14 @@
                       <tbody>
                         <tr *ngFor = "let key of dataKeys(claims)">
                           <th scope="row"> {{key}}</th>
-                          <td class="text-break">{{claims[key]}}</td>
+                          <td class="text-break text-truncate">{{claims[key]}}</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
-              <div class="card">
+              <div class="card" *ngIf="!hideAccordian">
                 <div class="card-header" id="headingThree">
                   <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
@@ -64,13 +85,13 @@
                       <tbody>
                         <tr *ngFor = "let key of dataKeys(userInfo)">
                           <th scope="row"> {{key}}</th>
-                          <td class="text-break">{{userInfo[key]}}</td>
+                          <td class="text-break text-truncate">{{userInfo[key]}}</td>
                         </tr>
                       </tbody>
                   </table>
                   </div>
                 </div>
-              </div>
+              </div>              
               <div class="card p-3">
                 <button class="container btn btn-secondary p-3 w-50 align-self-center" (click)="onNext()">Next</button>
               </div>

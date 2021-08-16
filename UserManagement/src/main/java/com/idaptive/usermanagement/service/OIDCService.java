@@ -33,22 +33,24 @@ public class OIDCService {
     @Value("${oidcClientId}")
     private String oidcClientId;
 
+    @Value("${oidcClientSecret}")
+    private String oidcClientSecret;
+
     @Value("${oidcRedirectURL}")
     private String oidcRedirectURL;
 
     @Value("${oidcScopesSupported}")
     private String scopesSupported;
 
-    private final String responseType = "code";
-
     private final String codeChallengeMethod = "S256";
 
     /**
      *  Builds the /authorize URL using CyberArkIdentityAuth client
      *  @param codeChallenge Input string
+     *  @param responseType Input string
      *  @return authorize URL string
      */
-    public String buildAuthorizeURL(String codeChallenge) throws IOException {
+    public String buildAuthorizeURL(String codeChallenge, String responseType) throws IOException {
         String authorizeUrl;
         try
         {
@@ -65,6 +67,30 @@ public class OIDCService {
         }
         catch (Exception ex){
             logger.error("Exception at buildAuthorizeURL() : ", ex);
+            throw ex;
+        }
+    }
+
+    /**
+     *  Builds the implicit /authorize URL using CyberArkIdentityOIDCClient
+     *  @param responseType Input string
+     *  @return authorize URL string
+     */
+    public String buildImplicitAuthURL(String responseType) throws IOException {
+        String authorizeUrl;
+        try
+        {
+            CyberArkIdentityOIDCClient identityAuth = new CyberArkIdentityOIDCClient(tenantURL, oidcAppId, oidcClientId, oidcClientSecret);
+
+            authorizeUrl = identityAuth.authorizeUrl(oidcRedirectURL)
+                    .setResponseType(responseType)
+                    .setScope(scopesSupported)
+                    .build();
+
+            return authorizeUrl;
+        }
+        catch (Exception ex){
+            logger.error("Exception at buildImplicitAuthURL() : ", ex);
             throw ex;
         }
     }

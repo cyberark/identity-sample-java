@@ -20,6 +20,6 @@ export class LoginProtocolComponent implements OnInit {
   }
 
   onApiOidcClick(){
-    this.router.navigate(['api&oidc'])
+    this.router.navigate(['oidcflow'])
   }
 }

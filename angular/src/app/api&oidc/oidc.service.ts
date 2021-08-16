@@ -15,18 +15,14 @@ export class OIDCService {
         return this.http.get<any>(environment.baseUrl + `oidc/pkceMetaData`, { headers: head, withCredentials: true })
     }
 
-    buildAuthorizeURL(codeChallenge : string){
+    buildAuthorizeURL(codeChallenge : string, responseType : string = "code"){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/buildAuthorizeURL`, { headers: head, withCredentials: true, params: new HttpParams().set("codeChallenge", codeChallenge) })
+        return this.http.get<any>(environment.baseUrl + `oidc/buildAuthorizeURL`, { headers: head, withCredentials: true, params: new HttpParams().set("codeChallenge", codeChallenge).set('responseType', responseType) })
     }
 
-    authorize(url : string){
-        let head = new HttpHeaders()
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Authorization', 'Bearer ' + this.readCookie("AUTH"));
-
-        return this.http.get<any>(url, { headers: head, withCredentials: true })
+    buildImplicitAuthURL(responseType : string){
+        let head = this.getHeaders();
+        return this.http.get<any>(environment.baseUrl + `oidc/buildImplicitAuthURL`, { headers: head, withCredentials: true, params: new HttpParams().set('responseType', responseType) })
     }
 
     getTokenSet(authorizationCode : string, codeVerifier : string){
