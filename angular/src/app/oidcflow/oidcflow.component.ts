@@ -16,7 +16,8 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { OIDCService } from '../api&oidc/oidc.service';
+import { AuthorizationService } from '../api&oidc/authorizationservice';
+import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL } from '../utils';
 
 enum OidcFlow {
   auth = "auth",
@@ -46,43 +47,28 @@ export class OidcFlowComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private oidcService: OIDCService
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit() {
+    localStorage.setItem('authFlow', AuthorizationFlow.OIDC);
   }
 
   onBuildAuthUrl() {
     this.loading = true;
+    let authRequest = new AuthorizationMetadataRequest();
     if (this.oidcFlow === OidcFlow.implicit) {
-      this.oidcService.buildImplicitAuthURL(this.responseTypes.join(' ')).subscribe(
-        data => {
-          this.loading = false;
-          this.authURL = data.Result.authorizeUrl;
-          this.authorizeBtn.nativeElement.disabled = false;
-        },
-        error => {
-          console.error(error);
-          this.loading = false;
-        }
-      )
+      authRequest.responseType = this.responseTypes.join(' ');
+      buildAuthorizeURL(authRequest, this);
     } else {
-      this.oidcService.getPKCEMetadata().subscribe(
+      this.authorizationService.getPKCEMetadata().subscribe(
         pkceMetadata => {
           this.codeChallenge = pkceMetadata.Result.codeChallenge;
           this.codeVerifier = pkceMetadata.Result.codeVerifier;
           localStorage.setItem('codeVerifier', this.codeVerifier);
-          this.oidcService.buildAuthorizeURL(pkceMetadata.Result.codeChallenge, this.responseTypes.join(' ')).subscribe(
-            data => {
-              this.loading = false;
-              this.authURL = data.Result.authorizeUrl;
-              this.authorizeBtn.nativeElement.disabled = false;
-            },
-            error => {
-              console.error(error);
-              this.loading = false;
-            }
-          )
+          authRequest.codeChallenge = pkceMetadata.Result.codeChallenge;
+          authRequest.responseType = this.responseTypes.join(' ');
+          buildAuthorizeURL(authRequest, this);
         });
     }
   }
@@ -93,10 +79,10 @@ export class OidcFlowComponent implements OnInit {
 
   onAccept() {
     this.loading = true;
-    window.location.href = this.authURL + "&AUTH=" + this.oidcService.readCookie("AUTH");
+    window.location.href = this.authURL + "&AUTH=" + this.authorizationService.readCookie("AUTH");
   }
 
-  onSelect(val) {
+  onSelect(val: OidcFlow) {
     this.oidcFlow = val;
     if (this.oidcFlow === OidcFlow.auth) {
       this.responseTypes = ["code"];
@@ -115,13 +101,13 @@ export class OidcFlowComponent implements OnInit {
     }
   }
 
-  onCheckIdToken(isChecked) {
+  onCheckIdToken(isChecked: boolean) {
     this.isIdTokenChecked = isChecked;
     if (isChecked && !this.responseTypes.includes("id_token")) this.responseTypes.push("id_token");
     else this.responseTypes = this.responseTypes.filter(t => t !== "id_token");
   }
 
-  onCheckToken(isChecked) {
+  onCheckToken(isChecked: boolean) {
     this.isTokenChecked = isChecked;
     if (isChecked && !this.responseTypes.includes("token")) this.responseTypes.push("token");
     else this.responseTypes = this.responseTypes.filter(t => t !== "token");

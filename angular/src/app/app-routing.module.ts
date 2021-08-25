@@ -15,6 +15,7 @@ import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
 import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
+import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'flow2', component: Flow2Component },
   { path: 'oidcflow', component: OidcFlowComponent },
   { path: 'RedirectResource', component: RedirectComponent },
+  { path: 'oauthflow', component: OAuthFlowComponent },
 ];
 
 @NgModule({

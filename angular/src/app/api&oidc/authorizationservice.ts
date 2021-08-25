@@ -1,38 +1,39 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { AuthorizationMetadataRequest, TokenMetadataRequest } from '../utils';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class OIDCService {
+export class AuthorizationService {
 
     constructor(private http: HttpClient) { }
 
     getPKCEMetadata(){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/pkceMetaData`, { headers: head, withCredentials: true })
+        return this.http.get<any>(environment.baseUrl + `pkceMetaData`, { headers: head, withCredentials: true })
     }
 
-    buildAuthorizeURL(codeChallenge : string, responseType : string = "code"){
+    buildAuthorizeURL(authorizationMetadataRequest: AuthorizationMetadataRequest){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/buildAuthorizeURL`, { headers: head, withCredentials: true, params: new HttpParams().set("codeChallenge", codeChallenge).set('responseType', responseType) })
+        return this.http.post<any>(environment.baseUrl + `buildAuthorizeURL`, authorizationMetadataRequest, { headers: head, withCredentials: true })
     }
 
-    buildImplicitAuthURL(responseType : string){
+    getTokenSet(tokenMetadataRequest: TokenMetadataRequest){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/buildImplicitAuthURL`, { headers: head, withCredentials: true, params: new HttpParams().set('responseType', responseType) })
+        return this.http.post<any>(environment.baseUrl + `tokenSet`, tokenMetadataRequest, { headers: head, withCredentials: true })
     }
 
-    getTokenSet(authorizationCode : string, codeVerifier : string){
+    getTokenRequestPreview(tokenPreviewReq: TokenMetadataRequest){
         let head = this.getHeaders();
-        return this.http.post<any>(environment.baseUrl + `oidc/tokenSet`, { authorizationCode, codeVerifier }, { headers: head, withCredentials: true })
+        return this.http.post<any>(environment.baseUrl + `tokenRequestPreview`, tokenPreviewReq, { headers: head, withCredentials: true })
     }
 
-    getClaims(idToken : string){
+    getClaims(token : string){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/claims`, { headers: head, withCredentials: true, params: new HttpParams().set("idToken", idToken) })
+        return this.http.get<any>(environment.baseUrl + `claims`, { headers: head, withCredentials: true, params: new HttpParams().set("token", token) })
     }
 
     getUserInfo(accessToken : string){

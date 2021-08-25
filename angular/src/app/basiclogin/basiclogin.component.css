@@ -91,18 +91,6 @@
   background-image: '../../assets/images/issue_icon.png';
 }
 
-form span {
-  color: #f44336;
-  font-size: 75%;
-}
-
-label.required::after {
-  content: '*';
-  color: #f44336;
-  font-weight: bold;
-  margin-left: .25em;
-}
-
 .username-block {
   display: flex;
   justify-content: space-between;

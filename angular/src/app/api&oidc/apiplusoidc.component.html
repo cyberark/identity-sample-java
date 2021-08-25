@@ -8,28 +8,9 @@
           <div class="row justify-content-center">
             <div class="accordion w-50" id="accordionExample">
               <div class="card">
-                <h3 class="text-center font-weight-light m-3">OIDC Metadata</h3>
-                <div class="card-header" id="headingFour">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                      Authorize Response
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordionExample">
-                  <div class="card-body">
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr *ngFor = "let key of dataKeys(authResponse)">
-                          <th scope="row">{{key}}</th>
-                          <td class="text-break text-truncate">{{authResponse[key]}}</td>
-                        </tr>
-                      </tbody>
-                  </table>
-                  </div>
-                </div>
+                <h3 class="text-center font-weight-light m-3">{{heading}}</h3>
               </div>
-              <div class="card" *ngIf="!(hideAccordian || hideTokensAccordian)" >
+              <div class="card" *ngIf="!(hideAccordian || hideTokensAccordian)">
                 <div class="card-header" id="headingOne">
                   <h2 class="mb-0">
                     <button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -37,7 +18,7 @@
                     </button>
                   </h2>
                 </div>
-                <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                   <div class="card-body">
                     <table class="table table-sm">
                       <tbody>
@@ -58,7 +39,7 @@
                     </button>
                   </h2>
                 </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div id="collapseTwo" class="collapse" [ngClass]="{'show': hideTokensAccordian}" aria-labelledby="headingTwo" data-parent="#accordionExample">
                   <div class="card-body">
                     <table class="table table-sm">
                       <tbody>
@@ -71,7 +52,7 @@
                   </div>
                 </div>
               </div>
-              <div class="card" *ngIf="!hideAccordian">
+              <div class="card" *ngIf="!hideAccordian && !isOauthFlow">
                 <div class="card-header" id="headingThree">
                   <h2 class="mb-0">
                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">

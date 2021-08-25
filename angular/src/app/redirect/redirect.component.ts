@@ -16,6 +16,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthorizationService } from '../api&oidc/authorizationservice';
+import { AuthorizationFlow, OAuthFlow, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',
@@ -24,24 +26,75 @@ import { Router } from '@angular/router';
 export class RedirectComponent implements OnInit {
 
     loading = false;
+    authResponse = {};
+    isTokenReqVisible = false;
+    tokenPostCall = 'Token Endpoint API Request';
+    tokenPostCallBody = '';
+    tokenReq = new TokenMetadataRequest();
 
     constructor(
-        private router: Router
+        private router: Router,
+        private authorizationService: AuthorizationService
     ) { }
 
     ngOnInit() {
         if (window.location.hash.length > 0) {
-            const authParams = this.parseParms(window.location.hash.substring(1));
-            this.router.navigateByUrl('/api&oidc', {state: authParams});
+            this.authResponse = this.parseParms(window.location.hash.substring(1));
+            if (Object.keys(this.authResponse).includes('code')) this.tokenEndpointPreview();
         } else {
             //Auth code flow
-            const code = this.parseParms(window.location.search.substring(1));
-            this.router.navigateByUrl('/api&oidc', {state: code});
+            this.loading = true;
+            this.authResponse = this.parseParms(window.location.search.substring(1));
+            
+            this.tokenEndpointPreview();
+        }
+    }
+
+    private tokenEndpointPreview() {
+        this.isTokenReqVisible = true;
+        const oauth_flow = localStorage.getItem('oauthflow_flow');
+        const authFlow = localStorage.getItem('authFlow');
+
+        this.tokenReq.authorizationCode = this.authResponse['code'];
+        if (oauth_flow && oauth_flow === OAuthFlow.authPKCE || authFlow === AuthorizationFlow.OIDC) this.tokenReq.codeVerifier = localStorage.getItem('codeVerifier');
+        else this.tokenReq.clientSecret = localStorage.getItem('client_secret');
+        this.tokenReq.authFlow = AuthorizationFlow[authFlow];
+        this.tokenReq.clientId = localStorage.getItem('username');
+        this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe(
+            data => {
+                this.loading = false;
+                this.tokenPostCall = data.Result.apiEndPoint;
+                this.tokenPostCallBody = this.tokenEndpointBody(data.Result.payload);
+            },
+            error => {
+                this.loading = false;
+                console.error(error);
+            }
+        );
+    }
+
+    tokenEndpointBody(payload: Object) {
+        let resultStr = '';
+        Object.keys(payload).forEach(k => {
+            resultStr += `${k}=${payload[k]}\n`;
+        });
+        return resultStr;
+    }
+
+    onProceed() {
+        this.router.navigateByUrl('/api&oidc', {state: {authResponse: this.authResponse, tokenReq: this.tokenReq}});
+    }
+
+    onCancel() {
+        if(localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH){
+            this.router.navigate(['oauthflow']);
+        } else {
+            this.router.navigate(['oidcflow']);
         }
     }
 
     // Parses the URL parameters and returns an object
-    parseParms(str) {
+    parseParms(str: string) {
         let pieces = str.split("&"), data = {}, i, parts;
         // process each query pair
         for (i = 0; i < pieces.length; i++) {
@@ -52,5 +105,9 @@ export class RedirectComponent implements OnInit {
             data[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
         }
         return data;
+    }
+
+    dataKeys(obj: Object) {
+        return Object.keys(obj);
     }
 }

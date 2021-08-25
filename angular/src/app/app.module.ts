@@ -23,6 +23,7 @@ import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
 import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
+import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { RedirectComponent } from './redirect/redirect.component';
     Flow2Component,
     OidcFlowComponent,
     RedirectComponent,
+    OAuthFlowComponent,
   ],
   imports: [
     BrowserModule,

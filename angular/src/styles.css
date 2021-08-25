@@ -33,6 +33,29 @@ body {
   overflow-x: hidden;
 }
 
+.preline {
+  white-space: pre-line;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+  table-layout: fixed;
+}
+
+form span {
+  color: #f44336;
+  font-size: 75%;
+}
+
+label.required::after {
+  content: '*';
+  color: #f44336;
+  font-weight: bold;
+  margin-left: .25em;
+}
+
 .padding-0 {
   padding: 0 !important;
 }

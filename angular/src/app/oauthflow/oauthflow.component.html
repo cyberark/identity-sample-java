@@ -1,0 +1,60 @@
+<div class="container-fluid padding-0">
+    <div *ngIf="loading" class="loader-screen">
+        <img class="loader" src="../../assets/images/Spinner.svg">
+    </div>
+    <app-header></app-header>
+    <div class="app-page">
+        <div class="container w-50 bg-white p-3">
+            <div class="d-flex flex-column align-items-center w-50 mx-auto">
+                <h3 class="font-weight-light m-3">OAuth Flow</h3>
+                <select name="oauth" id="oauthSel" class="form-control w-100" (change)="onSelect($event.target.value)">
+                    <option value="auth">Authorization</option>
+                    <option value="authPKCE">PKCE</option>
+                    <option value="implicit">Implicit</option>
+                </select>
+                <form [formGroup]="loginForm" autocomplete="off">
+                    <div class="form-group d-flex align-items-center mt-3">
+                        <label class="required label">Username</label>
+                        <input class="form-control" disabled [value]="username">
+                    </div>
+                    <div class="form-group d-flex align-items-center" *ngIf="isPasswordVisible">
+                        <label class="required label">Password</label>
+                        <input class="form-control" formControlName="password" type="password" required>
+                        <span *ngIf="hasError('password', 'required')">Required</span>
+                    </div>
+                    <button class="container btn btn-secondary" type="submit" (click)="onBuildAuthUrl()">Build Authorize URL</button>
+                </form>
+            </div>
+            <div class="m-3">
+                <h5 class="font-weight-light">Selected Flow + Authorize URL</h5>
+                <p class="p-3 border text-break preline">
+                    {{authURL.split('&').join('\n&')}}
+                </p>
+                <div class="d-flex">
+                    <div class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</div>
+                    <button #authorizeBtn class="container btn btn-secondary" data-toggle="modal" data-target="#userConsent" disabled>Authorize</button>
+                </div>
+            </div>
+            <div class="modal fade" id="userConsent" tabindex="-1" role="dialog"
+                aria-labelledby="userConsentTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="userConsentTitle">An application would like to access your account</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Signing in to the application "Demo App" will share name, email address and profile scope with the application.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="container btn btn-outline-secondary mr-5" data-dismiss="modal">Back</button>
+                            <button type="button" class="container btn btn-secondary" data-dismiss="modal" (click)="onAccept()">Accept</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

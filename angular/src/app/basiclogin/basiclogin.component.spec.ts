@@ -4,17 +4,17 @@ import { BasicLoginComponent } from './basiclogin.component';
 
 describe('BasicLoginComponent', () => {
   let component: BasicLoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+  let fixture: ComponentFixture<BasicLoginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      declarations: [ BasicLoginComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(BasicLoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
