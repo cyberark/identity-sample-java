@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
 
 import com.idaptive.usermanagement.Repos.TokenStoreRepository;
-import com.idaptive.usermanagement.entity.AdvanceLoginRequest;
-import com.idaptive.usermanagement.entity.DBUser;
-import com.idaptive.usermanagement.entity.TokenStore;
+import com.idaptive.usermanagement.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.idaptive.usermanagement.entity.AuthRequest;
+
 import java.security.Key;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -61,12 +59,6 @@ public class AuthService {
 	@Value("${oauthAppId}")
 	private String applicationID;
 
-	@Value("${scope}")
-	private String scope;
-
-	@Value("${oauthAuthCodeFlowGrantType}")
-	private String grantType;
-
 	@Autowired
 	private TokenStoreRepository tokenStoreRepository;
 
@@ -82,7 +74,7 @@ public class AuthService {
 
 	private HttpHeaders setHeaders() {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.set("x-centrify-native-client", "true");
+		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		return httpHeaders;
@@ -161,7 +153,7 @@ public class AuthService {
 
 	private HttpHeaders setHeaders(String token) {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.set("x-centrify-native-client", "true");
+		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
@@ -330,7 +322,7 @@ public class AuthService {
 
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("code", advanceLoginRequest.getAuthorizationCode());
-			map.add("grant_type", grantType);
+			map.add("grant_type", GrantType.authorization_code.name());
 			map.add("redirect_uri", "https://apidemo.cyberark.app:8080/RedirectResource");
 			map.add("client_id", advanceLoginRequest.getClientId());
 			map.add("code_verifier", advanceLoginRequest.getCodeVerifier());

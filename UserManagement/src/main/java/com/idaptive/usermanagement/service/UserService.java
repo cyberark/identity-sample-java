@@ -1,13 +1,11 @@
 package com.idaptive.usermanagement.service;
 
-import java.util.Arrays;
+import java.io.IOException;
 
+import com.cyberark.entities.TokenHolder;
 import com.idaptive.usermanagement.Repos.MfaUserMappingRepository;
 import com.idaptive.usermanagement.Repos.UserRepository;
-import com.idaptive.usermanagement.entity.DBUser;
-import com.idaptive.usermanagement.entity.MfaUserMapping;
-import com.idaptive.usermanagement.entity.User;
-import org.apache.commons.codec.binary.Base64;
+import com.idaptive.usermanagement.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -51,21 +45,6 @@ public class UserService {
 	@Value("${tenant}")
 	private String tenant;
 
-	@Value("${oauthAppId}")
-	private String applicationID;
-
-	@Value("${oauthUser}")
-	private String clientID;
-
-	@Value("${oauthPassword}")
-	private String clientSecret;
-
-	@Value("${scope}")
-	private String scope;
-
-	@Value("${grantType}")
-	private String grantType;
-
 	@Value("${mfaRole}")
 	private String roleName;
 
@@ -88,6 +67,9 @@ public class UserService {
 	@Autowired
 	private MfaUserMappingRepository mfaUserMappingRepository;
 
+	@Autowired
+	public AuthFlows authFlows;
+
 	public UserService(RestTemplateBuilder builder) {
 		this.restTemplate = builder.build();
 	}
@@ -106,25 +88,25 @@ public class UserService {
 		}
 	}
 
-	private String receiveOAuthTokenCC() {
-		ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
-		details.setAccessTokenUri(tenant + "/oauth2/token/" + applicationID);
-		details.setClientId(clientID);
-		details.setClientSecret(clientSecret);
-		details.setScope(Arrays.asList(scope));
-		details.setGrantType(grantType);
-		OAuth2RestTemplate template = new OAuth2RestTemplate(details);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		OAuth2AccessToken token = template.getAccessToken();
-		return token.getValue();
+	private String receiveOAuthTokenForClientCreds() throws Exception {
+		TokenMetadataRequest metadataRequest = new TokenMetadataRequest();
+		metadataRequest.grantType = GrantType.client_credentials;
+
+		TokenHolder tokenHolder = null;
+		try {
+			tokenHolder = this.authFlows.getEnumMap().get(AuthorizationFlow.OAUTH).getTokenSetWithClientCreds(metadataRequest);
+		} catch (IOException e) {
+			throw new Exception("Error occurred while fetching access_token");
+		}
+
+		return tokenHolder.getAccessToken();
 	}
 
 	private HttpHeaders setHeaders(String token) {
 		HttpServletRequest currentRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpHeaders httpHeaders = new HttpHeaders();
 		
-		httpHeaders.set("x-centrify-native-client", "true");
+		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
@@ -132,12 +114,12 @@ public class UserService {
 		return httpHeaders;
 	}
 
-	private HttpHeaders prepareForRequestOauth() {
-		String token = receiveOAuthTokenCC();
+	private HttpHeaders prepareForRequestOauth()  throws Exception {
+		String token = receiveOAuthTokenForClientCreds();
 		return setHeaders(token);
 	}
 
-	public ResponseEntity<JsonNode> createUser(User user, boolean isMfa, boolean enableMFAWidgetFlow) {
+	public ResponseEntity<JsonNode> createUser(User user, boolean isMfa, boolean enableMFAWidgetFlow) throws Exception{
 		String userJson = "";
 		try {
 			userJson = getJson(user);
@@ -186,7 +168,7 @@ public class UserService {
 		mfaUserMappingRepository.save(new MfaUserMapping(outUser.getId(),mfaUserId));
 	}
 
-	public String getRoleUuid(String roleName) throws RoleNotFoundException {
+	public String getRoleUuid(String roleName) throws RoleNotFoundException, Exception {
 		String getRoles = tenant + "/Redrock/query";
 		HttpHeaders headers = prepareForRequestOauth();
 		HttpEntity<String> getRolesRequest = new HttpEntity<>(

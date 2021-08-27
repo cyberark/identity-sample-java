@@ -1,7 +1,6 @@
 package com.idaptive.usermanagement.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import com.idaptive.usermanagement.Repos.TokenStoreRepository;
@@ -20,11 +19,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -45,21 +40,6 @@ public class UserOpsService {
 
 	@Value("${tenant}")
 	private String tenant;
-
-	@Value("${oauthAppId}")
-	private String applicationID;
-
-	@Value("${oauthUser}")
-	private String clientID;
-
-	@Value("${oauthPassword}")
-	private String clientSecret;
-
-	@Value("${scope}")
-	private String scope;
-
-	@Value("${grantType}")
-	private String grantType;
 
 	@Value("${mfaRole}")
 	private String roleName;
@@ -100,32 +80,13 @@ public class UserOpsService {
 		}
 	}
 
-	private String receiveOAuthTokenCC() {
-		ClientCredentialsResourceDetails details = new ClientCredentialsResourceDetails();
-		details.setAccessTokenUri(tenant + "/oauth2/token/" + applicationID);
-		details.setClientId(clientID);
-		details.setClientSecret(clientSecret);
-		details.setScope(Arrays.asList(scope));
-		details.setGrantType(grantType);
-		OAuth2RestTemplate template = new OAuth2RestTemplate(details);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		OAuth2AccessToken token = template.getAccessToken();
-		return token.getValue();
-	}
-
 	private HttpHeaders setHeaders(String token) {
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.set("x-centrify-native-client", "true");
+		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
 		return httpHeaders;
-	}
-
-	private HttpHeaders prepareForRequestOauth() {
-		String token = receiveOAuthTokenCC();
-		return setHeaders(token);
 	}
 
 	private HttpHeaders prepareForRequest(String token) {

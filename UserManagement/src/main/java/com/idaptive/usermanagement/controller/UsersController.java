@@ -24,7 +24,7 @@ public class UsersController {
 	private UserService userService;
 
 	@PostMapping("/user/register")
-	public ResponseEntity<JsonNode> createUser(HttpServletRequest request, @RequestBody UserRegistration userRegistration) {
+	public ResponseEntity<JsonNode> createUser(HttpServletRequest request, @RequestBody UserRegistration userRegistration) throws Exception {
 		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
 		return userService.createUser(userRegistration.getUser(), userRegistration.getIsMfa(), enableMFAWidgetFlow);
 	}

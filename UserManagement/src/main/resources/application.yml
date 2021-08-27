@@ -36,17 +36,17 @@ customerId: <YOUR_TENANT_PREFIX>
 podurl: https://<YOUR_POD_URL>/Security/ResumeFromExtIdpAuth?ExtIdpAuthChallengeState=
 callbackurl: https://<YOUR_MACHINE_HOST>/login
 jwtKey: kjaspdjjjslaytl
-grantType: client_credentials
-oauthAuthCodeFlowGrantType: authorization_code
-scope: <YOUR_OAUTH_SCOPE>
 oauthAppId: <YOUR_OAUTH_AAPLICATION_ID>
-oauthUser: <YOUR_OAUTH_CLIENT_ID>
-oauthPassword: <YOUR_OAUTH_CLIENT_SECRET>
+oauthServiceUserName: <YOUR_OAUTH_CLIENT_ID>
+oauthServiceUserPassword: <YOUR_OAUTH_CLIENT_SECRET>
+oauthScopesSupported: <YOUR_OAUTH_SCOPE>
+
 oidcAppId: <YOUR_OIDC_AAPLICATION_ID>
 oidcClientId: <YOUR_OIDC_CLIENT_ID>
-oidcClientSecret: <YOUR_OIDC_CLIENT_SECRET>
 oidcScopesSupported: openid email profile
-oidcRedirectURL: https://apidemo.cyberark.app:4200/RedirectResource
+
+authorizationRedirectURL: https://apidemo.cyberark.app:4200/RedirectResource
+
 mfaRole: <YOUR_MFA_ROLE>
 accentColor: /#FFFFFF
 ribbonColor: /#FFFFFF
