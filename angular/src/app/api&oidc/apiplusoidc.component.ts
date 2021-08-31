@@ -16,8 +16,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginService } from '../login/login.service';
 import { AuthorizationFlow } from '../utils';
 import { AuthorizationService } from './authorizationservice';
+import { ajax, css } from "jquery";
 
 @Component({
   selector: 'apiplusoidc',
@@ -38,7 +40,8 @@ export class ApiPlusOidc implements OnInit {
 
   constructor(
     private router: Router,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private loginService: LoginService,
   ) { }
 
   ngOnInit() {
@@ -46,8 +49,9 @@ export class ApiPlusOidc implements OnInit {
     delete state.navigationId;
     this.authResponse = state.authResponse;
 
-    if (this.authResponse['error']) {
+    if (!this.authResponse || this.authResponse['error']) {
       this.hideAccordian = true;
+      (<any>$('#errorPopup')).modal();
       return;
     }
 
@@ -69,8 +73,9 @@ export class ApiPlusOidc implements OnInit {
       //implicit flow
       this.hideTokensAccordian = true;
       this.loading = true;
-      this.getClaims(this.authResponse['access_token']);
-      this.getUserInfo(this.authResponse['access_token']);
+      const token = this.isOauthFlow ? this.authResponse['access_token'] : this.authResponse['id_token'];
+      this.getClaims(token);
+      this.getUserInfo(token);
       this.loading = false;
     }
 
@@ -105,5 +110,28 @@ export class ApiPlusOidc implements OnInit {
 
   onNext() {
     this.router.navigate(['user'])
+  }
+
+  onTryAnotherFlow(){
+    this.loginService.logout().subscribe(
+      data => {
+        if (data.success == true) {
+          const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
+          localStorage.clear();
+          this.router.navigate([routeToNavigate]);
+        }
+      },
+      error => {
+        console.error(error);
+      }
+    )
+  }
+
+  onOk(){
+    if(localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH) {
+      this.router.navigate(['oauthflow']);
+    } else {
+      this.router.navigate(['oidcflow']);
+    }
   }
 }

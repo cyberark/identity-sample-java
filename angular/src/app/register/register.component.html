@@ -79,11 +79,11 @@
                   </div>
                   <div class="col-md-12 mt-3">
                     <div class="d-flex">
+                      <button *ngIf="update" class="container btn btn-outline-secondary submit mr-5"
+                      (click)="onLogOut()">Log out</button>
                       <button [disabled]="socialUser" class="container btn btn-secondary submit "
                         data-target="#userConsent" type="submit"
                         (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
-                      <button *ngIf="update" class="container btn btn-outline-secondary submit ml-5"
-                      (click)="onLogOut()">Log out</button>
                     </div>
                   </div>
                 </div>

@@ -28,7 +28,7 @@ export class RedirectComponent implements OnInit {
     loading = false;
     authResponse = {};
     isTokenReqVisible = false;
-    tokenPostCall = 'Token Endpoint API Request';
+    tokenPostCall = '';
     tokenPostCallBody = '';
     tokenReq = new TokenMetadataRequest();
 
@@ -45,7 +45,6 @@ export class RedirectComponent implements OnInit {
             //Auth code flow
             this.loading = true;
             this.authResponse = this.parseParms(window.location.search.substring(1));
-            
             this.tokenEndpointPreview();
         }
     }
@@ -68,7 +67,7 @@ export class RedirectComponent implements OnInit {
             },
             error => {
                 this.loading = false;
-                console.error(error);
+                (<any>$('#errorPopup')).modal();
             }
         );
     }
@@ -82,15 +81,23 @@ export class RedirectComponent implements OnInit {
     }
 
     onProceed() {
-        this.router.navigateByUrl('/api&oidc', {state: {authResponse: this.authResponse, tokenReq: this.tokenReq}});
+        this.router.navigateByUrl('/api&oidc', { state: { authResponse: this.authResponse, tokenReq: this.tokenReq } });
     }
 
     onCancel() {
-        if(localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH){
+        this.goBack();
+    }
+
+    private goBack() {
+        if (localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH) {
             this.router.navigate(['oauthflow']);
         } else {
             this.router.navigate(['oidcflow']);
         }
+    }
+
+    onOk() {
+        this.goBack();
     }
 
     // Parses the URL parameters and returns an object

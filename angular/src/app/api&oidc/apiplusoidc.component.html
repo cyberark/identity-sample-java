@@ -1,84 +1,110 @@
 <div class="container-fluid padding-0">
-    <div *ngIf="loading" class="loader-screen">
-      <img class="loader" src="../../assets/images/Spinner.svg">
-    </div>
-    <app-header></app-header>
-    <div class="app-page">
-      <div class="container">
-          <div class="row justify-content-center">
-            <div class="accordion w-50" id="accordionExample">
-              <div class="card">
-                <h3 class="text-center font-weight-light m-3">{{heading}}</h3>
-              </div>
-              <div class="card" *ngIf="!(hideAccordian || hideTokensAccordian)">
-                <div class="card-header" id="headingOne">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Token Set (/Token Endpoint)
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                  <div class="card-body">
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr *ngFor = "let key of dataKeys(tokenSet)">
-                          <th scope="row">{{key}}</th>
-                          <td class="text-break text-truncate">{{tokenSet[key]}}</td>
-                        </tr>
-                      </tbody>
-                    </table>                 
-                  </div>
-                </div>
-              </div>
-              <div class="card" *ngIf="!hideAccordian">
-                <div class="card-header" id="headingTwo">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                      Claims (Base64 Decoded id_token)
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseTwo" class="collapse" [ngClass]="{'show': hideTokensAccordian}" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                  <div class="card-body">
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr *ngFor = "let key of dataKeys(claims)">
-                          <th scope="row"> {{key}}</th>
-                          <td class="text-break text-truncate">{{claims[key]}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              <div class="card" *ngIf="!hideAccordian && !isOauthFlow">
-                <div class="card-header" id="headingThree">
-                  <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                      User Info (/UserInfo Endpoint)
-                    </button>
-                  </h2>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                  <div class="card-body">
-                    <table class="table table-sm">
-                      <tbody>
-                        <tr *ngFor = "let key of dataKeys(userInfo)">
-                          <th scope="row"> {{key}}</th>
-                          <td class="text-break text-truncate">{{userInfo[key]}}</td>
-                        </tr>
-                      </tbody>
-                  </table>
-                  </div>
-                </div>
-              </div>              
-              <div class="card p-3">
-                <button class="container btn btn-secondary p-3 w-50 align-self-center" (click)="onNext()">Next</button>
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header></app-header>
+  <div class="app-page">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="accordion w-50" id="accordionExample">
+          <div class="card">
+            <h3 class="text-center font-weight-light m-3">{{heading}}</h3>
+          </div>
+          <div class="card" *ngIf="!(hideAccordian || hideTokensAccordian)">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link " type="button" data-toggle="collapse" data-target="#collapseOne"
+                  aria-expanded="true" aria-controls="collapseOne">
+                  Token Set (/Token Endpoint)
+                </button>
+              </h2>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+              <div class="card-body">
+                <table class="table table-sm">
+                  <tbody>
+                    <tr *ngFor="let key of dataKeys(tokenSet)">
+                      <th scope="row">{{key}}</th>
+                      <td class="text-break text-truncate">{{tokenSet[key]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
+          <div class="card" *ngIf="!hideAccordian">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                  aria-expanded="true" aria-controls="collapseTwo">
+                  Claims (Base64 Decoded id_token)
+                </button>
+              </h2>
+            </div>
+            <div id="collapseTwo" class="collapse" [ngClass]="{'show': hideTokensAccordian}"
+              aria-labelledby="headingTwo" data-parent="#accordionExample">
+              <div class="card-body">
+                <table class="table table-sm">
+                  <tbody>
+                    <tr *ngFor="let key of dataKeys(claims)">
+                      <th scope="row"> {{key}}</th>
+                      <td class="text-break text-truncate">{{claims[key]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="card" *ngIf="!hideAccordian && !isOauthFlow">
+            <div class="card-header" id="headingThree">
+              <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree"
+                  aria-expanded="true" aria-controls="collapseThree">
+                  User Info (/UserInfo Endpoint)
+                </button>
+              </h2>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+              <div class="card-body">
+                <table class="table table-sm">
+                  <tbody>
+                    <tr *ngFor="let key of dataKeys(userInfo)">
+                      <th scope="row"> {{key}}</th>
+                      <td class="text-break text-truncate">{{userInfo[key]}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex bg-white p-3">
+            <button class="container btn btn-outline-secondary mr-5" (click)="onTryAnotherFlow()">Try Another
+              Flow</button>
+            <button class="container btn btn-secondary" (click)="onNext()">Next</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="errorPopup" tabindex="-1" role="dialog" aria-labelledby="errorPopupTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="errorPopupTitle">Error</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Oops, something went wrong. Please try again later.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="container btn btn-secondary w-50 align-self-center" data-dismiss="modal"
+                (click)="onOk()">Retry</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <app-footer></app-footer>
+  </div>
+  <app-footer></app-footer>
 </div>
