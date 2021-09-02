@@ -83,26 +83,7 @@
           </div>
         </div>
       </div>
-      <div class="modal fade" id="errorPopup" tabindex="-1" role="dialog" aria-labelledby="errorPopupTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="errorPopupTitle">Error</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Oops, something went wrong. Please try again later.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="container btn btn-secondary w-50 align-self-center" data-dismiss="modal"
-                (click)="onOk()">Retry</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-error [onBtnClick]="onOk"></app-error>
     </div>
   </div>
   <app-footer></app-footer>

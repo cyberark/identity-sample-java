@@ -2,19 +2,42 @@
   <div class="app-page">
     <div class="container">
       <div class="text-white text-center">
-        <h1 class="text-white ">CyberArk Identity Demo Applications</h1>
-        <h5 class="text-white ">ACME is a sample company which uses CyberArk Identity APIs, SDKs and widgets to secure its web applications.</h5>
+        <h1 class="text-white ">CyberArk Identity Demo Web App (Java)</h1>
+        <h5 class="text-white ">Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widgets to secure its web applications. This playground application shows all the possible variations that a developer from Acme has at her disposal for this. This app uses Java Spring backend and Angular JS frontend.</h5>
+        <br>
+        <h5 class="text-white">
+          For developer guides and API documentation, please visit 
+          <a href="https://identity-developer.cyberark.com/" target="_blank" style="color: #8ab4f8;">
+            CyberArk Identity Developer Program
+          </a>
+          website.
+        </h5>
       </div>
       <div class="home-main-content">        
         <div class="card-deck">
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title text-center">ACME UI + APIs</h5>
+              <h5 class="card-title text-center">Scenario 1: Acme wants to use its own UI with CyberArk Identity APIs</h5>
               <ul class="card-text">
-                <li>Simulation of a customer hosted web application</li>
-                <li>Java spring backend, Angular front end web application</li>
-                <li>CyberArk Identity stores the identity of end users signing up to ACME</li>
-                <li>Sign up, Login, Profile update, and MFA powered by CyberArk Identity APIs</li>
+                <li>User identities stored in CyberArk Identity</li>
+                <li>Authentication UI built within the Acme demo app</li>
+                <li>Authentication UI uses CyberArk Identity APIs</li>
+                <li>
+                  Use cases:
+                  <ul>
+                    <li>Sign-up using Acme UI</li>
+                    <li>Authentication (with MFA)</li>
+                    <li>User profile updates to CyberArk Identity using APIs</li>
+                  </ul>
+                </li>
+                <li>
+                  Protocol flows demonstrated:
+                  <ul>
+                    <li>OAuth (Authorization code, Authorization code with PKCE, Implicit, Client credentials, Resource owner password grant)</li>
+                    <li>OIDC (Authorization code, Authorization code with PKCE, Implicit, Hybrid)</li>
+                    <li>Non-standard (just APIs)</li>
+                  </ul>
+                </li>
               </ul>
             </div>
             <div class="w-50 align-self-center p-3">
@@ -23,12 +46,28 @@
           </div>
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title text-center">ACME UI + MFA Widget</h5>
+              <h5 class="card-title text-center">Scenario 2: Acme wants to use CyberArk Identity only for MFA (2FA)</h5>
               <ul class="card-text">
-                <li>This demo web app simulates a Acme.com securing their end user facing website using CyberArk MFA</li>
-                <li>Acme handles the login and Cyberark manages the multi-factor authentication mechanism</li>
-                <li>This also mimics a real world in-app step up authentication e.g Fund transfer</li>
-                <li>The backend is driven by Java spring, while Angular JS is used for the front-end of the application.</li>
+                <li>User identities stored in Acme demo app</li>
+                <li>Password entry UI built within the Acme demo app</li>
+                <li>MFA (2FA) uses CyberArk Identity MFA widget</li>
+                <li>
+                  Use cases:
+                  <ul>
+                    <li>Sign-up using Acme UI</li>
+                    <li>Authentication (with MFA)</li>
+                    <li>User profile update to Acme database</li>
+                    <li>Implicit user profile update to CyberArk Identity using APIs</li>
+                    <li>Step-up MFA for funds transfer</li>
+                  </ul>
+                </li>
+                <li>
+                  Protocols used:
+                  <ul>
+                    <li>OAuth (Authorization code)</li>
+                    <li>For other flow, please refer to "Scenario1"</li>
+                  </ul>
+                </li>
               </ul>
             </div>
             <div class="w-50 align-self-center p-3">

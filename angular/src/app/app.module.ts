@@ -25,6 +25,7 @@ import { RedirectComponent } from './redirect/redirect.component';
 import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
 import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
 import { M2MComponent } from './m2m/m2m.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { M2MComponent } from './m2m/m2m.component';
     LoginComponent,
     HeaderComponent,
     FooterComponent,
+    ErrorComponent,
     RegisterComponent,
     HomeComponent,
     CustomComponent,

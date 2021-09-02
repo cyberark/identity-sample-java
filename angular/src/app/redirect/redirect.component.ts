@@ -76,20 +76,12 @@ export class RedirectComponent implements OnInit {
         this.router.navigateByUrl('/metadata', { state: { authResponse: this.authResponse, tokenReq: this.tokenReq } });
     }
 
-    onCancel() {
-        this.goBack();
-    }
-
-    private goBack() {
+    goBack() {
         if (getStorage('authFlow') === AuthorizationFlow.OAUTH) {
             this.router.navigate(['oauthflow']);
         } else {
             this.router.navigate(['oidcflow']);
         }
-    }
-
-    onOk() {
-        this.goBack();
     }
 
     // Parses the URL parameters and returns an object
