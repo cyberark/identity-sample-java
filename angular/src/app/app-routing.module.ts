@@ -11,7 +11,7 @@ import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
 import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
-import { ApiPlusOidc } from './api&oidc/apiplusoidc.component';
+import { Metadata } from './api&oidc/metadata.component';
 import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
@@ -31,7 +31,7 @@ const routes: Routes = [
   { path: 'flow1', component: Flow1Component },
   { path: 'loginprotocols', component: LoginProtocolComponent },
   { path: 'apionly', component: ApionlyComponent },
-  { path: 'api&oidc', component: ApiPlusOidc },
+  { path: 'metadata', component: Metadata },
   { path: 'flow2', component: Flow2Component },
   { path: 'oidcflow', component: OidcFlowComponent },
   { path: 'RedirectResource', component: RedirectComponent },

@@ -22,11 +22,11 @@ import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 
 @Component({
-  selector: 'apiplusoidc',
-  templateUrl: './apiplusoidc.component.html',
-  styleUrls: ['./apiplusoidc.component.css']
+  selector: 'metadata',
+  templateUrl: './metadata.component.html',
+  styleUrls: ['./metadata.component.css']
 })
-export class ApiPlusOidc implements OnInit {
+export class Metadata implements OnInit {
 
   tokenSet = {};
   claims = {};

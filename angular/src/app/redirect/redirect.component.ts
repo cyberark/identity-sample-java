@@ -81,7 +81,7 @@ export class RedirectComponent implements OnInit {
     }
 
     onProceed() {
-        this.router.navigateByUrl('/api&oidc', { state: { authResponse: this.authResponse, tokenReq: this.tokenReq } });
+        this.router.navigateByUrl('/metadata', { state: { authResponse: this.authResponse, tokenReq: this.tokenReq } });
     }
 
     onCancel() {
