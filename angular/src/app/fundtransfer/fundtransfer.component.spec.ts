@@ -4,23 +4,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
+import { FundTransferComponent } from './fundtransfer.component';
 
-import { RegisterComponent } from './register.component';
-
-describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+describe('FundTransferComponent', () => {
+  let component: FundTransferComponent;
+  let fixture: ComponentFixture<FundTransferComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegisterComponent, HeaderComponent, FooterComponent ],
-      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule]
+      declarations: [ FundTransferComponent, HeaderComponent, FooterComponent ],
+      imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(FundTransferComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

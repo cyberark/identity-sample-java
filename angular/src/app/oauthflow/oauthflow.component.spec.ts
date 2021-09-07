@@ -4,23 +4,22 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
+import { OAuthFlowComponent } from './oauthflow.component';
 
-import { RegisterComponent } from './register.component';
-
-describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+describe('OAuthFlowComponent', () => {
+  let component: OAuthFlowComponent;
+  let fixture: ComponentFixture<OAuthFlowComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegisterComponent, HeaderComponent, FooterComponent ],
-      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule]
+      declarations: [ OAuthFlowComponent, HeaderComponent, FooterComponent ],
+      imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(OAuthFlowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

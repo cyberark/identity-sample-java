@@ -1,26 +1,24 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
+import { Flow2Component } from './flow2.component';
 
-import { RegisterComponent } from './register.component';
-
-describe('RegisterComponent', () => {
-  let component: RegisterComponent;
-  let fixture: ComponentFixture<RegisterComponent>;
+describe('Flow2Component', () => {
+  let component: Flow2Component;
+  let fixture: ComponentFixture<Flow2Component>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegisterComponent, HeaderComponent, FooterComponent ],
-      imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule]
+      declarations: [ Flow2Component, HeaderComponent, FooterComponent ],
+      imports: [RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegisterComponent);
+    fixture = TestBed.createComponent(Flow2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

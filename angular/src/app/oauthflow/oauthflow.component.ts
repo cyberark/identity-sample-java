@@ -17,7 +17,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthorizationService } from '../api&oidc/authorizationservice';
+import { AuthorizationService } from '../metadata/authorizationservice';
 import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, OAuthFlow } from '../utils';
 
 @Component({

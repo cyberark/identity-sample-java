@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { BasicLoginService } from '../basiclogin/basiclogin.service';
-import { AuthorizationService } from '../api&oidc/authorizationservice';
+import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
 

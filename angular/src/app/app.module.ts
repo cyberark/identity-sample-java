@@ -19,7 +19,7 @@ import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
 import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
-import { Metadata } from './api&oidc/metadata.component';
+import { Metadata } from './metadata/metadata.component';
 import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';

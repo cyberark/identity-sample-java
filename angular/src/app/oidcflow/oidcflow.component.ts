@@ -16,7 +16,7 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthorizationService } from '../api&oidc/authorizationservice';
+import { AuthorizationService } from '../metadata/authorizationservice';
 import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL } from '../utils';
 
 enum OidcFlow {
