@@ -18,7 +18,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, OAuthFlow } from '../utils';
+import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, getStorage, OAuthFlow, setStorage } from '../utils';
 
 @Component({
   selector: 'oauthflow',
@@ -29,7 +29,7 @@ export class OAuthFlowComponent implements OnInit {
   @ViewChild('authorizeBtn') authorizeBtn;
 
   loginForm: FormGroup;
-  username: string = localStorage.getItem('username');
+  username: string = getStorage('username');
   selectedFlow: OAuthFlow = OAuthFlow.auth;
   loading = false;
   authURL = "Authorize URL";
@@ -45,14 +45,13 @@ export class OAuthFlowComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       password: ['', Validators.required],
     })
-
-    localStorage.setItem('authFlow', AuthorizationFlow.OAUTH);
-    localStorage.setItem('oauthflow_flow', OAuthFlow.auth);
+    setStorage('authFlow', AuthorizationFlow.OAUTH);
+    setStorage('oauthflow_flow', OAuthFlow.auth);
   }
 
   onSelect(val: OAuthFlow){
     this.selectedFlow = val;
-    localStorage.setItem('oauthflow_flow', val);
+    setStorage('oauthflow_flow', val);
     if(val !== OAuthFlow.auth){
       this.isPasswordVisible = false;
       localStorage.removeItem('client_secret');
@@ -78,8 +77,9 @@ export class OAuthFlowComponent implements OnInit {
     authReqMetaData.clientId = this.username;
     authReqMetaData.responseType = this.selectedFlow === OAuthFlow.implicit ? "token" : "code";
     if (this.selectedFlow === OAuthFlow.auth) {
-      authReqMetaData.clientSecret = this.loginForm.get('password').value;
-      localStorage.setItem('client_secret', this.loginForm.get('password').value);
+      const passValue = this.loginForm.get('password').value;
+      authReqMetaData.clientSecret = passValue;
+      setStorage('client_secret', passValue);
     }
     if (this.selectedFlow === OAuthFlow.authPKCE){
       this.loading = true;
@@ -87,7 +87,7 @@ export class OAuthFlowComponent implements OnInit {
         data => {
           this.loading = false;
           authReqMetaData.codeChallenge = data.Result.codeChallenge;
-          localStorage.setItem('codeVerifier', data.Result.codeVerifier);
+          setStorage('codeVerifier', data.Result.codeVerifier);
           buildAuthorizeURL(authReqMetaData, this);
         },
         error => {

@@ -17,13 +17,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL } from '../utils';
-
-enum OidcFlow {
-  auth = "auth",
-  implicit = "implicit",
-  hybrid = "hybrid"
-}
+import { AuthorizationFlow, AuthorizationMetadataRequest, authURLStr, buildAuthorizeURL, OidcFlow, setStorage } from '../utils';
 
 @Component({
   selector: 'oidcflow',
@@ -36,7 +30,7 @@ export class OidcFlowComponent implements OnInit {
 
   oidcFlow: OidcFlow = OidcFlow.auth;
   responseTypes = ["code"];
-  authURL = "Authorize URL";
+  authURL = authURLStr;
   loading = false;
   codeChallenge = "";
   codeVerifier = "";
@@ -51,7 +45,7 @@ export class OidcFlowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    localStorage.setItem('authFlow', AuthorizationFlow.OIDC);
+    setStorage('authFlow', AuthorizationFlow.OIDC);
   }
 
   onBuildAuthUrl() {
@@ -65,7 +59,7 @@ export class OidcFlowComponent implements OnInit {
         pkceMetadata => {
           this.codeChallenge = pkceMetadata.Result.codeChallenge;
           this.codeVerifier = pkceMetadata.Result.codeVerifier;
-          localStorage.setItem('codeVerifier', this.codeVerifier);
+          setStorage('codeVerifier', this.codeVerifier);
           authRequest.codeChallenge = pkceMetadata.Result.codeChallenge;
           authRequest.responseType = this.responseTypes.join(' ');
           buildAuthorizeURL(authRequest, this);

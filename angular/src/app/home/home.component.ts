@@ -16,6 +16,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { getStorage } from '../utils';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (localStorage.getItem("username") !== null) {
+    if (getStorage("username") !== null) {
       this.router.navigate(['user']);
     }
   }

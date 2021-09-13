@@ -38,14 +38,6 @@ export class UserService {
     return this.http.put<any>(this.userOpsUrl + `${id}`, user, { headers: head, withCredentials: true });
   }
 
-  getAllApps(username: string) {
-    let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get<any>(this.userOpsUrl + `dashboard`, { headers: head, withCredentials: true, params: new HttpParams().set("force", "true").set("username", username) })
-      .pipe(map(data => {
-        return data;
-      }));
-  }
-
   getClientCustomData() {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
     let url = this.configUrl + `getclientconfig`;

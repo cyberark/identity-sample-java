@@ -19,6 +19,7 @@ import { UserService } from '../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormBuilder, FormGroup, NgForm, Validators, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { getStorage } from '../utils';
 
 @Component({
     selector: 'app-fundtransfer',
@@ -47,7 +48,7 @@ export class FundTransferComponent implements OnInit {
             'amount': new FormControl(null)
           });
 
-        if (localStorage.getItem("username") == null) {
+        if (getStorage("username") == null) {
             this.router.navigate(['/login']);
         }
         this.isFundTransferSuccessful = JSON.parse(this.route.snapshot.queryParamMap.get('isFundTransferSuccessful'));

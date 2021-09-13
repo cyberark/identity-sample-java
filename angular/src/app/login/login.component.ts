@@ -19,6 +19,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractContro
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { getStorage, setStorage } from '../utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -65,36 +66,14 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       confirmPassword: ['', Validators.required]
     });
 
-    if (localStorage.getItem("username") !== null) {
+    if (getStorage("username") !== null) {
       this.router.navigate(['user']);
     }
 
-    this.route.queryParamMap.subscribe(
-      param => {
-        if (param.has("ExtIdpAuthChallengeState") && param.has("username") && param.has("customerId")) {
-          this.loading = true;
-          this.loginService.socialLoginResume(param.get("ExtIdpAuthChallengeState"), param.get("username"), param.get("customerId")).subscribe(
-            data => {
-              this.loading = false;
-              if (data.success == true) {
-                this.social = true;
-                this.redirectToDashboard(data.Result);
-              } else {
-                this.onLoginError(data.Message);
-              }
-            },
-            error => {
-              this.onLoginError(this.getErrorMessage(error));
-            }
-          )
-        }
-      }
-    );
-
-    if (localStorage.getItem("registerMessageType") !== null) {
-      this.messageType = localStorage.getItem("registerMessageType");
-      this.authMessage = localStorage.getItem("registerMessage");
-      localStorage.setItem("registerMessage", "");
+    if (getStorage("registerMessageType") !== null) {
+      this.messageType = getStorage("registerMessageType");
+      this.authMessage = getStorage("registerMessage");
+      setStorage("registerMessage", "");
     }
 
     if (this.loginPage == null) {
@@ -134,7 +113,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
 
     if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'Text') {
       this.textAnswer = true;
-      this.answerErrorText = "Answer"
+      this.answerErrorText = "Answer";
       if (selectedAuthMethod.Name == 'SQ') {
         this.answerLabel = selectedAuthMethod.PromptMechChosen;
       } else if (selectedAuthMethod.Name == 'UP') {
@@ -416,36 +395,19 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     return this.matchPasswordsCheck = pass === confirmPass; // ? null : { notSame: true }
   }
 
-  socialLogin(name: string) {
-    this.loading = true;
-    this.loginService.socialLogin(name).subscribe(
-      data => {
-        this.loading = false;
-        if (data.success == true) {
-          document.location.href = data.Result.IdpRedirectUrl;
-        } else {
-          this.onLoginError(data.Message);
-        }
-      },
-      error => {
-        this.onLoginError(this.getErrorMessage(error));
-      }
-    );
-  }
-
   redirectToDashboard(result: any) {
     this.setUserDetails(result);
     this.router.navigate(['loginprotocols']);
   }
 
   setUserDetails(result: any) {
-    localStorage.setItem("userId", result.UserId);
-    localStorage.setItem("username", result.User);
-    localStorage.setItem("displayName", result.DisplayName);
-    localStorage.setItem("tenant", result.PodFqdn);
-    localStorage.setItem("customerId", result.CustomerID);
-    localStorage.setItem("social", JSON.stringify(this.social));
-    localStorage.setItem("custom", result.Custom);
+    setStorage("userId", result.UserId);
+    setStorage("username", result.User);
+    setStorage("displayName", result.DisplayName);
+    setStorage("tenant", result.PodFqdn);
+    setStorage("customerId", result.CustomerID);
+    setStorage("social", JSON.stringify(this.social));
+    setStorage("custom", result.Custom);
   }
 
   resetFormFields(controls: Array<string>): boolean {

@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { AuthorizationFlow } from '../utils';
+import { AuthorizationFlow, getStorage } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 
@@ -35,7 +35,7 @@ export class Metadata implements OnInit {
   loading = false;
   hideAccordian = false; 
   hideTokensAccordian = false;
-  isOauthFlow = localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH;
+  isOauthFlow = getStorage('authFlow') === AuthorizationFlow.OAUTH;
   heading: string = this.isOauthFlow ? 'OAuth Metadata' : 'OIDC Metadata';
 
   constructor(
@@ -128,7 +128,7 @@ export class Metadata implements OnInit {
   }
 
   onOk(){
-    if(localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH) {
+    if(getStorage('authFlow') === AuthorizationFlow.OAUTH) {
       this.router.navigate(['oauthflow']);
     } else {
       this.router.navigate(['oidcflow']);

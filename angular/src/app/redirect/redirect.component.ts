@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, OAuthFlow, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, getStorage, OAuthFlow, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',
@@ -51,14 +51,14 @@ export class RedirectComponent implements OnInit {
 
     private tokenEndpointPreview() {
         this.isTokenReqVisible = true;
-        const oauth_flow = localStorage.getItem('oauthflow_flow');
-        const authFlow = localStorage.getItem('authFlow');
+        const oauth_flow = getStorage('oauthflow_flow');
+        const authFlow = getStorage('authFlow');
 
         this.tokenReq.authorizationCode = this.authResponse['code'];
-        if (oauth_flow && oauth_flow === OAuthFlow.authPKCE || authFlow === AuthorizationFlow.OIDC) this.tokenReq.codeVerifier = localStorage.getItem('codeVerifier');
-        else this.tokenReq.clientSecret = localStorage.getItem('client_secret');
+        if (oauth_flow && oauth_flow === OAuthFlow.authPKCE || authFlow === AuthorizationFlow.OIDC) this.tokenReq.codeVerifier = getStorage('codeVerifier');
+        else this.tokenReq.clientSecret = getStorage('client_secret');
         this.tokenReq.authFlow = AuthorizationFlow[authFlow];
-        this.tokenReq.clientId = localStorage.getItem('username');
+        this.tokenReq.clientId = getStorage('username');
         this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe(
             data => {
                 this.loading = false;
@@ -89,7 +89,7 @@ export class RedirectComponent implements OnInit {
     }
 
     private goBack() {
-        if (localStorage.getItem('authFlow') === AuthorizationFlow.OAUTH) {
+        if (getStorage('authFlow') === AuthorizationFlow.OAUTH) {
             this.router.navigate(['oauthflow']);
         } else {
             this.router.navigate(['oidcflow']);

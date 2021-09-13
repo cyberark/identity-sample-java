@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
 import { LoginService } from '../login/login.service';
+import { getStorage, setStorage } from '../utils';
 
 @Component({
   selector: 'app-root',
@@ -53,9 +54,9 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (localStorage.getItem("username") !== null && (this.router.url == "/register")) {
-      this.router.navigate(['dashboard']);
-    } else if (localStorage.getItem("username") == null && (this.router.url == "/user")) {
+    if (getStorage("username") !== null && (this.router.url == "/register")) {
+      this.router.navigate(['user']);
+    } else if (getStorage("username") == null && (this.router.url == "/user")) {
       this.router.navigate(['/login']);
     }
 
@@ -86,9 +87,9 @@ export class RegisterComponent implements OnInit {
       "country_code": ['']
     }, { updateOn: 'blur' });
 
-    if (localStorage.getItem("userId") !== null) {
+    if (getStorage("userId") !== null) {
       this.loading = true;
-      this.userService.getById(localStorage.getItem("userId"), JSON.parse(localStorage.getItem("social"))).subscribe(
+      this.userService.getById(getStorage("userId"), JSON.parse(getStorage("social"))).subscribe(
         data => {
           this.loading = false;
           if (data.success) {
@@ -101,7 +102,7 @@ export class RegisterComponent implements OnInit {
               this.socialUser = false;
             }
             userControls.Name.setValue(user.Name);
-            if (JSON.parse(localStorage.getItem("social"))) {
+            if (JSON.parse(getStorage("social"))) {
               userControls.Mail.setValue(user.EmailAddress);
             } else {
               userControls.Mail.setValue(user.Mail);
@@ -181,11 +182,11 @@ export class RegisterComponent implements OnInit {
       let fieldArray = ["Name", "Mail", "DisplayName", "MobileNumber", "MFA"];
 
       user = this.pick(form, fieldArray)
-      this.userService.update(user, localStorage.getItem("userId")).subscribe(
+      this.userService.update(user, getStorage("userId")).subscribe(
         data => {
           this.loading = false;
           if (data.success == true) {
-            localStorage.setItem("mfaUsername", data.UserName);
+            setStorage("mfaUsername", data.UserName);
             this.setMessage("info", "User information updated successfully");
             this.router.navigate(['/user']);
           } else {
@@ -205,11 +206,11 @@ export class RegisterComponent implements OnInit {
               this.loading = false;
               if (data.success == true) {
                 if (data.Result != null && data.Result.IntegrationResult != null && data.Result.IntegrationResult.IsManualApprovalTriggered == true) {
-                  localStorage.setItem("registerMessageType", "error");
-                  localStorage.setItem("registerMessage", "Your account sign-up request is pending approval. You will receive an email once it’s approved, and then you will be able to login.")
+                  setStorage("registerMessageType", "error");
+                  setStorage("registerMessage", "Your account sign-up request is pending approval. You will receive an email once it’s approved, and then you will be able to login.")
                 } else {
-                  localStorage.setItem("registerMessageType", "info");
-                  localStorage.setItem("registerMessage", "User " + user.Name + " registered successfully. Enter your credentials here to proceed.")
+                  setStorage("registerMessageType", "info");
+                  setStorage("registerMessage", "User " + user.Name + " registered successfully. Enter your credentials here to proceed.")
                 }
                 if (document.cookie.includes('flow1'))
                   this.router.navigate(['/login']);
@@ -242,7 +243,7 @@ export class RegisterComponent implements OnInit {
   cancelRegister() {
     this.registerForm.reset();
     if (this.update) {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['user']);
     } else {
       this.router.navigate(['/']);
     }

@@ -11,7 +11,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { CustomComponent } from './custom/custom.component';
 import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
@@ -34,7 +33,6 @@ import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
     FooterComponent,
     RegisterComponent,
     HomeComponent,
-    DashboardComponent,
     CustomComponent,
     BasicLoginComponent,
     MFAWidgetComponent,

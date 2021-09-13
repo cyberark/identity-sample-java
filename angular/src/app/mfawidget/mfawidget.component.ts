@@ -20,6 +20,7 @@ import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
+import { getStorage, setStorage } from '../utils';
 
 @Component({
   selector: 'app-mfawidget',
@@ -49,7 +50,7 @@ export class MFAWidgetComponent implements OnInit {
       "allowRegister": true,
       "allowForgotUsername": false,
       "apiFqdn": environment.apiFqdn,
-      "username": localStorage.getItem('mfaUsername'),
+      "username": getStorage('mfaUsername'),
       "hideBackgroundImage" : true,
       autoSubmitUsername: true,
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
@@ -59,9 +60,9 @@ export class MFAWidgetComponent implements OnInit {
 
     this.authorizationService.getPKCEMetadata().subscribe(
       pkceMetadata => {
-        this.loginService.authorize(AuthData.Auth, localStorage.getItem('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe(
+        this.loginService.authorize(AuthData.Auth, getStorage('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe(
           data => {
-            this.loginService.completeLoginUser(localStorage.getItem("sessionUuid"), data.Result.AuthorizationCode, localStorage.getItem('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe(
+            this.loginService.completeLoginUser(getStorage("sessionUuid"), data.Result.AuthorizationCode, getStorage('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe(
               data => {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);
@@ -84,8 +85,8 @@ export class MFAWidgetComponent implements OnInit {
           },
           error => {
             if (error.error.Success == false) {
-              localStorage.setItem("registerMessageType", "error");
-              localStorage.setItem("registerMessage", error.error.ErrorMessage);
+              setStorage("registerMessageType", "error");
+              setStorage("registerMessage", error.error.ErrorMessage);
             }
             console.error(error);
             context.router.navigate(['basiclogin']);
@@ -93,12 +94,12 @@ export class MFAWidgetComponent implements OnInit {
     });
   }
   setUserDetails(result: any) {
-    localStorage.setItem("userId", result.UserId);
-    localStorage.setItem("username", result.User);
-    localStorage.setItem("displayName", result.DisplayName);
-    localStorage.setItem("tenant", result.PodFqdn);
-    localStorage.setItem("customerId", result.CustomerID);
-    localStorage.setItem("social", "false");
-    localStorage.setItem("custom", result.Custom);
+    setStorage("userId", result.UserId);
+    setStorage("username", result.User);
+    setStorage("displayName", result.DisplayName);
+    setStorage("tenant", result.PodFqdn);
+    setStorage("customerId", result.CustomerID);
+    setStorage("social", "false");
+    setStorage("custom", result.Custom);
   }
 }

@@ -54,21 +54,6 @@ export class LoginService {
       }))));
   }
 
-  socialLogin(IdpName: string) {
-    return this.http.get<any>(this.authUrl + `socialLogin/` + IdpName)
-      .pipe(map(responseObj => {
-        return responseObj;
-      }));
-  }
-
-  socialLoginResume(ExtIdpAuthChallengeState: string, username: string, customerId: string) {
-    let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get<any>(this.authUrl + `socialLogin`, { headers: head, withCredentials: true, params: new HttpParams().set("ExtIdpAuthChallengeState", ExtIdpAuthChallengeState).set("username", username).set("customerId", customerId) })
-      .pipe(map(responseObj => {
-        return responseObj;
-      }));
-  }
-
   logout() {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<any>(this.authUrl + `out`, {}, { headers: head, withCredentials: true, })

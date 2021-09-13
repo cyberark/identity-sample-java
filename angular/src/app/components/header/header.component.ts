@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { getStorage, setStorage } from 'src/app/utils';
 
 const imgSrc = "../../../assets/images/acme_logo.png";
 const accentcolor = "#313131";
@@ -38,7 +39,7 @@ export class HeaderComponent implements OnInit {
   signOutMenu = false;
   homeMenu = false;
   loading = false;
-  custom = localStorage.getItem("custom") == "true";
+  custom = getStorage("custom") == "true";
   imageSource: string;
   accentColor = accentcolor;
   ribbonColor = accentcolor;
@@ -51,17 +52,17 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (localStorage.getItem("logo") === null || localStorage.getItem("logo") === "") {
+    if (getStorage("logo") === null || getStorage("logo") === "") {
       this.loading = true;
       this.userService.getClientCustomData().subscribe(
         data => {
           this.loading = false;
           if (data.appImage) {
             this.imageSource = imgSrc;
-            localStorage.setItem("logo", this.imageSource);
-            localStorage.setItem("accent", data.accentColor);
+            setStorage("logo", this.imageSource);
+            setStorage("accent", data.accentColor);
             this.accentColor = data.accentColor;
-            localStorage.setItem("ribbon", data.ribbonColor);
+            setStorage("ribbon", data.ribbonColor);
             this.ribbonColor = data.ribbonColor;
           } else {
             console.log("Incorrect data response");
@@ -73,14 +74,14 @@ export class HeaderComponent implements OnInit {
       );
     } else {
       this.imageSource = imgSrc;
-      this.accentColor = localStorage.getItem("accent") || accentcolor;
-      this.ribbonColor = localStorage.getItem("ribbon") || accentcolor;
+      this.accentColor = getStorage("accent") || accentcolor;
+      this.ribbonColor = getStorage("ribbon") || accentcolor;
     }
 
-    if (localStorage.getItem("displayName") !== null && localStorage.getItem("displayName") !== "") {
-      this.name = localStorage.getItem("displayName");
-    } else if (localStorage.getItem("username") !== null) {
-      this.name = localStorage.getItem("username");
+    if (getStorage("displayName") !== null && getStorage("displayName") !== "") {
+      this.name = getStorage("displayName");
+    } else if (getStorage("username") !== null) {
+      this.name = getStorage("username");
     }
 
     switch (this.router.url) {
@@ -89,7 +90,6 @@ export class HeaderComponent implements OnInit {
       case "/register":
         this.page = "home";
         break;
-      case "/dashboard":
       case "/fundtransfer":
       case "/fundtransfer?isFundTransferSuccessful=true":
       case "/mfawidget?fromFundTransfer=true":

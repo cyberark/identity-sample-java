@@ -18,6 +18,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractControl } from '@angular/forms';
 import { BasicLoginService } from './basiclogin.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { getStorage, setStorage } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -39,13 +40,13 @@ export class BasicLoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (localStorage.getItem("username") !== null) {
+    if (getStorage("username") !== null) {
       this.router.navigate(['user']);
     }
-    if (localStorage.getItem("registerMessageType") !== null) {
-      this.messageType = localStorage.getItem("registerMessageType");
-      this.authMessage = localStorage.getItem("registerMessage");
-      localStorage.setItem("registerMessage", "");
+    if (getStorage("registerMessageType") !== null) {
+      this.messageType = getStorage("registerMessageType");
+      this.authMessage = getStorage("registerMessage");
+      setStorage("registerMessage", "");
     }
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -87,8 +88,8 @@ export class BasicLoginComponent implements OnInit {
     this.resetFormFields();
   }
   redirectToMFA(result: any) {
-    localStorage.setItem("sessionUuid", result.SessionUuid);
-    localStorage.setItem("mfaUsername", result.MFAUserName);
+    setStorage("sessionUuid", result.SessionUuid);
+    setStorage("mfaUsername", result.MFAUserName);
     this.router.navigate(['mfawidget']);
   }
 

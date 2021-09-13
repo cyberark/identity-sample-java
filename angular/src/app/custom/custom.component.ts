@@ -20,6 +20,7 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormGroup, FormControl, Validators, NgForm, FormBuilder } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { getStorage, setStorage } from '../utils';
 declare var $: any;
 
 @Component({
@@ -49,12 +50,12 @@ export class CustomComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (localStorage.getItem("username") == null) {
+    if (getStorage("username") == null) {
       this.router.navigate(['/login']);
     }
 
-    if (!localStorage.getItem("custom")) {
-      this.router.navigate(['dashboard']);
+    if (!getStorage("custom")) {
+      this.router.navigate(['user']);
     }
 
     let self = this;
@@ -120,7 +121,7 @@ export class CustomComponent implements OnInit {
     customControls.ribbonColor.setValue(custom.ribbonColor);
     let imageData = this.getTrimmedImageData(custom.appImage);
     customControls.appImage.setValue(imageData);
-    this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(imageData || localStorage.getItem("logo")) || "../../../assets/images/logo.png";
+    this.imagePreview = this.sanitizer.bypassSecurityTrustResourceUrl(imageData || getStorage("logo")) || "../../../assets/images/logo.png";
     customControls.customerId.setValue(custom.customerId);
     customControls.tenant.setValue(custom.tenant);
     customControls.oauthAppId.setValue(custom.oauthAppId);
@@ -153,9 +154,9 @@ export class CustomComponent implements OnInit {
       data => {
         this.loading = false;
         if (data.success == true) {
-          localStorage.setItem("accent", this.customForm.controls.accentColor.value);
-          localStorage.setItem("ribbon", this.customForm.controls.ribbonColor.value);
-          localStorage.setItem("logo", this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.imagePreview));
+          setStorage("accent", this.customForm.controls.accentColor.value);
+          setStorage("ribbon", this.customForm.controls.ribbonColor.value);
+          setStorage("logo", this.sanitizer.sanitize(SecurityContext.RESOURCE_URL, this.imagePreview));
           this.userService.refreshActuators();
           if (this.customData.tenant !== this.customForm.controls.tenant.value) {
             localStorage.clear();
