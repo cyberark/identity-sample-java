@@ -7,26 +7,21 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.idaptive.usermanagement.config.AuthFilter;
 import com.idaptive.usermanagement.entity.*;
 import com.idaptive.usermanagement.service.AuthService;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.idaptive.usermanagement.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 @RestController
 public class AuthController {
@@ -50,7 +45,7 @@ public class AuthController {
 	}
 
 	@PostMapping("auth/advanceAuth")
-	public ResponseEntity<JsonNode> advanceAuth(@RequestBody JsonNode advAuthRequest,HttpServletResponse response) {
+	public ResponseEntity<JsonNode> advanceAuth(@RequestBody JsonNode advAuthRequest,HttpServletResponse response) throws UnsupportedEncodingException {
 		return this.authService.advanceAuthenticationByObject(advAuthRequest,response);
 	}
 
@@ -66,22 +61,13 @@ public class AuthController {
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 	
-	@GetMapping({ "auth/socialLogin/{idpName}" })
-	public ResponseEntity<JsonNode> socialLogin(@PathVariable String idpName) {	
-		return this.authService.socialLogin(idpName);
-	}
-
-	@GetMapping({ "auth/socialLogin" })
-	public ResponseEntity<JsonNode> socialLoginResult(@RequestParam String ExtIdpAuthChallengeState,
-			@RequestParam String username, @RequestParam String customerId, HttpServletResponse httpServletResponse) {
-		return authService.socialLoginResult(ExtIdpAuthChallengeState, username, customerId,httpServletResponse);
-	}
-
 	@PostMapping({ "/BasicLogin" })
 	public ResponseEntity<JsonNode> BasicLogin(@RequestBody BasicLoginRequest request, HttpServletResponse httpServletResponse) {
 		Response response = new Response();
 		try {
-			DBUser user = userService.Get(request.getUsername(), request.getPassword());
+			DBUser user = userService.Get(request.getUsername(), request.Password);
+			Arrays.fill(request.Password, ' ');
+
 			if (user != null) {
 				String sessionUuid = authService.CreateSession(user.getId());
 				ObjectMapper objectMapper = new ObjectMapper();
@@ -93,7 +79,10 @@ public class AuthController {
 				response.Success = false;
 				response.ErrorMessage = "Invalid Username or Password";
 			}
-			return new ResponseEntity(response, (user != null ? HttpStatus.OK : HttpStatus.NOT_FOUND));
+			HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+			if(user != null) httpStatus = HttpStatus.OK;
+
+			return new ResponseEntity(response, httpStatus);
 		}catch (Exception ex){
 			response.Success = false;
 			response.ErrorMessage = ex.getMessage();

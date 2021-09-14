@@ -42,7 +42,7 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
     protected String getClientId(String clientId) { return this.oidcClientId; }
 
     @Override
-    protected String getClientSecret(String clientSecret) { return null; }
+    protected char[] getClientSecret(char[] clientSecret) { return null; }
 
     @Override
     protected String getScopesSupported() {
@@ -58,7 +58,7 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
      *  @throws IOException
      */
     @Override
-    public CyberArkIdentityOIDCClient getClient(String clientId, String clientSecret) throws IOException {
+    public CyberArkIdentityOIDCClient getClient(String clientId, char[] clientSecret) throws IOException {
         return new CyberArkIdentityOIDCClient(super.tenantURL, this.oidcAppId, this.oidcClientId);
     }
 

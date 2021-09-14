@@ -33,9 +33,6 @@ server:
 
 tenant: <YOUR_TENANT_URL>
 customerId: <YOUR_TENANT_PREFIX>
-podurl: https://<YOUR_POD_URL>/Security/ResumeFromExtIdpAuth?ExtIdpAuthChallengeState=
-callbackurl: https://<YOUR_MACHINE_HOST>/login
-jwtKey: kjaspdjjjslaytl
 oauthAppId: <YOUR_OAUTH_AAPLICATION_ID>
 oauthServiceUserName: <YOUR_OAUTH_CLIENT_ID>
 oauthServiceUserPassword: <YOUR_OAUTH_CLIENT_SECRET>

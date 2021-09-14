@@ -1,12 +1,9 @@
 package com.idaptive.usermanagement.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 
 import com.idaptive.usermanagement.Repos.TokenStoreRepository;
 import com.idaptive.usermanagement.entity.*;
@@ -18,8 +15,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,12 +24,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import java.security.Key;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.crypto.spec.SecretKeySpec;
 
 @RefreshScope
 @Service
@@ -44,17 +35,8 @@ public class AuthService {
 	@Value("${tenant}")
 	private String tenantPrefix;
 
-	@Value("${callbackurl}")
-	private String callBackUrl;
-
-	@Value("${podurl}")
-	private String podUrl;
-
 	@Value("${customerId}")
 	private String tenantID;
-
-	@Value("${jwtKey}")
-	private String jwtKey;
 
 	@Value("${oauthAppId}")
 	private String applicationID;
@@ -113,7 +95,7 @@ public class AuthService {
 		return responseObj;
 	}
 
-	public ResponseEntity<JsonNode> advanceAuthenticationByObject(JsonNode authRequest, HttpServletResponse response) {
+	public ResponseEntity<JsonNode> advanceAuthenticationByObject(JsonNode authRequest, HttpServletResponse response) throws UnsupportedEncodingException {
 		String url = tenantPrefix + "/Security/AdvanceAuthentication";
 		HttpHeaders httpHeaders = setHeaders();
 		HttpEntity<JsonNode> request = new HttpEntity<>(authRequest, httpHeaders);
@@ -121,29 +103,17 @@ public class AuthService {
 		JsonNode advAuthBody = advAuthResp.getBody();
 		HttpHeaders advAuthHeader = advAuthResp.getHeaders();
 		if (advAuthResp.getBody().get("Result").has("UserId")) {
-			//String uuid = advAuthResp.getBody().get("Result").get("UserId").asText();
 			String token = null;
 			for (String value : advAuthHeader.get("Set-Cookie")) {
 				if (value.split(";")[0].split("=")[0].equals(".ASPXAUTH")) {
 					token = value.split(";")[0].split("=")[1];
 
-					Cookie authCookie = new Cookie("AUTH", token);
+					Cookie authCookie = new Cookie("AUTH", URLEncoder.encode(token, "UTF-8"));
 					authCookie.setSecure(true);
 					authCookie.setPath("/");
 					response.addCookie(authCookie);
 				}
 			}
-			//boolean access = hasUpdateAccess(uuid, token);
-			//ObjectNode objNode = (ObjectNode) advAuthBody.get("Result");
-			//objNode.put("Custom", access);
-			String jwt = doGenerateToken(advAuthResp.getBody().get("Result").get("UserId").asText());
-			Cookie cookie = new Cookie("JwtToken", jwt);
-			cookie.setHttpOnly(true);
-			cookie.setSecure(true);
-			cookie.setPath("/");
-		//	cookie.setDomain("idaptive.app");
-			response.addCookie(cookie);
-
 			return new ResponseEntity<JsonNode>(advAuthBody, advAuthHeader, HttpStatus.OK);
 		} else {
 			return advAuthResp;
@@ -158,24 +128,6 @@ public class AuthService {
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
 		return httpHeaders;
-	}
-
-	public boolean hasUpdateAccess(String uuid, String token) {
-		String url = tenantPrefix + "/UserMgmt/GetUsersRolesAndAdministrativeRights?id=" + uuid;
-		HttpHeaders headers = setHeaders(token);
-		HttpEntity<String> request = new HttpEntity<>(headers);
-		JsonNode result = restTemplate.postForObject(url, request, JsonNode.class);
-		JsonNode arr = result.get("Result").get("Results");
-		for (JsonNode jsonNode : arr) {
-			JsonNode administrativeRightsArr = jsonNode.get("Row").get("AdministrativeRights");
-			for (JsonNode jsonNode2 : administrativeRightsArr) {
-				if (jsonNode2.get("Description").asText().equals("Admin Portal Login")) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	public ResponseEntity<JsonNode> logout(String authToken, HttpServletResponse respose, Boolean enableMFAWidgetFlow) {
@@ -199,57 +151,6 @@ public class AuthService {
 		if (enableMFAWidgetFlow){
 			Integer userId = ((TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore",1)).getUserId();
 			tokenStoreRepository.deleteById(userId);
-		}
-		return result;
-	}
-
-	public ResponseEntity<JsonNode> resetUserPasswordUser(JsonNode requestBody, String authToken) {
-		String url = tenantPrefix + "/UserMgmt/ResetUserPassword";
-		HttpHeaders headers = setHeaders();
-		headers.set("Authorization", "Bearer " + authToken);
-		HttpEntity<JsonNode> request = new HttpEntity<>(requestBody, headers);
-		return restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
-	}
-
-	public ResponseEntity<JsonNode> socialLogin(String idpName) {
-		String url = tenantPrefix + "/Security/StartSocialAuthentication";
-		HashMap<String, String> body = new HashMap<>();
-		body.put("IdpName", idpName);
-		body.put("PostExtIdpAuthCallbackUrl", callBackUrl);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.set("x-centrify-native-client", "Web");
-		httpHeaders.set("content-type", "application/json");
-		HttpEntity<HashMap<String, String>> request = new HttpEntity<>(body, httpHeaders);
-		return restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
-	}
-
-	public ResponseEntity<JsonNode> socialLoginResult(String extIdpAuthChallengeState, String username,
-			String customerId, HttpServletResponse response) {
-		String url = podUrl + extIdpAuthChallengeState + "&username=" + username + "&customerId=" + customerId;
-		HttpHeaders httpHeaders = new HttpHeaders();
-		HttpEntity<String> request = new HttpEntity<>(httpHeaders);
-		ResponseEntity<JsonNode> result = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
-		if (result.getBody().get("success").asBoolean()) {
-			String userId = result.getBody().get("Result").get("UserId").asText();
-			String jwt = doGenerateToken(userId);
-			Cookie cookie = new Cookie("JwtToken", jwt);
-			cookie.setHttpOnly(true);
-			cookie.setSecure(true);
-			cookie.setPath("/");
-		//	cookie.setDomain("idaptive.app");
-			response.addCookie(cookie);
-
-			for (String value : result.getHeaders().get("Set-Cookie")) {
-				if (value.split(";")[0].split("=")[0].equals(".ASPXAUTH")) {
-					Cookie aspxauthCookie = new Cookie(".ASPXAUTH", value.split(";")[0].split("=")[1]);
-					aspxauthCookie.setHttpOnly(true);
-					aspxauthCookie.setSecure(true);
-					aspxauthCookie.setPath("/");
-			//		aspxauthCookie.setDomain("idaptive.app");
-					response.addCookie(aspxauthCookie);
-				}
-			}
-
 		}
 		return result;
 	}
@@ -297,21 +198,6 @@ public class AuthService {
 		}else{
 			throw new Exception("Invalid Tokens.Login Failed");
 		}
-	}
-
-	private String doGenerateToken(String usr) {
-		List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-				.commaSeparatedStringToAuthorityList("ROLE_" + "Administrator");
-		Map<String, Object> claims = new HashMap<String, Object>();
-		claims.put("sub", usr);
-		claims.put("iss", "Idaptive");
-		claims.put("authorities",
-				grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtKey);
-		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-		String jwttoken = Jwts.builder().setClaims(claims).signWith(signatureAlgorithm, signingKey).compact();
-		return jwttoken;
 	}
 
 	private String receiveOAuthTokenCCForUser(AdvanceLoginRequest advanceLoginRequest) {

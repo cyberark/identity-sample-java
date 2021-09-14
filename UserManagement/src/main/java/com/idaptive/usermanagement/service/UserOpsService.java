@@ -138,42 +138,6 @@ public class UserOpsService {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	
-	//This method developed for fetching federated user information with userId
-	public ResponseEntity<JsonNode> getUserInfo(String userId, String token) {
-		HttpHeaders headers = prepareForRequest(token);
-		HttpEntity<String> request = new HttpEntity<>(headers);
-		String url = tenant + "/UserMgmt/GetUserInfo?ID=" + userId;
-		return restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
-	}
-
-	static ArrayList<String> iconList = new ArrayList<>();
-
-	
-	//This method returns icon url and appkey using that client can fech the icon images.
-	public ResponseEntity<JsonNode> userDashboard(String username, String force, String token) {
-		HashMap<String, ArrayList<HashMap<String, String>>> appInfo = new HashMap<>();
-		String url = tenant + "/UPRest/GetUPData" + "?" + "force=" + force + "&username=" + username;
-		HttpHeaders headers = prepareForRequest(token);
-		HttpEntity<String> request = new HttpEntity<>(headers);
-		JsonNode result = restTemplate.postForObject(url, request, JsonNode.class);
-		JsonNode arrNode = result.get("Result").get("Apps");
-		if (arrNode.isArray()) {
-			for (final JsonNode objNode : arrNode) {
-				ArrayList<HashMap<String, String>> appList = new ArrayList<HashMap<String, String>>();
-				HashMap<String, String> map = new HashMap<>();
-				map.put("Icon", objNode.get("Icon").asText());
-				iconList.add(objNode.get("Icon").asText());
-				map.put("AppKey", objNode.get("AppKey").asText());
-				appList.add(map);
-				appInfo.put(objNode.get("Name").asText(), appList);
-			}
-		}
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode response = mapper.convertValue(appInfo, JsonNode.class);
-		return new ResponseEntity<JsonNode>(response, HttpStatus.OK);
-	}
-
 	public String GetMFAUserName(String name){
 		return name + "@" + this.tenantID;
 	}

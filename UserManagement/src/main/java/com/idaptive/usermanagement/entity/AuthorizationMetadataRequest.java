@@ -13,7 +13,7 @@ public class AuthorizationMetadataRequest extends PKCEMetaData {
     public String clientId;
 
     @JsonProperty("clientSecret")
-    public String clientSecret;
+    public char[] clientSecret;
 
     @JsonProperty("responseType")
     public String responseType;

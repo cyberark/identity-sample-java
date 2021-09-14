@@ -14,6 +14,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @RefreshScope
 @Service
@@ -28,7 +29,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     private String oauthServiceUserName;
 
     @Value("${oauthServiceUserPassword}")
-    private String oauthServiceUserPassword;
+    private char[] oauthServiceUserPass;
 
     @Value("${oauthScopesSupported}")
     private String oauthScopesSupported;
@@ -45,7 +46,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     protected String getClientId(String clientId) { return clientId; }
 
     @Override
-    protected String getClientSecret(String clientSecret) { return clientSecret; }
+    protected char[] getClientSecret(char[] clientSecret) { return clientSecret; }
 
     @Override
     protected String getScopesSupported() { return this.oauthScopesSupported; }
@@ -54,17 +55,17 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     /**
      *  Get CyberArkIdentityOAuthClient Instance to make authorized API requests.
      *  @param clientId         OAuth App Client Id
-     *  @param clientSecret     OAuth App Client Secret
+     *  @param clientSec     OAuth App Client Secret
      *  @return CyberArkIdentityOAuthClient Instance to make authorized API requests.
      *  @throws IOException
      */
     @Override
-    public CyberArkIdentityOAuthClient getClient(String clientId, String clientSecret) throws IOException {
-        if (clientSecret == null){
+    public CyberArkIdentityOAuthClient getClient(String clientId, char[] clientSec) throws IOException {
+        if (clientSec == null){
             return new CyberArkIdentityOAuthClient(super.tenantURL, this.oauthAppId, clientId);
         }
         else {
-            return new CyberArkIdentityOAuthClient(super.tenantURL, this.oauthAppId, clientId, clientSecret);
+            return new CyberArkIdentityOAuthClient(super.tenantURL, this.oauthAppId, clientId, String.valueOf(clientSec));
         }
     }
 
@@ -77,7 +78,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     public TokenHolder getTokenSetWithClientCreds(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPassword)
+            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
                     .requestTokenWithClientCreds()
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
@@ -98,8 +99,8 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     public TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPassword)
-                    .requestTokenWithPassword(tokenMetadataRequest.userName, tokenMetadataRequest.password)
+            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+                    .requestTokenWithPassword(tokenMetadataRequest.userName, String.valueOf(tokenMetadataRequest.password))
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
                     .execute();

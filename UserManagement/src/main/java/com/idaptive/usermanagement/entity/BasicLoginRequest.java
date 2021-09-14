@@ -3,9 +3,9 @@ package com.idaptive.usermanagement.entity;
 public class BasicLoginRequest {
 
     private String Username;
-    private String Password;
+    public char[] Password;
 
-    public BasicLoginRequest(String username, String password) {
+    public BasicLoginRequest(String username, char[] password) {
         Username = username;
         Password = password;
     }
@@ -18,11 +18,11 @@ public class BasicLoginRequest {
         Username = username;
     }
 
-    public String getPassword() {
+    public char[] getPassword() {
         return Password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(char[] password) {
         Password = password;
     }
 }

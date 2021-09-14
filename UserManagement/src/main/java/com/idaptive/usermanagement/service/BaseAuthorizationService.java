@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 @RefreshScope
 @Service
@@ -33,7 +35,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
 
     public abstract AuthorizationFlow supportedAuthorizationFlow();
 
-    public abstract T getClient(String clientId, String clientSecret) throws IOException;
+    public abstract T getClient(String clientId, char[] clientSecret) throws IOException;
 
     public abstract UserInfo getUserInfo(String accessToken) throws IOException;
 
@@ -45,7 +47,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
 
     protected abstract String getClientId(String clientId);
 
-    protected abstract String getClientSecret(String clientSecret);
+    protected abstract char[] getClientSecret(char[] clientSecret);
 
     protected abstract String getScopesSupported();
 
@@ -85,7 +87,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     public TokenHolder getTokenSet(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSecret)
+            TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
                     .requestToken(tokenMetadataRequest.authorizationCode, this.authorizationRedirectURL)
                     .setGrantType(tokenMetadataRequest.grantType.name());
 
@@ -144,11 +146,11 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     public TokenRequestPreview tokenRequestPreview(TokenMetadataRequest metadataRequest) throws Exception {
         try {
             TokenRequestPreview requestPreview = new TokenRequestPreview();
-            requestPreview.apiEndPoint = this.getClient(metadataRequest.clientId, metadataRequest.clientSecret)
+            requestPreview.apiEndPoint = this.getClient(metadataRequest.clientId, metadataRequest.clientSec)
                     .buildAPIEndpoint("Token", this.getAppId());
 
             requestPreview.payload.clientId = this.getClientId(metadataRequest.clientId);
-            requestPreview.payload.clientSecret = this.getClientSecret(metadataRequest.clientSecret);
+            requestPreview.payload.clientSec = this.getClientSecret(metadataRequest.clientSec);
             requestPreview.payload.grantType = metadataRequest.grantType;
 
             switch (metadataRequest.grantType)
@@ -165,6 +167,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
                     requestPreview.payload.userName = metadataRequest.userName;
                     requestPreview.payload.password = metadataRequest.password;
                     requestPreview.payload.scope = this.getScopesSupported();
+                    Arrays.fill(metadataRequest.password, ' ');
                     break;
                 default:
                     throw new Exception("Invalid Grant type is sent");

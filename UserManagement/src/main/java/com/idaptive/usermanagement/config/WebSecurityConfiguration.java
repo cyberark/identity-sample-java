@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -11,21 +12,24 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin"};
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/**").permitAll();
-		http.csrf().disable();
-		http.cors();	
+		http.csrf()
+				.ignoringAntMatchers(CSRF_IGNORE)
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+		http.cors();
 	}
-	
+
 	@Bean
 	public CorsFilter corsFilter() {
 	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    final CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true);
-	    //config.addAllowedOrigin("https://apidemo.idaptive.app");
 	    config.addAllowedOrigin("*");
-            config.addAllowedHeader("*");
+		config.addAllowedHeader("*");
 	    config.addExposedHeader("Set-Cookie");
 		config.addAllowedMethod("POST");
 		config.addAllowedMethod("PUT");

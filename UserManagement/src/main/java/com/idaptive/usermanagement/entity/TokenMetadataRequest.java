@@ -19,13 +19,13 @@ public class TokenMetadataRequest extends PKCEMetaData {
     public String userName;
 
     @JsonProperty("password")
-    public String password;
+    public char[] password;
 
     @JsonProperty("clientId")
     public String clientId;
 
     @JsonProperty("clientSecret")
-    public String clientSecret;
+    public char[] clientSec;
 
     @JsonProperty("redirectUrl")
     public String redirectUrl;

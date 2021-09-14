@@ -3,6 +3,7 @@ package com.idaptive.usermanagement.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.bytebuddy.implementation.bytecode.Throw;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
@@ -20,7 +21,7 @@ public class User {
 	private String name;
 
 	@JsonProperty("Password")
-	private String password;
+	public char[] password;
 
 	@JsonProperty("HomeNumber")
 	private String homeNumber;
@@ -55,7 +56,7 @@ public class User {
 	@JsonProperty("country_code")
 	private String country;
 
-	public User(String displayName, String email, String name, String password) {
+	public User(String displayName, String email, String name, char[] password) {
 		this.displayName = displayName;
 		this.mail = email;
 		this.name = name;
@@ -93,11 +94,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getPassword() {
+	public char[] getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(char[] password) {
 		this.password = password;
 	}
 

@@ -52,31 +52,6 @@ public class UserOpsController {
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
 
-	@GetMapping("/userops/dashboard")
-	public ResponseEntity<JsonNode> dashboard(@RequestParam String username, @RequestParam String force,
-			HttpServletRequest request) {
-		Cookie[] cookieArray = request.getCookies();
-		for (Cookie cookie : cookieArray) {
-			if (cookie.getName().equals(".ASPXAUTH")) {
-				return userOpsService.userDashboard(username, force, cookie.getValue());
-			}
-		}
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-	}
-
-	@GetMapping("/userops/info/{uuid}")
-	public ResponseEntity<JsonNode> userInfo(@PathVariable String uuid, HttpServletRequest request) {
-		Cookie[] cookieArray = request.getCookies();
-		for (Cookie cookie : cookieArray) {
-			if (cookie.getName().equals(".ASPXAUTH")) {
-				return userOpsService.getUserInfo(uuid, cookie.getValue());
-			}
-		}
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-	}
-
 //	@PutMapping("/updateconfig")
 //	public ResponseEntity<JsonNode> updateConfig(@RequestBody JsonNode body) {
 //		return userOpsService.updateConfig(body);

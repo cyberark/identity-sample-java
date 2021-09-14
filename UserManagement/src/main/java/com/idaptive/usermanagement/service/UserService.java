@@ -1,6 +1,8 @@
 package com.idaptive.usermanagement.service;
 
 import java.io.IOException;
+import java.lang.ref.Cleaner;
+import java.util.Arrays;
 
 import com.cyberark.entities.TokenHolder;
 import com.idaptive.usermanagement.Repos.MfaUserMappingRepository;
@@ -155,6 +157,9 @@ public class UserService {
 
 				return createUserResponse;
 			}
+
+			Arrays.fill(user.password, ' ');
+
 			return createUserResponse;
 		} catch (JsonProcessingException e) {
 			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -190,12 +195,14 @@ public class UserService {
 		return roleUuid;
 	}
 
-	public DBUser Get(String name, String password) {
+	public DBUser Get(String name, char[] password) {
 		DBUser exampleUser = new DBUser();
 		exampleUser.setName(name);
 		exampleUser.setPassword(password);
 		try {
-			return repo.findOne(Example.of(exampleUser)).get();
+			DBUser dbUser = repo.findOne(Example.of(exampleUser)).get();
+			Arrays.fill(exampleUser.Password, ' ');
+			return  dbUser;
 		}catch(Exception ex){
 			logger.error(ex.getMessage(),ex);
 			return  null;

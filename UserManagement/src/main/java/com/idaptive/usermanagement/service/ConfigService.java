@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Service
 public class ConfigService {
+	private static final int MAX_LOOPS = 100;
 	Logger logger = LoggerFactory.getLogger(ConfigService.class);
 
 	public ResponseEntity<JsonNode> updateConfig(JsonNode body) {
@@ -24,10 +25,18 @@ public class ConfigService {
 			ObjectNode objNode = (ObjectNode) body;
 			objNode.remove("Username");
 			Iterator<String> it = body.fieldNames();
-			while (it.hasNext()) {
-				String fieldName = it.next();
-				userConfig.setProperty(fieldName, body.get(fieldName).asText());
+
+			int loopCount = 0;
+			if(body.size() > MAX_LOOPS){
+				loopCount = MAX_LOOPS;
 			}
+			for(int i=0; i < loopCount; i++){
+				if(it.hasNext()){
+					String fieldName = it.next();
+					userConfig.setProperty(fieldName, body.get(fieldName).asText());
+				}
+			}
+
 			userConfig.save();
 			JsonNode response = null;
 			String message = "{\"success\":true,\"Result\":{\"message\":\"Updated  configuration file Successfully.\"}}";

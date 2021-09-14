@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +24,7 @@ import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
+import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
 
 @NgModule({
   declarations: [
@@ -52,8 +53,9 @@ import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpClientXsrfModule.withOptions({headerName: 'X-XSRF-TOKEN', cookieName: 'XSRF-TOKEN'})
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

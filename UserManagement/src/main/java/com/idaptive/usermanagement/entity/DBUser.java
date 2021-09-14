@@ -13,21 +13,21 @@ import javax.persistence.Id;
 public class DBUser {
     private Integer Id;
     private String Name;
-    private String Password;
+    public char[] Password;
     private String Mail;
     private String DisplayName;
     private String MobileNumber;
 
     public DBUser() {
     }
-    public DBUser(String name, String password, String mail, String displayName, String mobileNumber){
+    public DBUser(String name, char[] password, String mail, String displayName, String mobileNumber){
     this.Name = name;
     this.Password = password;
     this.Mail = mail;
     this.DisplayName = displayName;
     this.MobileNumber = mobileNumber;
     }
-    public DBUser(Integer id, String name, String password, String mail, String displayName, String mobileNumber){
+    public DBUser(Integer id, String name, char[] password, String mail, String displayName, String mobileNumber){
         this.Id = id;
         this.Name = name;
         this.Password = password;
@@ -54,14 +54,13 @@ public class DBUser {
         Name = name;
     }
 
-    public String getPassword() {
+    public char[] getPassword() {
         return Password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(char[] password) {
         Password = password;
     }
-
     public String getMail() {
         return Mail;
     }
