@@ -53,12 +53,13 @@ public class AuthController {
 	public ResponseEntity<JsonNode> logout(HttpServletRequest request,HttpServletResponse response) {
 		Cookie[] cookieArray = request.getCookies();
 		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+		String authToken = "";
 		for (Cookie cookie : cookieArray) {
 			if (cookie.getName().equals(".ASPXAUTH")) {
-				return this.authService.logout(cookie.getValue(),response,enableMFAWidgetFlow);
+				authToken = cookie.getValue();
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		return this.authService.logout(authToken, response, enableMFAWidgetFlow);
 	}
 	
 	@PostMapping({ "/BasicLogin" })

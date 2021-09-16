@@ -135,17 +135,10 @@ public class AuthService {
 		HttpHeaders headers = setHeaders();
 		headers.set("Authorization", "Bearer " + authToken);
 		HttpEntity<String> request = new HttpEntity<>(headers);
-		Cookie cookieJwt = new Cookie("JwtToken", null);
-		cookieJwt.setPath("/");
-		cookieJwt.setHttpOnly(true);
-		cookieJwt.setMaxAge(0);
-	//	cookieJwt.setDomain("idaptive.app");
-		respose.addCookie(cookieJwt);
 		Cookie cookie = new Cookie(".ASPXAUTH", null);
 		cookie.setPath("/");
 		cookie.setHttpOnly(true);
 		cookie.setMaxAge(0);
-	//	cookie.setDomain("idaptive.app");
 		respose.addCookie(cookie);
 		ResponseEntity<JsonNode> result =  this.restTemplate.exchange(tenant, HttpMethod.POST, request, JsonNode.class);
 		if (enableMFAWidgetFlow){
