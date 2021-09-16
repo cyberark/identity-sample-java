@@ -108,10 +108,6 @@ export class Metadata implements OnInit {
 
   dataKeys(object : Object) { return Object.keys(object); }
 
-  onNext() {
-    this.router.navigate(['user'])
-  }
-
   onTryAnotherFlow(){
     this.loginService.logout().subscribe(
       data => {
