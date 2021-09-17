@@ -18,6 +18,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm, FormBuilder } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
+import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
 import { UserService } from '../user/user.service';
 
@@ -61,12 +62,27 @@ export class SettingsComponent implements OnInit {
       "oidcScopesSupported": ['', Validators.required],
     });
 
+    document.querySelectorAll('input[name=basic]').forEach(ele => {
+      new Tagify(ele, {
+        originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(' '),
+        delimiters: " "
+      });
+    });
+
     this.settings = JSON.parse(getStorage('settings'));
     if(this.settings && this.settings.appImage){
       this.imagePreview = this.settings.appImage;
       this.settings.appImage = "";
       this.settingsForm.setValue(this.settings);
     }
+  }
+
+  onOIDCScopeChange(val: string) {
+    this.settingsForm.controls.oidcScopesSupported.setValue(val);
+  }
+
+  onOAuthScopeChange(val: string) {
+    this.settingsForm.controls.oauthScopesSupported.setValue(val);
   }
 
   checkMessageType(){

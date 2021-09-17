@@ -1,4 +1,5 @@
 @import'~bootstrap/dist/css/bootstrap.min.css';
+@import'../node_modules/@yaireo/tagify/dist/tagify.css';
 
 * {
   margin: 0;
@@ -26,6 +27,26 @@ body {
 }
 
 /* utility classes */
+.customTagStyle{
+  --tag-bg                  : #fff;
+  --tag-hover               : #fffeff;
+  --tag-text-color          : #000;
+  --tags-border-color       : silver;
+  --tag-text-color--edit    : #111;
+  --tags-focus-border-color : rgba(0,0,0,.03);
+  --tag-remove-btn-bg--hover: #000;
+  --tag-remove-bg           : #fff;
+  --tag-min-width           : inherit;
+  --tag-max-width           : inherit;
+  background                : rgba(0, 0, 0, .03);
+  border                    : initial;
+  padding                   : 6px;
+  width                     : calc(100% - 150px);
+}
+.customTagStyle span{
+  color: #000;
+}
+
 .app-page {
   margin-top: 60px;
   height: calc(100vh - 97px);

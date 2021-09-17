@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^12.2.8",
     "@angular/platform-browser-dynamic": "^12.2.8",
     "@angular/router": "^12.2.8",
+    "@yaireo/tagify": "^4.8.1",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.9",
     "jquery": "^3.6.0",

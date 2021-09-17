@@ -64,7 +64,7 @@
             </div>
             <div class="form-group d-flex align-items-center">
               <label class="required label">Scopes</label>
-              <input class="form-control" formControlName="oauthScopesSupported" required placeholder="Space Separated OAuth Scopes">
+              <input class="customTagStyle" name="basic" formControlName="oauthScopesSupported" required placeholder="Space Separated OAuth Scopes" (change)="onOAuthScopeChange($event.target.value)">
               <span *ngIf="hasError('oauthScopesSupported', 'required')">Required</span>
             </div>
           </div>
@@ -87,7 +87,7 @@
             </div>
             <div class="form-group d-flex align-items-center">
               <label class="required label">Scopes</label>
-              <input class="form-control" formControlName="oidcScopesSupported" required placeholder="openid email profile">
+              <input class="customTagStyle" name="basic" formControlName="oidcScopesSupported" required placeholder="openid email profile" (change)="onOIDCScopeChange($event.target.value)">
               <span *ngIf="hasError('oidcScopesSupported', 'required')">Required</span>
             </div>
           </div>
