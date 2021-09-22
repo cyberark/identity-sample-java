@@ -15,6 +15,7 @@ import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
+import { M2MComponent } from './m2m/m2m.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'oidcflow', component: OidcFlowComponent },
   { path: 'RedirectResource', component: RedirectComponent },
   { path: 'oauthflow', component: OAuthFlowComponent },
+  { path: 'm2m', component: M2MComponent },
 ];
 
 @NgModule({

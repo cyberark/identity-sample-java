@@ -42,4 +42,8 @@ export class LoginProtocolComponent implements OnInit {
   onApiOAuthClick(){
     this.router.navigate(['oauthflow']);
   }
+
+  onM2MClick(){
+    this.router.navigate(['m2m']);
+  }
 }

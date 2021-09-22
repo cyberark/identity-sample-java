@@ -31,6 +31,12 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     @Value("${authorizationRedirectURL}")
     private String authorizationRedirectURL;
 
+    @Value("${oauthServiceUserName}")
+    private String oauthServiceUserName;
+
+    @Value("${oauthServiceUserPassword}")
+    private char[] oauthServiceUserPass;
+
     private final Logger logger = LoggerFactory.getLogger(BaseAuthorizationService.class);
 
     public abstract AuthorizationFlow supportedAuthorizationFlow();
@@ -145,25 +151,33 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
      */
     public TokenRequestPreview tokenRequestPreview(TokenMetadataRequest metadataRequest) throws Exception {
         try {
-            TokenRequestPreview requestPreview = new TokenRequestPreview();
-            requestPreview.apiEndPoint = this.getClient(metadataRequest.clientId, metadataRequest.clientSec)
-                    .buildAPIEndpoint("Token", this.getAppId());
+            TokenRequestPreview requestPreview = new TokenRequestPreview();            
 
-            requestPreview.payload.clientId = this.getClientId(metadataRequest.clientId);
-            requestPreview.payload.clientSec = this.getClientSecret(metadataRequest.clientSec);
             requestPreview.payload.grantType = metadataRequest.grantType;
 
             switch (metadataRequest.grantType)
             {
                 case authorization_code:
+                    requestPreview.apiEndPoint = this.getClient(metadataRequest.clientId, metadataRequest.clientSec)
+                        .buildAPIEndpoint("Token", this.getAppId());
+                    requestPreview.payload.clientId = this.getClientId(metadataRequest.clientId);
+                    requestPreview.payload.clientSec = this.getClientSecret(metadataRequest.clientSec);
                     requestPreview.payload.redirectUrl = this.authorizationRedirectURL;
                     requestPreview.payload.authorizationCode = metadataRequest.authorizationCode;
                     requestPreview.payload.codeVerifier = metadataRequest.codeVerifier;
                     break;
                 case client_credentials:
+                    requestPreview.apiEndPoint = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+                        .buildAPIEndpoint("Token", this.getAppId());
+                    requestPreview.payload.clientId = this.oauthServiceUserName;
+                    requestPreview.payload.clientSec = this.oauthServiceUserPass;
                     requestPreview.payload.scope = this.getScopesSupported();
                     break;
                 case password:
+                    requestPreview.apiEndPoint = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+                        .buildAPIEndpoint("Token", this.getAppId());
+                    requestPreview.payload.clientId = this.oauthServiceUserName;
+                    requestPreview.payload.clientSec = this.oauthServiceUserPass;
                     requestPreview.payload.userName = metadataRequest.userName;
                     requestPreview.payload.password = metadataRequest.password;
                     requestPreview.payload.scope = this.getScopesSupported();

@@ -1,0 +1,45 @@
+<div class="container-fluid padding-0">
+    <div *ngIf="loading" class="loader-screen">
+        <img class="loader" src="../../assets/images/Spinner.svg">
+    </div>
+    <app-header></app-header>
+    <div class="app-page">
+        <div class="container w-50 bg-white p-3">
+            <div class="d-flex flex-column align-items-center w-50 mx-auto">
+                <h3 class="font-weight-light m-3">OAuth Flow - M2M</h3>
+                <select name="m2m" id="m2m" class="form-control w-100"
+                    (change)="onSelect($event.target.value)">
+                    <option value="clientCreds">Client Creds</option>
+                    <option value="resourceOwner">Resource Owner</option>
+                </select>
+                <form [formGroup]="loginForm" autocomplete="off" *ngIf="isFormVisible">
+                    <div class="form-group d-flex align-items-center mt-3">
+                        <label class="required label">Username</label>
+                        <input class="form-control" disabled [value]="username">
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="required label">Password</label>
+                        <input class="form-control" formControlName="password" type="password" required>
+                        <span *ngIf="hasError('password', 'required')">Required</span>
+                    </div>
+                </form>
+                <button class="container btn btn-secondary m-3" (click)="onBuildTokenUrl()">Build Token URL</button>
+            </div>
+            <div class="container p-3">
+                <div class="d-flex flex-column">
+                    <h5 class="font-weight-light">Selected Flow + Token URL</h5>
+                    <div class="border p-3 text-break preline">
+                        {{tokenPostCall}}
+                        <div class="mt-3"></div>
+                        {{tokenPostCallBody}}
+                    </div>
+                    <div class="d-flex mt-3">
+                        <button class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</button>
+                        <button #submitBtn class="container btn btn-secondary" disabled (click)="onSubmit()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</div>

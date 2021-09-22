@@ -24,6 +24,7 @@ import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
 import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
+import { M2MComponent } from './m2m/m2m.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
     OidcFlowComponent,
     RedirectComponent,
     OAuthFlowComponent,
+    M2MComponent,
   ],
   imports: [
     BrowserModule,

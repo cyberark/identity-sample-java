@@ -9,6 +9,8 @@ export enum OAuthFlow {
   auth = "auth",
   implicit = "implicit",
   authPKCE = "authPKCE",
+  clientCreds = "clientCreds",
+  resourceOwner = "resourceOwner",
 }
 
 export enum GrantType {
@@ -82,4 +84,17 @@ export const getStorage = (key: string) => {
   const val = localStorage.getItem(key);
   if (val) return atob(val);
   else return val;
+}
+
+/**
+ * post call body string with each param on new line
+ * @param payload object having all the request body params
+ * @returns string with body param with values in new lines
+ */
+export const tokenEndpointBody = (payload: Object) => {
+  let resultStr = '';
+  Object.keys(payload).forEach(k => {
+      resultStr += `${k}=${payload[k]}\n`;
+  });
+  return resultStr;
 }

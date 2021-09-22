@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, getStorage, OAuthFlow, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, getStorage, OAuthFlow, tokenEndpointBody, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',
@@ -63,21 +63,13 @@ export class RedirectComponent implements OnInit {
             data => {
                 this.loading = false;
                 this.tokenPostCall = data.Result.apiEndPoint;
-                this.tokenPostCallBody = this.tokenEndpointBody(data.Result.payload);
+                this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
             },
             error => {
                 this.loading = false;
                 (<any>$('#errorPopup')).modal();
             }
         );
-    }
-
-    tokenEndpointBody(payload: Object) {
-        let resultStr = '';
-        Object.keys(payload).forEach(k => {
-            resultStr += `${k}=${payload[k]}\n`;
-        });
-        return resultStr;
     }
 
     onProceed() {
