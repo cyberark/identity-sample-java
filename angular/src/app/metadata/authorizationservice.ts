@@ -1,7 +1,24 @@
+/*
+* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { AuthorizationMetadataRequest, TokenMetadataRequest } from '../utils';
+import {  EndpointsConnector } from '../EndpointsConnector';
 
 @Injectable({
   providedIn: 'root'
@@ -13,32 +30,32 @@ export class AuthorizationService {
 
     getPKCEMetadata(){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `pkceMetaData`, { headers: head, withCredentials: true })
+        return this.http.get<any>(EndpointsConnector.PkceMetaDataEndPoint, { headers: head, withCredentials: true })
     }
 
     buildAuthorizeURL(authorizationMetadataRequest: AuthorizationMetadataRequest){
         let head = this.getHeaders();
-        return this.http.post<any>(environment.baseUrl + `buildAuthorizeURL`, authorizationMetadataRequest, { headers: head, withCredentials: true })
+        return this.http.post<any>(EndpointsConnector.BuildAuthorizeURLEndPoint, authorizationMetadataRequest, { headers: head, withCredentials: true })
     }
 
     getTokenSet(tokenMetadataRequest: TokenMetadataRequest){
         let head = this.getHeaders();
-        return this.http.post<any>(environment.baseUrl + `tokenSet`, tokenMetadataRequest, { headers: head, withCredentials: true })
+        return this.http.post<any>(EndpointsConnector.TokenSetEndPoint, tokenMetadataRequest, { headers: head, withCredentials: true })
     }
 
     getTokenRequestPreview(tokenPreviewReq: TokenMetadataRequest){
         let head = this.getHeaders();
-        return this.http.post<any>(environment.baseUrl + `tokenRequestPreview`, tokenPreviewReq, { headers: head, withCredentials: true })
+        return this.http.post<any>(EndpointsConnector.TokenRequestPreviewEndPoint, tokenPreviewReq, { headers: head, withCredentials: true })
     }
 
     getClaims(token : string){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `claims`, { headers: head, withCredentials: true, params: new HttpParams().set("token", token) })
+        return this.http.get<any>(EndpointsConnector.ClaimsEndPoint, { headers: head, withCredentials: true, params: new HttpParams().set("token", token) })
     }
 
     getUserInfo(accessToken : string){
         let head = this.getHeaders();
-        return this.http.get<any>(environment.baseUrl + `oidc/userInfo`, { headers: head, withCredentials: true, params: new HttpParams().set("accessToken", accessToken) })
+        return this.http.get<any>(EndpointsConnector.OIDCUserInfoEndPoint, { headers: head, withCredentials: true, params: new HttpParams().set("accessToken", accessToken) })
     }
 
     getHeaders(){

@@ -44,7 +44,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   messageType = "error";
   forgotPasswordCheck = false;
   matchPasswordsCheck = true;
-  social = false;
   allowForgotPassword = false;
   loading = false;
   secondAuthLoad = false;
@@ -408,7 +407,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     setStorage("displayName", result.DisplayName);
     setStorage("tenant", result.PodFqdn);
     setStorage("customerId", result.CustomerID);
-    setStorage("social", JSON.stringify(this.social));
     setStorage("custom", result.Custom);
   }
 

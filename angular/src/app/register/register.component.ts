@@ -40,7 +40,6 @@ export class RegisterComponent implements OnInit {
   messageType = "error";
   errorMessage = "";
   matchPasswordsCheck = true;
-  socialUser = false;
   loading = false;
   showConsent = false;
   leftContainerStyle: SafeStyle = "";// = this.domSanitizer.bypassSecurityTrustStyle("");
@@ -97,7 +96,7 @@ export class RegisterComponent implements OnInit {
 
     if (getStorage("userId") !== null) {
       this.loading = true;
-      this.userService.getById(getStorage("userId"), JSON.parse(getStorage("social"))).subscribe(
+      this.userService.getById(getStorage("userId")).subscribe(
         data => {
           this.loading = false;
           if (data.success) {
@@ -105,16 +104,10 @@ export class RegisterComponent implements OnInit {
             let user = data.Result;
             if (user.DirectoryServiceType == "FDS") {
               this.registerForm.disable();
-              this.socialUser = true;
             } else {
-              this.socialUser = false;
             }
             userControls.Name.setValue(user.Name);
-            if (JSON.parse(getStorage("social"))) {
-              userControls.Mail.setValue(user.EmailAddress);
-            } else {
-              userControls.Mail.setValue(user.Mail);
-            }
+            userControls.Mail.setValue(user.Mail);
             userControls.DisplayName.setValue(user.DisplayName);
             userControls.MobileNumber.setValue(user.MobileNumber);
           } else {
@@ -158,9 +151,6 @@ export class RegisterComponent implements OnInit {
 
   validateRegisterForm(form: NgForm) {
     if (this.update) {
-      if (this.socialUser) {
-        return;
-      }
       let fieldArray = ["Name", "Mail", "DisplayName", "MobileNumber", "MFA"];
       if (!this.validateFormFields(fieldArray)) {
         this.divToScroll.nativeElement.scrollTop = 0;

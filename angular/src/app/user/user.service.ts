@@ -1,8 +1,25 @@
+/*
+* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { User } from '../user/user';
 import { map } from 'rxjs/operators';
+import {  EndpointsConnector } from '../EndpointsConnector';
 
 @Injectable({
   providedIn: 'root'
@@ -11,22 +28,14 @@ import { map } from 'rxjs/operators';
 export class UserService {
 
   constructor(private http: HttpClient) { }
-  private baseUrl ="https://apidemo.cyberark.app:8080/";
-  private userUrl = "https://apidemo.cyberark.app:8080/user/";
-  private userOpsUrl = "https://apidemo.cyberark.app:8080/userops/";
-  private configUrl = "https://apidemo.cyberark.app:8080/config/";
-  getById(id: string, social: boolean) {
+  getById(id: string) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    let url = this.userOpsUrl + `${id}`;
-    if (social) {
-      url = this.userOpsUrl + `info/${id}`;
-    }
-    return this.http.get<any>(url, { headers: head, withCredentials: true });
+    return this.http.get<any>(EndpointsConnector.UserOpsURL + `${id}`, { headers: head, withCredentials: true });
   }
 
   register(user: User, clientIP: string, isMfa: boolean) {
     let head = new HttpHeaders().set('Content-Type', 'application/json').set('CLIENT_IP', clientIP);
-    return this.http.post<any>(this.userUrl + `register`, {user: user, isMfa: isMfa}, { headers: head, withCredentials: true });
+    return this.http.post<any>(EndpointsConnector.RegisterEndpoint, {user: user, isMfa: isMfa}, { headers: head, withCredentials: true });
   }
 
   getClientIP(){
@@ -35,17 +44,16 @@ export class UserService {
 
   update(user: {}, id: string) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<any>(this.userOpsUrl + `${id}`, user, { headers: head, withCredentials: true });
+    return this.http.put<any>(EndpointsConnector.UserOpsURL + `${id}`, user, { headers: head, withCredentials: true });
   }
 
   getSettings() {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    let url = this.baseUrl + `getSettings`;
-    return this.http.get<any>(url, { headers: head, withCredentials: true });
+    return this.http.get<any>(EndpointsConnector.GetSettingsEndpoint, { headers: head, withCredentials: true });
   }
 
   setSettings(custom: any) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<any>(this.baseUrl + `updateSettings`, custom, { headers: head, withCredentials: true });
+    return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint, custom, { headers: head, withCredentials: true });
   }
 }

@@ -99,7 +99,6 @@ export class MFAWidgetComponent implements OnInit {
     setStorage("displayName", result.DisplayName);
     setStorage("tenant", result.PodFqdn);
     setStorage("customerId", result.CustomerID);
-    setStorage("social", "false");
     setStorage("custom", result.Custom);
   }
 }

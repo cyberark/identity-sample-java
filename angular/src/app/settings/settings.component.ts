@@ -98,7 +98,7 @@ export class SettingsComponent implements OnInit {
       error => {
         this.loading = false;
         this.messageType = "error";
-        this.errorMessage = error.ErrorMessage;
+        this.errorMessage = error.error.ErrorMessage;
         this.divToScroll.nativeElement.scrollTop = 0;
       }
     )

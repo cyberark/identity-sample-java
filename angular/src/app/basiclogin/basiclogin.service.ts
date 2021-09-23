@@ -1,8 +1,25 @@
+/*
+* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { interval } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import {  EndpointsConnector } from '../EndpointsConnector';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +36,9 @@ export class BasicLoginService {
     .set('Accept', 'application/json')
     .set('Access-Control-Allow-Methods', 'POST')
     .set('Access-Control-Allow-Origin', '*');
-    return this.http.post<any>(environment.baseUrl + `BasicLogin`, { Username, Password }, { headers: head, withCredentials: true })
+    return this.http.post<any>(EndpointsConnector.BasicLoginEndPoint, { Username, Password }, { headers: head, withCredentials: true })
       .pipe(map(result => {
         return result;
-      }));
-  }
-  logout(authToken : string) {
-    let head = new HttpHeaders().set('Content-Type', 'application/json').set("AUTH",authToken);;
-    return this.http.post<any>(environment.baseUrl + `UserOps/LogOut`, {}, { headers: head })
-      .pipe(map(user => {
-        return user;
       }));
   }
 
@@ -38,7 +48,7 @@ export class BasicLoginService {
     .set('Accept', 'application/json')
     .set('Access-Control-Allow-Methods', 'POST')
     .set('Access-Control-Allow-Origin', '*');
-    return this.http.post<any>(environment.baseUrl + `CompleteLogin`, { sessionUuid, authorizationCode, clientId, codeVerifier }, { headers: head, withCredentials: true })
+    return this.http.post<any>(EndpointsConnector.CompleteLoginEndPoint, { sessionUuid, authorizationCode, clientId, codeVerifier }, { headers: head, withCredentials: true })
       .pipe(map(result => {
         return result;
       }));
