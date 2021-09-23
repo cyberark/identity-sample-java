@@ -22,7 +22,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { getStorage, setStorage } from 'src/app/utils';
 
 const imgSrc = "../../../assets/images/acme_logo.png";
-const accentcolor = "#313131";
 
 @Component({
   selector: 'app-header',
@@ -33,16 +32,15 @@ export class HeaderComponent implements OnInit {
   @Input() isLoginVisible: boolean = false;
   @Input() isSignUpVisible: boolean = false;
   @Input() isHomeVisible: boolean = false;
+  @Input() isSettingsVisible: boolean = false;
+  @Input() isLogoutVisible: boolean = false;
 
   page = "home";
   name = "";
   signOutMenu = false;
   homeMenu = false;
   loading = false;
-  custom = getStorage("custom") == "true";
   imageSource: string;
-  accentColor = accentcolor;
-  ribbonColor = accentcolor;
 
   constructor(
     private loginService: LoginService,
@@ -52,18 +50,14 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (getStorage("logo") === null || getStorage("logo") === "") {
+    if (getStorage("settings") === null) {
       this.loading = true;
-      this.userService.getClientCustomData().subscribe(
+      this.userService.getSettings().subscribe(
         data => {
           this.loading = false;
-          if (data.appImage) {
-            this.imageSource = imgSrc;
-            setStorage("logo", this.imageSource);
-            setStorage("accent", data.accentColor);
-            this.accentColor = data.accentColor;
-            setStorage("ribbon", data.ribbonColor);
-            this.ribbonColor = data.ribbonColor;
+          if (data.Result.appImage) {
+            this.imageSource = data.Result.appImage;
+            setStorage("settings", JSON.stringify(data.Result));
           } else {
             console.log("Incorrect data response");
           }
@@ -73,9 +67,7 @@ export class HeaderComponent implements OnInit {
         }
       );
     } else {
-      this.imageSource = imgSrc;
-      this.accentColor = getStorage("accent") || accentcolor;
-      this.ribbonColor = getStorage("ribbon") || accentcolor;
+      this.imageSource = JSON.parse(getStorage("settings")).appImage;
     }
 
     if (getStorage("displayName") !== null && getStorage("displayName") !== "") {
@@ -137,16 +129,17 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.signOutMenu = false;
     this.loginService.logout().subscribe(
       data => {
         if (data.success == true) {
+          const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
           localStorage.clear();
-          this.router.navigate(['']);
+          this.router.navigate([routeToNavigate]);
         }
       },
       error => {
         console.log(error);
-      });
+      }
+    );
   }
 }

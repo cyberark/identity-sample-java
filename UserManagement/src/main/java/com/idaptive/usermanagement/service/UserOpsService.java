@@ -1,8 +1,5 @@
 package com.idaptive.usermanagement.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.idaptive.usermanagement.Repos.TokenStoreRepository;
 import com.idaptive.usermanagement.Repos.UserRepository;
 import com.idaptive.usermanagement.entity.DBUser;
@@ -11,10 +8,8 @@ import com.idaptive.usermanagement.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,19 +25,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.context.request.RequestContextHolder;
 
 @Service
-@RefreshScope
 public class UserOpsService {
 
 	Logger logger = LoggerFactory.getLogger(UserOpsService.class);
-
-	@Value("${customerId}")
-	private String tenantID;
-
-	@Value("${tenant}")
-	private String tenant;
-
-	@Value("${mfaRole}")
-	private String roleName;
 
 	@Autowired
 	private UserRepository repo;
@@ -50,14 +35,8 @@ public class UserOpsService {
 	@Autowired
 	private TokenStoreRepository tokenStoreRepository;
 
-//	@Value("${spring.cloud.config.username}")
-//	private String configUsername;
-//
-//	@Value("${spring.cloud.config.password}")
-//	private String configPassword;
-//
-//	@Autowired
-//	private EurekaClient eurekaClient;
+	@Autowired
+	private SettingsService settingsService;
 
 	@LoadBalanced
 	private final RestTemplate restTemplate;
@@ -99,7 +78,7 @@ public class UserOpsService {
 		String userJson = getJson(user);
 		HttpHeaders headers = prepareForRequest(token);
 		HttpEntity<String> request = new HttpEntity<>(userJson, headers);
-		String updateUserUrl = tenant + "/CDirectoryService/ChangeUser";
+		String updateUserUrl = settingsService.getTenantURL() + "/CDirectoryService/ChangeUser";
 		try {
 			ResponseEntity<JsonNode> result = restTemplate.exchange(updateUserUrl, HttpMethod.POST, request, JsonNode.class);
 			JsonNode response = result.getBody();
@@ -126,7 +105,7 @@ public class UserOpsService {
 	public ResponseEntity<JsonNode> getUser(String uuid, String token) {
 		HttpHeaders headers = prepareForRequest(token);
 		HttpEntity<String> request = new HttpEntity<>("{\"ID\":\"" + uuid + "\"}", headers);
-		String url = tenant + "/CDirectoryService/GetUser";
+		String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
 		JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
 		JsonNode result = response.get("Result");
 		String name = response.get("Result").get("Name").asText();
@@ -134,55 +113,22 @@ public class UserOpsService {
 		ObjectNode objNode = (ObjectNode) result;
 		objNode.remove("Name");
 		objNode.put("Name", nameArr[0]);
-		objNode.put(roleName, isRolePresent(uuid, token));
+		objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	public String GetMFAUserName(String name){
-		return name + "@" + this.tenantID;
+		return name + "@" + settingsService.getLoginSuffix();
 	}
 
-//	//Update configuration files of all services.This method calls config-server URL.
-//	public ResponseEntity<JsonNode> updateConfig(JsonNode body) {
-//		String plainCreds = configUsername + ":" + configPassword;
-//		byte[] plainCredsBytes = plainCreds.getBytes();
-//		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-//		String base64Creds = new String(base64CredsBytes);
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("Authorization", "Basic " + base64Creds);
-//		HttpEntity request = new HttpEntity(body, headers);
-//		Application application = eurekaClient.getApplication("config-server");
-//		String url = "http://" + application.getInstances().get(0).getIPAddr() + ":"
-//				+ application.getInstances().get(0).getPort() + "/updateconfig";
-//		return restTemplate.exchange(url, HttpMethod.PUT, request, JsonNode.class);
-//	}
-
-	
-	//Get configuration properties.This method calls config-server URL.
-//	public ResponseEntity<JsonNode> getConfig() {
-//		String plainCreds = configUsername + ":" + configPassword;
-//		byte[] plainCredsBytes = plainCreds.getBytes();
-//		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-//		String base64Creds = new String(base64CredsBytes);
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("Authorization", "Basic " + base64Creds);
-//		HttpEntity request = new HttpEntity(headers);
-//		Application application = eurekaClient.getApplication("config-server");
-//		String url = "http://" + application.getInstances().get(0).getIPAddr() + ":"
-//				+ application.getInstances().get(0).getPort() + "/getconfig";
-//		return restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
-//	}
-
-	// This method checks whether role is assigned to user mentioned in
-	// configuration file
 	public boolean isRolePresent(String uuid, String token) {
-		String url = tenant + "/UserMgmt/GetUsersRolesAndAdministrativeRights?id=" + uuid;
+		String url = settingsService.getTenantURL() + "/UserMgmt/GetUsersRolesAndAdministrativeRights?id=" + uuid;
 		HttpHeaders headers = prepareForRequest(token);
 		HttpEntity<String> request = new HttpEntity<>(headers);
 		JsonNode result = restTemplate.postForObject(url, request, JsonNode.class);
 		JsonNode arr = result.get("Result").get("Results");
 		for (JsonNode jsonNode : arr) {
-			if (jsonNode.get("Row").get("RoleName").asText().equals(roleName)) {
+			if (jsonNode.get("Row").get("RoleName").asText().equals(settingsService.getRoleName())) {
 				return true;
 			}
 		}

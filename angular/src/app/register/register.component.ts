@@ -20,8 +20,8 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
-import { LoginService } from '../login/login.service';
-import { getStorage, setStorage } from '../utils';
+import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -43,14 +43,15 @@ export class RegisterComponent implements OnInit {
   socialUser = false;
   loading = false;
   showConsent = false;
+  leftContainerStyle: SafeStyle = "";// = this.domSanitizer.bypassSecurityTrustStyle("");
 
   @ViewChild('divToScroll') divToScroll: ElementRef;
 
   constructor(
     private router: Router,
     private userService: UserService,
-    private loginService: LoginService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private domSanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -86,6 +87,13 @@ export class RegisterComponent implements OnInit {
       "state_code": [''],
       "country_code": ['']
     }, { updateOn: 'blur' });
+
+    const settings: Settings = JSON.parse(getStorage("settings"));
+    if (settings && settings.appImage) {
+      this.leftContainerStyle = this.domSanitizer.bypassSecurityTrustStyle(
+        `background-image: url('${settings.appImage}'); background-size: contain;`
+      );
+    }
 
     if (getStorage("userId") !== null) {
       this.loading = true;
@@ -159,9 +167,9 @@ export class RegisterComponent implements OnInit {
         return;
       }
     } else {
-      this.validateAllFormFields(this.registerForm);
+      const isValid = validateAllFormFields(this.registerForm);
       this.matchPasswords();
-      if (this.registerForm.invalid || !this.matchPasswordsCheck) {
+      if (!isValid || !this.matchPasswordsCheck) {
         this.divToScroll.nativeElement.scrollTop = 0;
         return;
       }
@@ -256,20 +264,6 @@ export class RegisterComponent implements OnInit {
     this.header.signOutMenu = false;
   }
 
-  onLogOut() {
-    this.loginService.logout().subscribe(
-      data => {
-        if (data.success == true) {
-          const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
-          localStorage.clear();
-          this.router.navigate([routeToNavigate]);
-        }
-      },
-      error => {
-        console.log(error);
-      });
-  }
-
   // #TODO Move in common util
   validateFormFields(controls: Array<string>): boolean {
     let valid = true;
@@ -281,18 +275,6 @@ export class RegisterComponent implements OnInit {
       }
     }
     return valid;
-  }
-
-  // #TODO Move in common util
-  validateAllFormFields(registerForm: FormGroup): any {
-    Object.keys(registerForm.controls).forEach(field => {
-      const control = registerForm.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
   }
 
   // #TODO Move in common util

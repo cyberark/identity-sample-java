@@ -9,26 +9,18 @@ import com.idaptive.usermanagement.entity.TokenMetadataRequest;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@RefreshScope
 @Service
 public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCClient> {
 
     private final Logger logger = LoggerFactory.getLogger(OIDCService.class);
 
-    @Value("${oidcAppId}")
-    private String oidcAppId;
-
-    @Value("${oidcClientId}")
-    private String oidcClientId;
-
-    @Value("${oidcScopesSupported}")
-    private String oidcScopesSupported;
+    @Autowired
+    private SettingsService settingsService;
 
     public OIDCService() { }
 
@@ -36,17 +28,17 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
     public AuthorizationFlow supportedAuthorizationFlow() { return AuthorizationFlow.OIDC; }
 
     @Override
-    protected String getAppId() { return this.oidcAppId; }
+    protected String getAppId() { return settingsService.getOIDCApplicationID(); }
 
     @Override
-    protected String getClientId(String clientId) { return this.oidcClientId; }
+    protected String getClientId(String clientId) { return settingsService.getOIDCClientID(); }
 
     @Override
     protected char[] getClientSecret(char[] clientSecret) { return null; }
 
     @Override
     protected String getScopesSupported() {
-        return this.oidcScopesSupported;
+        return settingsService.getOIDCScopesSupported();
     }
 
 
@@ -59,7 +51,7 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
      */
     @Override
     public CyberArkIdentityOIDCClient getClient(String clientId, char[] clientSecret) throws IOException {
-        return new CyberArkIdentityOIDCClient(super.tenantURL, this.oidcAppId, this.oidcClientId);
+        return new CyberArkIdentityOIDCClient(settingsService.getTenantURL(), settingsService.getOIDCApplicationID(), settingsService.getOIDCClientID());
     }
 
     /**

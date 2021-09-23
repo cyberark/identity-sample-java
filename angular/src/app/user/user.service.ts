@@ -38,25 +38,14 @@ export class UserService {
     return this.http.put<any>(this.userOpsUrl + `${id}`, user, { headers: head, withCredentials: true });
   }
 
-  getClientCustomData() {
+  getSettings() {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    let url = this.configUrl + `getclientconfig`;
+    let url = this.baseUrl + `getSettings`;
     return this.http.get<any>(url, { headers: head, withCredentials: true });
   }
 
-  getCustomData() {
+  setSettings(custom: any) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    let url = this.configUrl + `getconfig`;
-    return this.http.get<any>(url, { headers: head, withCredentials: true });
-  }
-
-  setCustomData(custom: any) {
-    let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<any>(this.configUrl + `updateconfig`, custom, { headers: head, withCredentials: true });
-  }
-
-  refreshActuators() {
-    //this.http.post<any>(this.userUrl + `refresh`, { withCredentials: true }).subscribe();
-    this.http.post<any>(this.baseUrl + `actuator/refresh`, { withCredentials: true }).subscribe();
+    return this.http.put<any>(this.baseUrl + `updateSettings`, custom, { headers: head, withCredentials: true });
   }
 }

@@ -2,15 +2,15 @@
   <div *ngIf="loading" class="loader-screen">
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
-  <app-header *ngIf="update"></app-header>
-  <app-header *ngIf="!update" isLoginVisible=true></app-header>
+  <app-header *ngIf="update" isLogoutVisible=true></app-header>
+  <app-header *ngIf="!update" isLoginVisible=true isHomeVisible=true></app-header>
   <div #divToScroll class="app-page">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div class="wrap d-md-flex">
             <div class="text-wrap p-4 p-lg-5 d-flex img d-flex align-items-end" 
-              style="background-image: url('../../assets/images/acme_logo.png'); background-size: contain;">
+              [style]="leftContainerStyle">
               <div class="text w-100" *ngIf="!update">
                 <h2 class="mb-4">Welcome to Acme!</h2>
               </div>
@@ -77,8 +77,6 @@
                   </div>
                   <div class="col-md-12 mt-3">
                     <div class="d-flex">
-                      <button *ngIf="update" class="container btn btn-outline-secondary submit mr-5"
-                      (click)="onLogOut()">Log out</button>
                       <button [disabled]="socialUser" class="container btn btn-secondary submit "
                         data-target="#userConsent" type="submit"
                         (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>

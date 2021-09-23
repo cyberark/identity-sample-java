@@ -1,6 +1,6 @@
-<header class="apidemo-header" [style.border-color]="accentColor" [style.background-color]="ribbonColor">
+<header class="apidemo-header">
   <nav class="navbar navbar-expand-md navbar-light">
-    <a href="/" class="navbar-brand"><img [attr.src]="imageSource" alt="JC Logo"></a>
+    <div class="navbar-brand"><img [attr.src]="imageSource" alt="logo"></div>
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsList"
       aria-controls="navbarsList" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleHomeMenu()">
       <span class="navbar-toggler-icon"></span>
@@ -13,6 +13,11 @@
             Home
           </a>
         </li>
+        <li class="nav-item" *ngIf="isSettingsVisible">
+          <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/settings')" href="settings" (click)="onTabClick('settings')">
+            Settings
+          </a>
+        </li>
         <li class="nav-item" *ngIf="isSignUpVisible">
           <a class="text-white" [class.btn]="this.notRegister()" [class.btn-sm]="this.notRegister()"
             [class.register-btn]="this.notRegister()" [class.nav-link]="this.checkSelectedTab('/register')"
@@ -22,16 +27,16 @@
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/login')" href="login"
             (click)="onTabClick('login')">Login</a>
         </li>
-      </ul>
-
-      <ul class="navbar-nav ml-auto" *ngIf="checkFlow2UserPage()">
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="checkFlow2UserPage()">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/fundtransfer')" href="fundtransfer"
             (click)="onTabClick('fundtransfer')">Fund Transfer</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="checkFlow2UserPage()">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/user')" href="user"
             (click)="onTabClick('user')">User Profile</a>
+        </li>
+        <li class="nav-item" *ngIf="isLogoutVisible">
+          <div class="nav-link text-white" (click)="logout()" style="cursor: pointer;">Logout</div>
         </li>
       </ul>
     </div>

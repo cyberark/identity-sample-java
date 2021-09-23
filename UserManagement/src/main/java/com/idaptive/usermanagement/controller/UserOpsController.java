@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -22,8 +21,6 @@ import com.idaptive.usermanagement.config.AuthFilter;
 
 @RestController
 public class UserOpsController {
-
-	Logger logger = LoggerFactory.getLogger(UserOpsController.class);
 
 	@Autowired
 	private UserOpsService userOpsService;
@@ -51,19 +48,4 @@ public class UserOpsController {
 		}
 		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 	}
-
-//	@PutMapping("/updateconfig")
-//	public ResponseEntity<JsonNode> updateConfig(@RequestBody JsonNode body) {
-//		return userOpsService.updateConfig(body);
-//	}
-//
-//	@GetMapping("/getconfig")
-//	public ResponseEntity<JsonNode> getCustomProperties(){
-//		return userOpsService.getConfig();
-//	}
-//
-//
-	
-	
-	
 }

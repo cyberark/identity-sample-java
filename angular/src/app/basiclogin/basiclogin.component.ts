@@ -18,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractControl } from '@angular/forms';
 import { BasicLoginService } from './basiclogin.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getStorage, setStorage } from '../utils';
+import { getStorage, setStorage, validateAllFormFields } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -63,7 +63,7 @@ export class BasicLoginComponent implements OnInit {
   }
 
   loginUser(form: NgForm) {
-    if(!this.validateAllFormFields(this.loginForm)){
+    if(!validateAllFormFields(this.loginForm)){
       return;
     }
     this.loading = true;
@@ -100,23 +100,6 @@ export class BasicLoginComponent implements OnInit {
       field.markAsUntouched({ onlySelf: true });
       if (field.invalid) {
         valid = false;
-      }
-    });
-    return valid;
-  }
-
-  // #TODO Move in common util
-  validateAllFormFields(form: FormGroup): any {
-    let valid = true;
-    Object.keys(form.controls).forEach(field => {
-      const control = form.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-        if (control.invalid) {
-          valid = false;
-        }
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
       }
     });
     return valid;

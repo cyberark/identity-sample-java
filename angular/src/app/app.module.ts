@@ -11,7 +11,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-import { CustomComponent } from './custom/custom.component';
+import { SettingsComponent } from './settings/settings.component';
 import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
 import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
@@ -36,7 +36,7 @@ import { ErrorComponent } from './components/error/error.component';
     ErrorComponent,
     RegisterComponent,
     HomeComponent,
-    CustomComponent,
+    SettingsComponent,
     BasicLoginComponent,
     MFAWidgetComponent,
     FundTransferComponent,

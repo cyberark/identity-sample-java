@@ -2,7 +2,7 @@
     <div *ngIf="loading" class="loader-screen">
         <img class="loader" src="../../assets/images/Spinner.svg">
     </div>
-    <app-header></app-header>
+    <app-header isLogoutVisible=true></app-header>
     <div class="app-page">
         <div class="container">
             <div class="row justify-content-center">
@@ -23,7 +23,7 @@
                                     <tbody>
                                         <tr *ngFor="let key of dataKeys(authResponse)">
                                             <th scope="row">{{key}}</th>
-                                            <td class="text-break text-truncate">{{authResponse[key]}}</td>
+                                            <td class="text-break text-truncate" [title]="authResponse[key]">{{authResponse[key]}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

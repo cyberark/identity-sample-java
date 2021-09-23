@@ -10,10 +10,8 @@ import com.idaptive.usermanagement.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -27,25 +25,19 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.context.request.RequestContextHolder;
 
 
-@RefreshScope
 @Service
 public class AuthService {
 
 	private final Logger logger = LoggerFactory.getLogger(AuthService.class);
-	@Value("${tenant}")
-	private String tenantPrefix;
-
-	@Value("${customerId}")
-	private String tenantID;
-
-	@Value("${oauthAppId}")
-	private String applicationID;
 
 	@Autowired
 	private TokenStoreRepository tokenStoreRepository;
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private SettingsService settingsService;
 
 	@LoadBalanced
 	private final RestTemplate restTemplate;
@@ -64,11 +56,11 @@ public class AuthService {
 
 	public ResponseEntity<JsonNode> startAuthenticationWithObject(AuthRequest authRequest, HttpServletResponse response, Boolean enableMFAWidgetFlow)
 			throws JsonProcessingException {
-		String tenant = tenantPrefix + "/Security/StartAuthentication";
+		String tenant = settingsService.getTenantURL() + "/Security/StartAuthentication";
 		HttpHeaders httpHeaders = setHeaders();
 		ObjectMapper mapper = new ObjectMapper();
 		String name = authRequest.getUsername();
-		authRequest.setUsername(name + "@" + tenantID);
+		authRequest.setUsername(name + "@" + settingsService.getLoginSuffix());
 		String beginAuth = mapper.writeValueAsString(authRequest);
 		HttpEntity<String> request = new HttpEntity<>(beginAuth, httpHeaders);
 		boolean success = false;
@@ -96,7 +88,7 @@ public class AuthService {
 	}
 
 	public ResponseEntity<JsonNode> advanceAuthenticationByObject(JsonNode authRequest, HttpServletResponse response) throws UnsupportedEncodingException {
-		String url = tenantPrefix + "/Security/AdvanceAuthentication";
+		String url = settingsService.getTenantURL() + "/Security/AdvanceAuthentication";
 		HttpHeaders httpHeaders = setHeaders();
 		HttpEntity<JsonNode> request = new HttpEntity<>(authRequest, httpHeaders);
 		ResponseEntity<JsonNode> advAuthResp = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class);
@@ -131,7 +123,7 @@ public class AuthService {
 	}
 
 	public ResponseEntity<JsonNode> logout(String authToken, HttpServletResponse respose, Boolean enableMFAWidgetFlow) {
-		String tenant = tenantPrefix + "/Security/Logout";
+		String tenant = settingsService.getTenantURL() + "/Security/Logout";
 		HttpHeaders headers = setHeaders();
 		headers.set("Authorization", "Bearer " + authToken);
 		HttpEntity<String> request = new HttpEntity<>(headers);
@@ -140,6 +132,10 @@ public class AuthService {
 		cookie.setHttpOnly(true);
 		cookie.setMaxAge(0);
 		respose.addCookie(cookie);
+		Cookie authCookie = new Cookie("AUTH", null);
+		authCookie.setPath("/");
+		authCookie.setMaxAge(0);
+		respose.addCookie(authCookie);
 		ResponseEntity<JsonNode> result =  this.restTemplate.exchange(tenant, HttpMethod.POST, request, JsonNode.class);
 		if (enableMFAWidgetFlow){
 			Integer userId = ((TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore",1)).getUserId();
@@ -165,7 +161,7 @@ public class AuthService {
 		HttpHeaders headers = setHeaders(accessToken);
 		HttpEntity<String> request = new HttpEntity<>(headers);
 
-		String url = tenantPrefix + "/CDirectoryService/GetUser";
+		String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
 		ResponseEntity<JsonNode> getResponse = restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
 		JsonNode response = getResponse.getBody();
 		String mfaUser = response.get("Result").get("Name").asText();
@@ -195,7 +191,7 @@ public class AuthService {
 
 	private String receiveOAuthTokenCCForUser(AdvanceLoginRequest advanceLoginRequest) {
 		try {
-			String url = tenantPrefix + "/oauth2/token//" + applicationID;
+			String url = settingsService.getTenantURL() + "/oauth2/token/" + settingsService.getOauthApplicationID();
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.set("Content-Type", "application/x-www-form-urlencoded");
 

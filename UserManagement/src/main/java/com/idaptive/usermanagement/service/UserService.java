@@ -1,7 +1,6 @@
 package com.idaptive.usermanagement.service;
 
 import java.io.IOException;
-import java.lang.ref.Cleaner;
 import java.util.Arrays;
 
 import com.cyberark.entities.TokenHolder;
@@ -11,10 +10,8 @@ import com.idaptive.usermanagement.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,39 +26,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.idaptive.usermanagement.entity.User;
 import com.idaptive.usermanagement.exception.RoleNotFoundException;
-//import com.netflix.discovery.EurekaClient;
-//import com.netflix.discovery.shared.Application;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
-@RefreshScope
 public class UserService {
 
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 
-	@Value("${customerId}")
-	private String tenantID;
-
-	@Value("${tenant}")
-	private String tenant;
-
-	@Value("${mfaRole}")
-	private String roleName;
-
-//
-//	@Value("${spring.cloud.config.username}")
-//	private String configUsername;
-//
-//	@Value("${spring.cloud.config.password}")
-//	private String configPassword;
-//
-//	@Autowired
-//	private EurekaClient eurekaClient;
-
 	@LoadBalanced
 	private final RestTemplate restTemplate;
+
+	@Autowired
+	private SettingsService settingsService;
 
 	@Autowired
 	private UserRepository repo;
@@ -127,8 +105,8 @@ public class UserService {
 			userJson = getJson(user);
 			HttpHeaders headers = prepareForRequestOauth();
 			HttpEntity<String> createuserrequest = new HttpEntity<>(userJson, headers);
-			String createUserUrl = tenant + "/CDirectoryService/Signup";
-			String updateRoleUrl = tenant + "/Roles/UpdateRole";
+			String createUserUrl = settingsService.getTenantURL() + "/CDirectoryService/Signup";
+			String updateRoleUrl = settingsService.getTenantURL() + "/Roles/UpdateRole";
 			ResponseEntity<JsonNode> createUserResponse = null;
 			createUserResponse = restTemplate.exchange(createUserUrl, HttpMethod.POST, createuserrequest,
 					JsonNode.class);
@@ -143,7 +121,7 @@ public class UserService {
 				}
 			} else {
 				if (isMfa) {
-					String roleUuid = getRoleUuid(roleName);
+					String roleUuid = getRoleUuid(settingsService.getRoleName());
 
 					HttpEntity<String> updateRoleRequest = new HttpEntity<>(
 							"{\"Users\":{\"Add\":[\"" + createUserResponse.getBody().get("Result").get("UserId").asText()
@@ -174,7 +152,7 @@ public class UserService {
 	}
 
 	public String getRoleUuid(String roleName) throws RoleNotFoundException, Exception {
-		String getRoles = tenant + "/Redrock/query";
+		String getRoles = settingsService.getTenantURL() + "/Redrock/query";
 		HttpHeaders headers = prepareForRequestOauth();
 		HttpEntity<String> getRolesRequest = new HttpEntity<>(
 				"{ Script: \"Select * from Role WHERE Name = \'" + roleName + "\' ORDER BY Name COLLATE NOCASE \"}",
@@ -213,38 +191,6 @@ public class UserService {
 	}
 
 	public String GetMFAUserName(String name){
-		return name + "@" + this.tenantID;
+		return name + "@" + settingsService.getLoginSuffix();
 	}
-
-//	public ResponseEntity<JsonNode> getConfig() {
-//		String plainCreds = configUsername + ":" + configPassword;
-//		byte[] plainCredsBytes = plainCreds.getBytes();
-//		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-//		String base64Creds = new String(base64CredsBytes);
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("Authorization", "Basic " + base64Creds);
-//		HttpEntity request = new HttpEntity(headers);
-//		Application application = eurekaClient.getApplication("config-server");
-//		String url = "http://" + application.getInstances().get(0).getIPAddr() + ":"
-//				+ application.getInstances().get(0).getPort() + "/getclientconfig";
-//		return restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
-//
-//	}
-//
-//	public ResponseEntity<JsonNode> refreshConfig() {
-//		HttpHeaders headers = new HttpHeaders();
-//		HttpEntity request = new HttpEntity(headers);
-//		Application userOpsApplication = eurekaClient.getApplication("user-ops-service");
-//		Application authApplication = eurekaClient.getApplication("auth-service");
-//
-//		String userOpsUrl = "http://" + userOpsApplication.getInstances().get(0).getIPAddr() + ":"
-//				+ userOpsApplication.getInstances().get(0).getPort() + "/actuator/refresh";
-//		String authUrl = "http://" + authApplication.getInstances().get(0).getIPAddr() + ":"
-//				+ authApplication.getInstances().get(0).getPort() + "/actuator/refresh";
-//		restTemplate.exchange(userOpsUrl, HttpMethod.POST, request, JsonNode.class);
-//		return restTemplate.exchange(authUrl, HttpMethod.POST, request, JsonNode.class);
-//
-//	}
-
-
 }

@@ -9,30 +9,18 @@ import com.idaptive.usermanagement.entity.TokenMetadataRequest;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-@RefreshScope
 @Service
 public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuthClient>{
 
     private final Logger logger = LoggerFactory.getLogger(OAuthService.class);
 
-    @Value("${oauthAppId}")
-    private String oauthAppId;
-
-    @Value("${oauthServiceUserName}")
-    private String oauthServiceUserName;
-
-    @Value("${oauthServiceUserPassword}")
-    private char[] oauthServiceUserPass;
-
-    @Value("${oauthScopesSupported}")
-    private String oauthScopesSupported;
+    @Autowired
+    private SettingsService settingsService;
 
     public OAuthService() { }
 
@@ -40,7 +28,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     public AuthorizationFlow supportedAuthorizationFlow() { return AuthorizationFlow.OAUTH; }
 
     @Override
-    protected String getAppId() { return this.oauthAppId; }
+    protected String getAppId() { return settingsService.getOauthApplicationID(); }
 
     @Override
     protected String getClientId(String clientId) { return clientId; }
@@ -49,7 +37,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     protected char[] getClientSecret(char[] clientSecret) { return clientSecret; }
 
     @Override
-    protected String getScopesSupported() { return this.oauthScopesSupported; }
+    protected String getScopesSupported() { return settingsService.getOauthScopesSupported(); }
 
 
     /**
@@ -62,10 +50,10 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     @Override
     public CyberArkIdentityOAuthClient getClient(String clientId, char[] clientSec) throws IOException {
         if (clientSec == null){
-            return new CyberArkIdentityOAuthClient(super.tenantURL, this.oauthAppId, clientId);
+            return new CyberArkIdentityOAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId);
         }
         else {
-            return new CyberArkIdentityOAuthClient(super.tenantURL, this.oauthAppId, clientId, String.valueOf(clientSec));
+            return new CyberArkIdentityOAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId, String.valueOf(clientSec));
         }
     }
 
@@ -78,7 +66,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     public TokenHolder getTokenSetWithClientCreds(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+            tokenHolder = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithClientCreds()
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
@@ -99,7 +87,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
     public TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+            tokenHolder = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithPassword(tokenMetadataRequest.userName, String.valueOf(tokenMetadataRequest.password))
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())

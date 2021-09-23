@@ -1,0 +1,103 @@
+<div class="container-fluid padding-0">
+  <div *ngIf="loading" class="loader-screen">
+    <img class="loader" src="../../assets/images/Spinner.svg">
+  </div>
+  <app-header isHomeVisible=true></app-header>
+  <div #divToScroll class="app-page">
+    <div class="container bg-white">
+      <h3 class="text-center font-weight-light p-3">Settings</h3>
+      <div *ngIf="errorMessage != ''" class="user-error">
+        <div class="error-image"><img
+            [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+        </div>
+        <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+      </div>
+      <form [formGroup]="settingsForm" class="row" autocomplete="off">
+        <div class="container border p-3 mb-1 mx-3">
+          <div class="form-group d-flex align-items-center">
+            <label class="label">Application Logo</label>
+            <input type="file" class="form-control" accept=".png,.jpg,.gif,.ico,.bmp" formControlName="appImage" (change)="onImageUpload($event)">
+            <img [attr.src]="imagePreview" alt="default-logo" width="28px" height="28px">
+          </div>
+        </div>
+        <div class="col">
+          <div class="border p-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <h5>CyberArk Tenant</h5>
+              <img src="../../assets/images/cyberark-logo.png" alt="cyberark-logo" style="width: 28px;height: 28px;">
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">URL</label>
+              <input class="form-control" formControlName="tenantURL" required placeholder="https://YOUR_TENANT.idaptive.app/">
+              <span *ngIf="hasError('tenantURL', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Login Suffix</label>
+              <input class="form-control" formControlName="loginSuffix" required placeholder="Login Suffix">
+              <span *ngIf="hasError('loginSuffix', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Role Name</label>
+              <input class="form-control" formControlName="roleName" required placeholder="MFA Role Name">
+              <span *ngIf="hasError('roleName', 'required')">Required</span>
+            </div>
+          </div>
+          <div class="border p-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <h5>OAuth 2.0</h5>
+              <img src="../../assets/images/oauth_logo28x28.png" alt="oauth_logo" style="height: 28px;">
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Application ID</label>
+              <input class="form-control" formControlName="oauthAppId" required placeholder="OAuth Client Application ID">
+              <span *ngIf="hasError('oauthAppId', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Username</label>
+              <input class="form-control" formControlName="oauthServiceUserName" required placeholder="Service Username">
+              <span *ngIf="hasError('oauthServiceUserName', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Password</label>
+              <input class="form-control" formControlName="oauthServiceUserPassword" required placeholder="Service User Password">
+              <span *ngIf="hasError('oauthServiceUserPassword', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Scopes</label>
+              <input class="form-control" formControlName="oauthScopesSupported" required placeholder="Space Separated OAuth Scopes">
+              <span *ngIf="hasError('oauthScopesSupported', 'required')">Required</span>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="border p-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <h5>OpenID Connect</h5>
+              <img src="../../assets/images/openid-icon-28x28.png" alt="openid-icon" style="height: 28px;">
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Application ID</label>
+              <input class="form-control" formControlName="oidcAppId" required placeholder="OpenID Connect Application ID">
+              <span *ngIf="hasError('oidcAppId', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Client ID</label>
+              <input class="form-control" formControlName="oidcClientId" required placeholder="OpenID Connect Client ID">
+              <span *ngIf="hasError('oidcClientId', 'required')">Required</span>
+            </div>
+            <div class="form-group d-flex align-items-center">
+              <label class="required label">Scopes</label>
+              <input class="form-control" formControlName="oidcScopesSupported" required placeholder="openid email profile">
+              <span *ngIf="hasError('oidcScopesSupported', 'required')">Required</span>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="d-flex justify-content-center p-3">
+        <div class="container btn btn-outline-secondary mr-5" (click)="onCancel()">Cancel</div>
+        <div class="container btn btn-secondary" (click)="onSave()">Save</div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

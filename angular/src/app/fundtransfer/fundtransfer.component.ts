@@ -19,7 +19,7 @@ import { UserService } from '../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormBuilder, FormGroup, NgForm, Validators, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
-import { getStorage } from '../utils';
+import { getStorage, validateAllFormFields } from '../utils';
 
 @Component({
     selector: 'app-fundtransfer',
@@ -59,8 +59,7 @@ export class FundTransferComponent implements OnInit {
     }
 
     transferFunds(form: NgForm) {
-        this.validateAllFormFields(this.fundTransferForm);
-        if (this.fundTransferForm.invalid) {
+        if (!validateAllFormFields(this.fundTransferForm)) {
             return;
         }
         this.router.navigate(['mfawidget'], { queryParams: { fromFundTransfer: true } });
@@ -73,17 +72,6 @@ export class FundTransferComponent implements OnInit {
         }
         return true;
     }
-    
-    validateAllFormFields(fundTransferForm: FormGroup): any {
-        Object.keys(fundTransferForm.controls).forEach(field => {
-          const control = fundTransferForm.get(field);
-          if (control instanceof FormControl) {
-            control.markAsTouched({ onlySelf: true });
-          } else if (control instanceof FormGroup) {
-            this.validateAllFormFields(control);
-          }
-        });
-      }
     
     hasError(controlName: string, errorName: string) {
         let form = this.fundTransferForm;

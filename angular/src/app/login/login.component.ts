@@ -437,18 +437,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   // #TODO Move in common util
-  validateAllFormFields(form: FormGroup): any {
-    Object.keys(form.controls).forEach(field => {
-      const control = form.get(field);
-      if (control instanceof FormControl) {
-        control.markAsTouched({ onlySelf: true });
-      } else if (control instanceof FormGroup) {
-        this.validateAllFormFields(control);
-      }
-    });
-  }
-
-  // #TODO Move in common util
   public hasError = (controlName: string, errorName: string) => {
     let form = this.loginForm;
     let control = form.controls[controlName];

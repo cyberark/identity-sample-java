@@ -18,7 +18,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, getStorage, GrantType, OAuthFlow, setStorage, tokenEndpointBody, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, getStorage, GrantType, OAuthFlow, setStorage, tokenEndpointBody, TokenMetadataRequest, validateAllFormFields } from '../utils';
 
 @Component({
   selector: 'm2m',
@@ -69,6 +69,8 @@ export class M2MComponent implements OnInit {
    * based on the oauth flow builds the token url
    */
   onBuildTokenUrl(){
+    if(this.selectedFlow === OAuthFlow.resourceOwner && !validateAllFormFields(this.loginForm)) return;
+
     this.loading = true;
     this.tokenMetaReq.authFlow = AuthorizationFlow.OAUTH;
     if(this.selectedFlow === OAuthFlow.clientCreds) {

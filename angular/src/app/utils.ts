@@ -1,3 +1,5 @@
+import { FormControl, FormGroup } from "@angular/forms";
+
 export const authURLStr = "Authorize URL";
 
 export enum AuthorizationFlow {
@@ -28,6 +30,20 @@ export enum OidcFlow {
 export class PKCEMetaData {
   codeVerifier: string;
   codeChallenge: string;
+}
+
+export class Settings {
+  appImage: string;
+  tenantURL: string;
+  loginSuffix: string;
+  roleName: string;
+  oauthAppId: string;
+  oauthServiceUserName: string;
+  oauthServiceUserPassword: string;
+  oauthScopesSupported: string;
+  oidcAppId: string;
+  oidcClientId: string;
+  oidcScopesSupported: string;
 }
 
 export class AuthorizationMetadataRequest extends PKCEMetaData {
@@ -97,4 +113,25 @@ export const tokenEndpointBody = (payload: Object) => {
       resultStr += `${k}=${payload[k]}\n`;
   });
   return resultStr;
+}
+
+/**
+ * Validates are the form fields in the given form group
+ * @param form form group instance to be validated
+ * @returns true if all fields are valid otherwise false
+ */
+export const validateAllFormFields = (form: FormGroup): boolean => {
+  let valid = true;
+  Object.keys(form.controls).forEach(field => {
+    const control = form.get(field);
+    if (control instanceof FormControl) {
+      control.markAsTouched({ onlySelf: true });
+      if (control.invalid) {
+        valid = false;
+      }
+    } else if (control instanceof FormGroup) {
+      validateAllFormFields(control);
+    }
+  });
+  return valid;
 }

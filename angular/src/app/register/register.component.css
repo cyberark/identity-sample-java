@@ -84,33 +84,12 @@
   height: 100%;
 }
 
-.user-error {
-  display: flex;
-  align-items: flex-start;
-  font-family: "Roboto";
-  font-weight: 400;
-  font-size: 14px;
-  color: #cc3300;
-}
-
-.error-image {
-  order: 1;
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-}
-
 .message-info-icon {
   background-image: '../../assets/images/green_check.png';
 }
 
 .message-error-icon {
   background-image: '../../assets/images/issue_icon.png';
-}
-
-.user-error p {
-  order: 2;
-  margin-top: 2px;
 }
 
 label.required::after {

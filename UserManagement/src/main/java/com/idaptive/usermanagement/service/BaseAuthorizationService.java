@@ -11,13 +11,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.idaptive.usermanagement.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
@@ -25,19 +24,10 @@ import java.util.Arrays;
 @Service
 public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthClient> {
 
-    @Value("${tenant}")
-    protected String tenantURL;
-
-    @Value("${authorizationRedirectURL}")
-    private String authorizationRedirectURL;
-
-    @Value("${oauthServiceUserName}")
-    private String oauthServiceUserName;
-
-    @Value("${oauthServiceUserPassword}")
-    private char[] oauthServiceUserPass;
-
     private final Logger logger = LoggerFactory.getLogger(BaseAuthorizationService.class);
+
+    @Autowired
+    SettingsService settingsService;
 
     public abstract AuthorizationFlow supportedAuthorizationFlow();
 
@@ -58,6 +48,8 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     protected abstract String getScopesSupported();
 
     private final String codeChallengeMethod = "S256";
+
+    private final String authorizationRedirectURL = "https://apidemo.cyberark.app:4200/RedirectResource";
 
     public BaseAuthorizationService() { }
 
@@ -151,7 +143,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
      */
     public TokenRequestPreview tokenRequestPreview(TokenMetadataRequest metadataRequest) throws Exception {
         try {
-            TokenRequestPreview requestPreview = new TokenRequestPreview();            
+            TokenRequestPreview requestPreview = new TokenRequestPreview();
 
             requestPreview.payload.grantType = metadataRequest.grantType;
 
@@ -167,19 +159,19 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
                     requestPreview.payload.codeVerifier = metadataRequest.codeVerifier;
                     break;
                 case client_credentials:
-                    requestPreview.apiEndPoint = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+                    requestPreview.apiEndPoint = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                         .buildAPIEndpoint("Token", this.getAppId());
-                    requestPreview.payload.clientId = this.oauthServiceUserName;
-                    requestPreview.payload.clientSec = this.oauthServiceUserPass;
+                    requestPreview.payload.clientId = settingsService.getOauthServiceUserName();
+                    requestPreview.payload.clientSec = settingsService.getOauthServiceUserPass();
                     requestPreview.payload.scope = this.getScopesSupported();
                     break;
                 case password:
-                    requestPreview.apiEndPoint = this.getClient(this.oauthServiceUserName, this.oauthServiceUserPass)
+                    requestPreview.apiEndPoint = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                         .buildAPIEndpoint("Token", this.getAppId());
-                    requestPreview.payload.clientId = this.oauthServiceUserName;
-                    requestPreview.payload.clientSec = this.oauthServiceUserPass;
+                    requestPreview.payload.clientId = settingsService.getOauthServiceUserName();
+                    requestPreview.payload.clientSec = settingsService.getOauthServiceUserPass();
                     requestPreview.payload.userName = metadataRequest.userName;
-                    requestPreview.payload.password = metadataRequest.password;
+                    requestPreview.payload.password = metadataRequest.password.clone();
                     requestPreview.payload.scope = this.getScopesSupported();
                     Arrays.fill(metadataRequest.password, ' ');
                     break;

@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
-import { CustomComponent } from './custom/custom.component';
+import { SettingsComponent } from './settings/settings.component';
 import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
 import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'user', component: RegisterComponent },
-  { path: 'custom', component: CustomComponent },
+  { path: 'settings', component: SettingsComponent },
   { path: 'basiclogin', component: BasicLoginComponent },
   { path: 'mfawidget', component: MFAWidgetComponent },
   { path: 'fundtransfer', component: FundTransferComponent },

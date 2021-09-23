@@ -123,6 +123,26 @@ label.required::after {
 
 /* application specific common CSS */
 
+.user-error {
+  display: flex;
+  align-items: flex-start;
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 14px;
+  color: #cc3300;
+}
+
+.user-error p {
+  order: 2;
+  margin-top: 2px;
+}
+
+.error-image {
+  order: 1;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
 
 /* media Queries */
 

@@ -18,7 +18,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, getStorage, OAuthFlow, setStorage } from '../utils';
+import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, getStorage, OAuthFlow, setStorage, validateAllFormFields } from '../utils';
 
 @Component({
   selector: 'oauthflow',
@@ -72,6 +72,8 @@ export class OAuthFlowComponent implements OnInit {
    * based on the oauth flow builds the authorization url
    */
   onBuildAuthUrl(){
+    if(this.selectedFlow === OAuthFlow.auth && !validateAllFormFields(this.loginForm)) return;
+
     let authReqMetaData = new AuthorizationMetadataRequest();
     authReqMetaData.authFlow = AuthorizationFlow.OAUTH;
     authReqMetaData.clientId = this.username;
