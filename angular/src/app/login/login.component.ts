@@ -141,6 +141,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           if (data.success == true) {
             if (data.Result.Summary == "LoginSuccess") {
               this.redirectToDashboard(data.Result);
+            } else if (data.success == true && data.Result.PodFqdn){
+              this.onLoginError(`Update Tenant URL to \"${data.Result.PodFqdn}\" in <u><a href="/settings">settings page</a></u>.`);
             } else {
               this.loginForm.get('username').disable();
               if (data.Result && data.Result.ClientHints && data.Result.ClientHints.AllowForgotPassword) {
