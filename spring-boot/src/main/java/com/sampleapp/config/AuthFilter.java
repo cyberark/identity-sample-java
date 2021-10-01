@@ -27,12 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.service.AuthService;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.util.StringUtils;
 
@@ -82,6 +82,6 @@ public class AuthFilter extends OncePerRequestFilter {
     public static String cleanIt(String str) {
         return Jsoup.clean(
                 StringEscapeUtils.escapeHtml4(StringEscapeUtils.escapeEcmaScript(StringUtils.replace(str, "'", "''")))
-                , Whitelist.basic());
+                , Safelist.basic());
     }
 }

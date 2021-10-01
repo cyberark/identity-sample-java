@@ -26,7 +26,7 @@ import { AuthorizationFlow, getStorage, GrantType, OAuthFlow, setStorage, tokenE
 })
 
 export class M2MComponent implements OnInit {
-  @ViewChild('submitBtn') submitBtn: ElementRef;
+  @ViewChild('submitBtn', { static: true }) submitBtn: ElementRef;
 
   isFormVisible: boolean = false;
   loginForm: FormGroup;

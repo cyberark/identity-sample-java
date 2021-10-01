@@ -26,7 +26,7 @@ import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, get
 })
 
 export class OAuthFlowComponent implements OnInit {
-  @ViewChild('authorizeBtn') authorizeBtn;
+  @ViewChild('authorizeBtn', { static: true }) authorizeBtn;
 
   loginForm: FormGroup;
   username: string = getStorage('username');

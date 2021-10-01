@@ -26,7 +26,7 @@ import { AuthorizationFlow, AuthorizationMetadataRequest, authURLStr, buildAutho
 })
 
 export class OidcFlowComponent implements OnInit {
-  @ViewChild('authorizeBtn') authorizeBtn;
+  @ViewChild('authorizeBtn', { static: true }) authorizeBtn;
 
   oidcFlow: OidcFlow = OidcFlow.auth;
   responseTypes = ["code"];

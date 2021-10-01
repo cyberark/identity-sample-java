@@ -28,7 +28,7 @@ import { getStorage, validateAllFormFields } from '../utils';
 })
 
 export class FundTransferComponent implements OnInit {
-    @ViewChild(HeaderComponent)
+    @ViewChild(HeaderComponent, { static: true })
     private header: HeaderComponent;
     private isFundTransferSuccessful = false;
 

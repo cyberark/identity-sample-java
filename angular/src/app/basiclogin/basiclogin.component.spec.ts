@@ -15,7 +15,7 @@
 */
 
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FooterComponent } from '../components/footer/footer.component';
@@ -27,7 +27,7 @@ describe('BasicLoginComponent', () => {
   let component: BasicLoginComponent;
   let fixture: ComponentFixture<BasicLoginComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ BasicLoginComponent, HeaderComponent, FooterComponent ],
       imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule]

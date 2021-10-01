@@ -28,7 +28,7 @@ import { UserService } from '../user/user.service';
 })
 
 export class SettingsComponent implements OnInit {
-  @ViewChild('divToScroll') divToScroll: ElementRef;
+  @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
 
   settingsForm: FormGroup;
   messageType = "info";

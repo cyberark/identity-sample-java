@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
   showConsent = false;
   leftContainerStyle: SafeStyle = "";// = this.domSanitizer.bypassSecurityTrustStyle("");
 
-  @ViewChild('divToScroll') divToScroll: ElementRef;
+  @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
 
   constructor(
     private router: Router,
