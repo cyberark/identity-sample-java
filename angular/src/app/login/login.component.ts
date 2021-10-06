@@ -48,6 +48,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   loading = false;
   secondAuthLoad = false;
   secondMechanisms: JSON;
+  showQRCode = false;
+  QRImageSource: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -108,7 +110,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   authMethodChange() {
+    this.loginForm.controls["answer"].reset();
     let selectedAuthMethod = this.mechanisms[this.formControls.authMethod.value];
+    this.showQRCode = false;
+    this.textAnswer = false;
 
     if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'Text') {
       this.textAnswer = true;
@@ -119,8 +124,12 @@ export class LoginComponent implements OnInit, AfterContentChecked {
         this.answerLabel = selectedAuthMethod.PromptMechChosen;
         this.answerErrorText = "Password";
       }
-    } else {
-      this.textAnswer = false;
+    } else if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'StartOob' && selectedAuthMethod.Name == 'QR') {
+      this.showQRCode = true;
+      this.QRImageSource = selectedAuthMethod.Image;
+      this.answerErrorText = "QR Code scanning";
+    } 
+    else {
       this.answerErrorText = "Code";
     }
   }
@@ -221,6 +230,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       case "Text":
         return "Answer";
       case "StartTextOob":
+      case "StartOob":
         return "StartOOB";
     }
   }
@@ -308,6 +318,9 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   startOver() {
+    if (this.pollChallenge){
+      this.pollChallenge.unsubscribe();
+    }
     this.loginForm.reset();
     this.textAnswer = false;
     this.loginPage = "username";

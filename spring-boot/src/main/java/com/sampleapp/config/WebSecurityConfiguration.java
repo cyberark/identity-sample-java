@@ -28,7 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register"};
+	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register", "/updateSettings"};
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {

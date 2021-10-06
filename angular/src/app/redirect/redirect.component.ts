@@ -111,4 +111,12 @@ export class RedirectComponent implements OnInit {
     dataKeys(obj: Object) {
         return Object.keys(obj);
     }
+    
+    /**
+     * Copies string content clipboard
+     * @param form string to copy
+     */
+    copyToClipboard = (val: string) => {
+        navigator.clipboard.writeText(val);
+    }
 }

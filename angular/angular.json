@@ -34,6 +34,10 @@
             ]
           },
           "configurations": {
+            "development":{
+              "sourceMap": true,
+              "optimization": false
+            },
             "production": {
               "fileReplacements": [{
                 "replace": "src/environments/environment.ts",
@@ -67,6 +71,10 @@
             "port": 4200
           },
           "configurations": {
+            "development":{
+              "sourceMap": true,
+              "optimization": false
+            },
             "production": {
               "browserTarget": "api-demo:build:production"
             }

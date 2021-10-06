@@ -34,7 +34,8 @@
               </div>
               <div *ngIf="textAnswer" class="form-group d-flex align-items-center">
                 <label class="required label">{{answerLabel}}</label>
-                <input class="form-control" formControlName="answer" type="password" required>
+                <input *ngIf="!showQRCode" class="form-control" formControlName="answer" type="password" required>
+                <div *ngIf="showQRCode"><img [attr.src]="QRImageSource" alt="QR Code"></div>
                 <span *ngIf="hasError('answer', 'required')">{{answerErrorText}} is required</span>
               </div>
               <div *ngIf="showLoginComponent('reset')" class="form-group">

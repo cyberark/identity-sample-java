@@ -132,4 +132,12 @@ export class Metadata implements OnInit {
       this.router.navigate(['oidcflow']);
     }
   }
+
+  /**
+  * Copies string content clipboard
+  * @param form string to copy
+  */
+  copyToClipboard = (val: string) => {
+    navigator.clipboard.writeText(val);
+  }
 }
