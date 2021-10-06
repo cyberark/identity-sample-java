@@ -104,20 +104,20 @@ export class SettingsComponent implements OnInit {
     this.loading = true;
     let data = this.settingsForm.value;
     data.appImage = this.imagePreview;
-    this.userService.setSettings(data).subscribe(
-      d => {
+    this.userService.setSettings(data).subscribe({
+      next: d => {
         this.loading = false;
         setStorage('settings', JSON.stringify(data));
         this.errorMessage = d.Result;
         this.divToScroll.nativeElement.scrollTop = 0;
       },
-      error => {
+      error: error => {
         this.loading = false;
         this.messageType = "error";
         this.errorMessage = error.error.ErrorMessage;
         this.divToScroll.nativeElement.scrollTop = 0;
       }
-    )
+    })
   }
 
   onCancel(){

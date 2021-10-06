@@ -57,18 +57,18 @@ export class Metadata implements OnInit {
 
     if (this.authResponse['code']) {
       this.loading = true;
-      this.authorizationService.getTokenSet(state.tokenReq).subscribe(
-        data => {
+      this.authorizationService.getTokenSet(state.tokenReq).subscribe({
+        next: data => {
           this.loading = false;
           this.tokenSet = data.Result;
           this.getClaims(this.tokenSet['access_token']);
           this.getUserInfo(this.tokenSet['access_token']);
         },
-        error => {
+        error: error => {
           this.loading = false;
           console.error(error);
         }
-      )
+      });
     } else {
       //implicit flow
       this.hideTokensAccordian = true;
@@ -82,45 +82,47 @@ export class Metadata implements OnInit {
   }
   
   getClaims(idToken : string) {
-    this.authorizationService.getClaims(idToken).subscribe(
-      data => {
+    this.authorizationService.getClaims(idToken).subscribe({
+      next: data => {
         if (data && data.Success == true) {
             this.claims = data.Result;
         } 
       },
-      error => {
+      error: error => {
         console.error(error);
-      });
+      }
+    });
   }
 
   getUserInfo(accessToken : string){
     if (this.isOauthFlow) return;
-    this.authorizationService.getUserInfo(accessToken).subscribe(
-      data => {
+    this.authorizationService.getUserInfo(accessToken).subscribe({
+      next: data => {
         if (data && data.Success == true) {
             this.userInfo = data.Result;
         } 
       },
-      error => {
+      error: error => {
         console.error(error);
-      });
+      }
+    });
   }
 
   dataKeys(object : Object) { return Object.keys(object); }
 
   onTryAnotherFlow(){
-    this.loginService.logout().subscribe(
-      data => {
+    this.loginService.logout().subscribe({
+      next: data => {
         if (data.success == true) {
           const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
           localStorage.clear();
           this.router.navigate([routeToNavigate]);
         }
       },
-      error => {
+      error: error => {
         console.error(error);
       }
-    )
+    });
   }
 
   onOk(){

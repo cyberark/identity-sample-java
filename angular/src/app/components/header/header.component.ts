@@ -52,8 +52,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (getStorage("settings") === null) {
       this.loading = true;
-      this.userService.getSettings().subscribe(
-        data => {
+      this.userService.getSettings().subscribe({
+        next: data => {
           this.loading = false;
           if (data.Result.appImage) {
             this.imageSource = data.Result.appImage;
@@ -61,11 +61,12 @@ export class HeaderComponent implements OnInit {
           } else {
             console.log("Incorrect data response");
           }
-        }, error => {
+        }, 
+        error: () => {
           this.loading = false;
           console.log("Error response");
         }
-      );
+      });
     } else {
       this.imageSource = JSON.parse(getStorage("settings")).appImage;
     }
@@ -129,17 +130,17 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.loginService.logout().subscribe(
-      data => {
+    this.loginService.logout().subscribe({
+      next: data => {
         if (data.success == true) {
           const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
           localStorage.clear();
           this.router.navigate([routeToNavigate]);
         }
       },
-      error => {
+      error: error => {
         console.log(error);
       }
-    );
+    });
   }
 }

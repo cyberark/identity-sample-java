@@ -16,6 +16,7 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { defaultErrStr } from 'src/app/utils';
 
 @Component({
     selector: 'app-error',
@@ -23,7 +24,7 @@ import { Router } from '@angular/router';
 })
 export class ErrorComponent implements OnInit {
     @Input() title: string = 'Error';
-    @Input() body: string = 'Oops, something went wrong. Please try again later.';
+    @Input() body: string = defaultErrStr;
     @Input() btnLabel: string = 'Retry';
     @Input() onBtnClick: () => void;
 

@@ -17,6 +17,7 @@
 import { FormControl, FormGroup } from "@angular/forms";
 
 export const authURLStr = "Authorize URL";
+export const defaultErrStr = "Oops, something went wrong. Please try again later.";
 
 export enum AuthorizationFlow {
   OAUTH = "OAUTH",
@@ -85,17 +86,17 @@ export class TokenMetadataRequest extends PKCEMetaData {
  * @param context any - The component class context
  */
 export const buildAuthorizeURL = (authRequest: AuthorizationMetadataRequest, context: any) => {
-  context.authorizationService.buildAuthorizeURL(authRequest).subscribe(
-    data => {
+  context.authorizationService.buildAuthorizeURL(authRequest).subscribe({
+    next: data => {
       context.loading = false;
       context.authURL = data.Result.authorizeUrl;
       context.authorizeBtn.nativeElement.disabled = false;
     },
-    error => {
+    error: error => {
       console.error(error);
       context.loading = false;
     }
-  );
+  });
 }
 
 /**

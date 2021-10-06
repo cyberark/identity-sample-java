@@ -81,18 +81,18 @@ export class M2MComponent implements OnInit {
         this.tokenMetaReq.password = this.loginForm.get('password').value;
     }
 
-    this.authorizationService.getTokenRequestPreview(this.tokenMetaReq).subscribe(
-        data => {
-            this.loading = false;
-            this.submitBtn.nativeElement.disabled = false;
-            this.tokenPostCall = data.Result.apiEndPoint;
-            this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
-        },
-        error => {
-            this.loading = false;
-            console.error(error);
-        }
-    );
+    this.authorizationService.getTokenRequestPreview(this.tokenMetaReq).subscribe({
+      next: data => {
+          this.loading = false;
+          this.submitBtn.nativeElement.disabled = false;
+          this.tokenPostCall = data.Result.apiEndPoint;
+          this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
+      },
+      error: error => {
+          this.loading = false;
+          console.error(error);
+      }
+    });
   }
 
   onSubmit(){

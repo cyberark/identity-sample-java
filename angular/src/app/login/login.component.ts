@@ -134,8 +134,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     this.authMessage = "";
     if (this.loginPage == "username") {
       this.loading = true;
-      this.loginService.beginAuth(this.formControls.username.value).subscribe(
-        data => {
+      this.loginService.beginAuth(this.formControls.username.value).subscribe({
+        next: data => {
           this.loading = false;
           if (data.success == true) {
             if (data.Result.Summary == "LoginSuccess") {
@@ -153,9 +153,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
             this.onLoginError(data.Message);
           }
         },
-        error => {
+        error: error => {
           this.onLoginError(this.getErrorMessage(error));
-        });
+        }
+      });
     } else {
       if (this.loginPage == "password" || this.loginPage == "reset") {
         this.currentMechanism = this.mechanisms[0];
@@ -164,8 +165,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       }
 
       this.loading = true;
-      this.loginService.advanceAuth(this.sessionId, this.tenantId, this.currentMechanism["MechanismId"], this.getAction(this.currentMechanism["AnswerType"]), this.formControls.answer.value).subscribe(
-        data => {
+      this.loginService.advanceAuth(this.sessionId, this.tenantId, this.currentMechanism["MechanismId"], this.getAction(this.currentMechanism["AnswerType"]), this.formControls.answer.value).subscribe({
+        next: data => {
           this.loading = false;
           if (data.success == true) {
             if (this.pollChallenge) {
@@ -180,9 +181,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
             this.onLoginError(data.Message);
           }
         },
-        error => {
+        error: error => {
           this.onLoginError(this.getErrorMessage(error));
-        });
+        }
+      });
     }
   }
 
@@ -264,8 +266,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           this.textAnswer = true;
           this.answerLabel = this.currentMechanism["PromptMechChosen"];
           this.loginPage = "firstChallengeCode";
-          this.pollChallenge = this.loginService.getPollingChallenge(this.sessionId, this.tenantId, this.currentMechanism["MechanismId"]).subscribe(
-            data => {
+          this.pollChallenge = this.loginService.getPollingChallenge(this.sessionId, this.tenantId, this.currentMechanism["MechanismId"]).subscribe({
+            next: data => {
               if (data.success == true) {
                 if (data.Result.Summary == "OobPending") {
                 } else if (data.Result.Summary == "NewPackage" || data.Result.Summary == "StartNextChallenge") {
@@ -282,9 +284,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
                 this.pollChallenge.unsubscribe();
               }
             },
-            error => {
+            error: error => {
               this.onLoginError(this.getErrorMessage(error));
-            });
+            }
+          });
           this.router.navigate(['login']);
         } else if (data.Result.Summary == "NewPackage" || data.Result.Summary == "StartNextChallenge") {
           this.redirectToNextPage(data);
@@ -366,8 +369,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     this.authMessage = "";
     this.textAnswer = false;
     this.loading = true;
-    this.loginService.advanceAuth(this.sessionId, this.tenantId, "", "", "").subscribe(
-      data => {
+    this.loginService.advanceAuth(this.sessionId, this.tenantId, "", "", "").subscribe({
+      next: data => {
         this.loading = false;
         if (data.success == true) {
           this.sessionId = data.Result.SessionId;
@@ -380,9 +383,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           this.onLoginError(data.Message);
         }
       },
-      error => {
+      error: error => {
         this.onLoginError(this.getErrorMessage(error));
-      });
+      }
+    });
     return false;
   }
 

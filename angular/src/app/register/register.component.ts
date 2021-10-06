@@ -96,8 +96,8 @@ export class RegisterComponent implements OnInit {
 
     if (getStorage("userId") !== null) {
       this.loading = true;
-      this.userService.getById(getStorage("userId")).subscribe(
-        data => {
+      this.userService.getById(getStorage("userId")).subscribe({
+        next: data => {
           this.loading = false;
           if (data.success) {
             let userControls = this.registerForm.controls;
@@ -114,10 +114,10 @@ export class RegisterComponent implements OnInit {
             this.setMessage("error", data.Message);
           }
         },
-        error => {
+        error: error => {
           this.setMessage("error", error.message);
         }
-      );
+      });
       this.update = true;
       this.submitButtonText = "Update";
     } else {
@@ -180,8 +180,8 @@ export class RegisterComponent implements OnInit {
       let fieldArray = ["Name", "Mail", "DisplayName", "MobileNumber", "MFA"];
 
       user = this.pick(form, fieldArray)
-      this.userService.update(user, getStorage("userId")).subscribe(
-        data => {
+      this.userService.update(user, getStorage("userId")).subscribe({
+        next: data => {
           this.loading = false;
           if (data.success == true) {
             setStorage("mfaUsername", data.UserName);
@@ -191,16 +191,16 @@ export class RegisterComponent implements OnInit {
             this.setMessage("error", data.Message);
           }
         },
-        error => {
+        error: error => {
           this.setMessage("error", error.message);
         }
-      );
+      });
     } else {
       user = Object.assign({}, form);
-      this.userService.getClientIP().subscribe(
-        ipData => {
-          this.userService.register(user, ipData.ip, true).subscribe(
-            data => {
+      this.userService.getClientIP().subscribe({
+        next: ipData => {
+          this.userService.register(user, ipData.ip, true).subscribe({
+            next: data => {
               this.loading = false;
               if (data.success == true) {
                 if (data.Result != null && data.Result.IntegrationResult != null && data.Result.IntegrationResult.IsManualApprovalTriggered == true) {
@@ -219,15 +219,15 @@ export class RegisterComponent implements OnInit {
                 this.setMessage("error", data.Message);
               }
             },
-            error => {
+            error: error => {
               this.setMessage("error", error.message);
             }
-          );
+          });
         },
-        error => {
+        error: error => {
           this.setMessage("error", error.message);
         }
-      );
+      });
     }
   }
 

@@ -67,8 +67,8 @@ export class BasicLoginComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.loginService.basicLoginUser(this.formControls.username.value,this.formControls.password.value).subscribe(
-      data=>{
+    this.loginService.basicLoginUser(this.formControls.username.value,this.formControls.password.value).subscribe({
+      next: data => {
         this.loading = false;
         if (data && data.Success == true) {
           this.redirectToMFA(data.Result);
@@ -76,9 +76,10 @@ export class BasicLoginComponent implements OnInit {
           this.onLoginError(data.ErrorMessage);
         }
       },
-      error => {
+      error: error => {
         this.onLoginError(error.error.ErrorMessage);
-      });
+      }
+    });
   }
 
   onLoginError(message) {

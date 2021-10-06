@@ -85,18 +85,18 @@ export class OAuthFlowComponent implements OnInit {
     }
     if (this.selectedFlow === OAuthFlow.authPKCE){
       this.loading = true;
-      this.authorizationService.getPKCEMetadata().subscribe(
-        data => {
+      this.authorizationService.getPKCEMetadata().subscribe({
+        next: data => {
           this.loading = false;
           authReqMetaData.codeChallenge = data.Result.codeChallenge;
           setStorage('codeVerifier', data.Result.codeVerifier);
           buildAuthorizeURL(authReqMetaData, this);
         },
-        error => {
+        error: error => {
           this.loading = false;
           console.error(error);
         }
-      )
+      })
     } else {
       this.loading = true;
       buildAuthorizeURL(authReqMetaData, this);

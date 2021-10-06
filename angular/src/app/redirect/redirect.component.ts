@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, getStorage, OAuthFlow, tokenEndpointBody, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, defaultErrStr, getStorage, OAuthFlow, tokenEndpointBody, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',
@@ -31,6 +31,7 @@ export class RedirectComponent implements OnInit {
     tokenPostCall = '';
     tokenPostCallBody = '';
     tokenReq = new TokenMetadataRequest();
+    errorBody = defaultErrStr;
 
     constructor(
         private router: Router,
@@ -38,6 +39,11 @@ export class RedirectComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        if(this.checkError()){            
+            this.errorBody = new URL(window.location.href).searchParams.get("error_description");
+            (<any>$('#errorPopup')).modal();
+            return;
+        }
         if (window.location.hash.length > 0) {
             this.authResponse = this.parseParms(window.location.hash.substring(1));
             if (Object.keys(this.authResponse).includes('code')) this.tokenEndpointPreview();
@@ -47,6 +53,10 @@ export class RedirectComponent implements OnInit {
             this.authResponse = this.parseParms(window.location.search.substring(1));
             this.tokenEndpointPreview();
         }
+    }
+
+    checkError(){
+        return window.location.href.includes('error');
     }
 
     private tokenEndpointPreview() {
@@ -59,17 +69,17 @@ export class RedirectComponent implements OnInit {
         else this.tokenReq.clientSecret = getStorage('client_secret');
         this.tokenReq.authFlow = AuthorizationFlow[authFlow];
         this.tokenReq.clientId = getStorage('username');
-        this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe(
-            data => {
+        this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe({
+            next: (data) => {
                 this.loading = false;
                 this.tokenPostCall = data.Result.apiEndPoint;
                 this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
             },
-            error => {
+            error: () => {
                 this.loading = false;
                 (<any>$('#errorPopup')).modal();
             }
-        );
+        });
     }
 
     onProceed() {

@@ -51,19 +51,19 @@ export class MFAWidgetComponent implements OnInit {
       "allowForgotUsername": false,
       "apiFqdn": environment.apiFqdn,
       "username": getStorage('mfaUsername'),
-      "hideBackgroundImage" : true,
+      "hideBackgroundImage": true,
       autoSubmitUsername: true,
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
     });
   }
   loginSuccessHandler(AuthData, context) {
 
-    this.authorizationService.getPKCEMetadata().subscribe(
-      pkceMetadata => {
-        this.loginService.authorize(AuthData.Auth, getStorage('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe(
-          data => {
-            this.loginService.completeLoginUser(getStorage("sessionUuid"), data.Result.AuthorizationCode, getStorage('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe(
-              data => {
+    this.authorizationService.getPKCEMetadata().subscribe({
+      next: pkceMetadata => {
+        this.loginService.authorize(AuthData.Auth, getStorage('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe({
+          next: data => {
+            this.loginService.completeLoginUser(getStorage("sessionUuid"), data.Result.AuthorizationCode, getStorage('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe({
+              next: data => {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);
                   context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
@@ -78,19 +78,22 @@ export class MFAWidgetComponent implements OnInit {
                   context.router.navigate(['basiclogin']);
                 }
               },
-              error => {
+              error: error => {
                 console.error(error);
                 context.router.navigate(['basiclogin']);
-              });
+              }
+            });
           },
-          error => {
+          error: error => {
             if (error.error.Success == false) {
               setStorage("registerMessageType", "error");
               setStorage("registerMessage", error.error.ErrorMessage);
             }
             console.error(error);
             context.router.navigate(['basiclogin']);
-          });
+          }
+        })
+      }
     });
   }
   setUserDetails(result: any) {

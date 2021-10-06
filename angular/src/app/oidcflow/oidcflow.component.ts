@@ -55,15 +55,16 @@ export class OidcFlowComponent implements OnInit {
       authRequest.responseType = this.responseTypes.join(' ');
       buildAuthorizeURL(authRequest, this);
     } else {
-      this.authorizationService.getPKCEMetadata().subscribe(
-        pkceMetadata => {
+      this.authorizationService.getPKCEMetadata().subscribe({
+        next: pkceMetadata => {
           this.codeChallenge = pkceMetadata.Result.codeChallenge;
           this.codeVerifier = pkceMetadata.Result.codeVerifier;
           setStorage('codeVerifier', this.codeVerifier);
           authRequest.codeChallenge = pkceMetadata.Result.codeChallenge;
           authRequest.responseType = this.responseTypes.join(' ');
           buildAuthorizeURL(authRequest, this);
-        });
+        }
+      });
     }
   }
 
