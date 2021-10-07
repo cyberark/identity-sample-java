@@ -56,8 +56,9 @@
                       <label class="label required">Password</label>
                       <input class="form-control" formControlName="Password" type="password" (blur)="matchPasswords()" required>
                       <span *ngIf="hasError('Password', 'required')">Required</span>
-                      <span *ngIf="hasError('Password', 'minlength')">Password must be at least 8 characters long</span>
-                      <span *ngIf="hasError('Password', 'maxlength')">Password should not be longer than 64 characters</span>
+                      <span *ngIf="hasError('Password', 'pattern')">
+                        Password must be at least 8 character long with a combination of at least 1 uppercase, 1 lowercase and 1 number
+                      </span>
                     </div>
                   </div>
                   <div class="col-md-12">

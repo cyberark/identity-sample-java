@@ -70,22 +70,10 @@ export class RegisterComponent implements OnInit {
       "DisplayName": ['', Validators.required],
       "Password": ['', Validators.compose([
         Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(64)
+        Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,64}$")
       ])],
       "ConfirmPassword": ['', Validators.required],
       "MobileNumber": [''],
-      "MFA": [false],
-      "ForcePasswordChangeNext": [false],
-      "Description": [''],
-      "OfficeNumber": [''], // Validators.pattern('^(?=.*[0-9])[- +()0-9]+$')
-      "HomeNumber": [''],
-      "street_line_1": [''],
-      "street_line_2": [''],
-      "address_city": [''],
-      "postal_code": [''],
-      "state_code": [''],
-      "country_code": ['']
     }, { updateOn: 'blur' });
 
     const settings: Settings = JSON.parse(getStorage("settings"));

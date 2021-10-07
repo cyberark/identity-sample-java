@@ -40,6 +40,7 @@ export class SettingsComponent implements OnInit {
   selectedFile: File;
   imagePreview: SafeResourceUrl;
   settings: Settings;
+  hasAppLogoError = false;
 
   constructor(
     private router: Router,
@@ -50,15 +51,25 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.settingsForm = this.formBuilder.group({
       "appImage": ['',],
-      "tenantURL": ['', Validators.required],
+      "tenantURL": ['', Validators.compose([
+        Validators.required,
+        Validators.maxLength(80)
+      ])],
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
       "oauthAppId": ['', Validators.required],
       "oauthServiceUserName": ['', Validators.required],
-      "oauthServiceUserPassword": ['', Validators.required],
+      "oauthServiceUserPassword": ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(64)
+      ])],
       "oauthScopesSupported": ['', Validators.required],
       "oidcAppId": ['', Validators.required],
-      "oidcClientId": ['', Validators.required],
+      "oidcClientId": ['', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')
+      ])],
       "oidcScopesSupported": ['', Validators.required],
     });
 
@@ -91,11 +102,20 @@ export class SettingsComponent implements OnInit {
 
   onImageUpload(event) {
     this.selectedFile = event.target.files[0];
+    const fileName = this.selectedFile.name;
+    if(this.selectedFile.size > 1000000 || this.checkImageFileExt(fileName.substring(fileName.lastIndexOf('.')+1, fileName.length))){
+      this.hasAppLogoError = true;
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       this.imagePreview = reader.result.toString();
     };
     reader.readAsDataURL(this.selectedFile);
+  }
+
+  checkImageFileExt(extension: string){
+    return !["png","jpg","gif","ico","bmp"].includes(extension);
   }
 
   onSave(){
