@@ -28,6 +28,7 @@ import com.sampleapp.entity.GrantType;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.MfaUserMapping;
+import com.sampleapp.entity.Response;
 import com.sampleapp.exception.RoleNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,8 +98,8 @@ public class UserService {
 		try {
 			tokenHolder = this.authFlows.getEnumMap().get(AuthorizationFlow.OAUTH).getTokenSetWithClientCreds(metadataRequest);
 		} catch (IOException e) {
-			logger.error("Exception occurred : ", e);
-			throw new Exception("Error occurred while fetching access_token", e);
+			logger.error("Error occurred while fetching access_token : ", e);
+			throw new Exception(e.getMessage(), e);
 		}
 
 		return tokenHolder.getAccessToken();
@@ -132,9 +133,9 @@ public class UserService {
 			ResponseEntity<JsonNode> createUserResponse = null;
 			createUserResponse = restTemplate.exchange(createUserUrl, HttpMethod.POST, createuserrequest,
 					JsonNode.class);
-			StringBuffer message = new StringBuffer("User name " + user.getName() + " is already in use.");
+			StringBuffer message = new StringBuffer("User name " + GetMFAUserName(user.getName()) + " is already in use.");
 			if (createUserResponse.getBody().get("Result").isNull()) {
-				if (createUserResponse.getBody().get("Message").asText().contentEquals(message)) {
+				if (createUserResponse.getBody().get("Message").asText().contains(message)) {
 					JsonNode createUserResponseBody = createUserResponse.getBody();
 					ObjectNode objNode = (ObjectNode) createUserResponseBody;
 					objNode.remove("Message");
@@ -161,12 +162,9 @@ public class UserService {
 			Arrays.fill(user.password, ' ');
 
 			return createUserResponse;
-		} catch (JsonProcessingException e) {
+		} catch (Exception e) {
 			logger.error("Exception occurred : ", e);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
-		} catch (RoleNotFoundException e) {
-			logger.error("Exception occurred : ", e);
-			return new ResponseEntity<JsonNode>(e.exceptionBody(), HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

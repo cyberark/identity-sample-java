@@ -75,8 +75,9 @@ export class RedirectComponent implements OnInit {
                 this.tokenPostCall = data.Result.apiEndPoint;
                 this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
             },
-            error: () => {
+            error: error => {
                 this.loading = false;
+                console.error(error);
                 (<any>$('#errorPopup')).modal();
             }
         });

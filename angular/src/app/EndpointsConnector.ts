@@ -16,20 +16,22 @@
 
 import { environment } from '../environments/environment';
 
+let baseUrl = `${environment.baseUrl}:${environment.serverPort}`;
+
 export const EndpointsConnector = {
-    BasicLoginEndPoint : `${environment.baseUrl}/BasicLogin`,
-    CompleteLoginEndPoint : `${environment.baseUrl}/CompleteLogin`,
-    BeginAuthEndPoint : `${environment.baseUrl}/auth/beginAuth`,
-    AdvanceAuthEndPoint : `${environment.baseUrl}/auth/advanceAuth`,
-    LogOutEndPoint : `${environment.baseUrl}/auth/out`,
-    PkceMetaDataEndPoint : `${environment.baseUrl}/pkceMetaData`,
-    BuildAuthorizeURLEndPoint : `${environment.baseUrl}/buildAuthorizeURL`,
-    TokenSetEndPoint : `${environment.baseUrl}/tokenSet`,
-    TokenRequestPreviewEndPoint : `${environment.baseUrl}/tokenRequestPreview`,
-    ClaimsEndPoint : `${environment.baseUrl}/claims`,
-    OIDCUserInfoEndPoint : `${environment.baseUrl}/oidc/userInfo`,
-    GetSettingsEndpoint: `${environment.baseUrl}/getSettings`,
-    UpdateSettingsEndpoint: `${environment.baseUrl}/updateSettings`,
-    RegisterEndpoint: `${environment.baseUrl}/user/register`,
-    UserOpsURL: `${environment.baseUrl}/userops/`
+    BasicLoginEndPoint : `${baseUrl}/BasicLogin`,
+    CompleteLoginEndPoint : `${baseUrl}/CompleteLogin`,
+    BeginAuthEndPoint : `${baseUrl}/auth/beginAuth`,
+    AdvanceAuthEndPoint : `${baseUrl}/auth/advanceAuth`,
+    LogOutEndPoint : `${baseUrl}/auth/out`,
+    PkceMetaDataEndPoint : `${baseUrl}/pkceMetaData`,
+    BuildAuthorizeURLEndPoint : `${baseUrl}/buildAuthorizeURL`,
+    TokenSetEndPoint : `${baseUrl}/tokenSet`,
+    TokenRequestPreviewEndPoint : `${baseUrl}/tokenRequestPreview`,
+    ClaimsEndPoint : `${baseUrl}/claims`,
+    OIDCUserInfoEndPoint : `${baseUrl}/oidc/userInfo`,
+    GetSettingsEndpoint: `${baseUrl}/getSettings`,
+    UpdateSettingsEndpoint: `${baseUrl}/updateSettings`,
+    RegisterEndpoint: `${baseUrl}/user/register`,
+    UserOpsURL: `${baseUrl}/userops/`
   }

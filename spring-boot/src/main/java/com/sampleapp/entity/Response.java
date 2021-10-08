@@ -24,4 +24,9 @@ public class Response {
     public Response(){
         Success = true;
     }
+
+    public Response(Boolean success, String errorMessage){
+        this.Success = success;
+        this.ErrorMessage = errorMessage;
+    }
 }

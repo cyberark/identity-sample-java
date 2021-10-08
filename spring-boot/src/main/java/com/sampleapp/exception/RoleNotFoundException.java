@@ -29,15 +29,7 @@ public class RoleNotFoundException extends Exception {
 		this.roleName = roleName;
 	}
 
-	public JsonNode exceptionBody() {
-		JsonNode body = null;
-		String message = "{\"success\": false,\"Result\": {\"Summary\": \"Failure\"},\"Message\": \"Please contact your system administrator.Configured MFA Role not present.\"}";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			body = mapper.readTree(message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return body;
+	public String getMessage() {
+		return "Configured " + roleName + " Role not present.";
 	}
 }

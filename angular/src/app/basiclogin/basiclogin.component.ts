@@ -77,6 +77,7 @@ export class BasicLoginComponent implements OnInit {
         }
       },
       error: error => {
+        console.error(error);
         this.onLoginError(error.error.ErrorMessage);
       }
     });

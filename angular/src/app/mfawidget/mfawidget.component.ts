@@ -20,7 +20,7 @@ import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
-import { getStorage, setStorage } from '../utils';
+import { getStorage, setStorage, APIErrStr } from '../utils';
 
 @Component({
   selector: 'app-mfawidget',
@@ -85,10 +85,12 @@ export class MFAWidgetComponent implements OnInit {
             });
           },
           error: error => {
+            let errorMessage = APIErrStr;
             if (error.error.Success == false) {
-              setStorage("registerMessageType", "error");
-              setStorage("registerMessage", error.error.ErrorMessage);
+              errorMessage = error.error.ErrorMessage;
             }
+            setStorage("registerMessageType", "error");
+            setStorage("registerMessage", errorMessage);
             console.error(error);
             context.router.navigate(['basiclogin']);
           }

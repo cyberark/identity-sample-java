@@ -26,7 +26,7 @@
                                             <td #userinput>
                                                 <div class="text-break text-truncate myDIV col-sm-10 horizontalDiv" [title]="authResponse[key]">{{authResponse[key]}}</div>
                                                 <div class="hide col-sm-2 horizontalDiv">
-                                                    <i class="fa fa-clone btn btn-link"  (click)="copyToClipboard(userinput.textContent)"></i>
+                                                    <i class="fa fa-clone btn btn-link"  title="copy" (click)="copyToClipboard(userinput.textContent)"></i>
                                                 </div>
                                             </td>
                                         </tr>

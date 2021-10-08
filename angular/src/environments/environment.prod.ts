@@ -16,7 +16,8 @@
 
 export const environment = {
   production: true,
-  baseUrl:"https://apidemo.cyberark.app:8080/",
+  baseUrl:"https://apidemo.cyberark.app",
+  serverPort: 8080,
   apiFqdn:"<YOUR_TENANT_FULLY_QUALIFIED_DOMAIN_NAME>",
   oauthAppId: "<YOUR_OAUTH_APPLICATION_ID>",
   oauthScope: "<YOUR_OAUTH_SCOPE>"

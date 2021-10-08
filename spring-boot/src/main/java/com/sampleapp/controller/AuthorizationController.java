@@ -59,9 +59,10 @@ public class AuthorizationController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,7 +85,7 @@ public class AuthorizationController {
             logger.error("Exception at buildAuthorizeURL() : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -115,9 +116,10 @@ public class AuthorizationController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -132,9 +134,10 @@ public class AuthorizationController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -150,9 +153,10 @@ public class AuthorizationController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -168,9 +172,10 @@ public class AuthorizationController {
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
             response.Success = false;
             response.ErrorMessage = ex.getMessage();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

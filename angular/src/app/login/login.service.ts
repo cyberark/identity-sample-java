@@ -25,7 +25,6 @@ import {  EndpointsConnector } from '../EndpointsConnector';
 })
 
 export class LoginService {
-  private authUrl = "https://apidemo.cyberark.app:8080/auth/";
 
   constructor(private http: HttpClient) { }
 

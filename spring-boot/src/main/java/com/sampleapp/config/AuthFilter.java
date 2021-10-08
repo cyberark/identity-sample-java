@@ -51,7 +51,7 @@ public class AuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         Boolean enableMFAWidgetFlow = readServletCookie(request,"flow").get().equals("flow2");
-        if (enableMFAWidgetFlow) {
+        if (enableMFAWidgetFlow && findCookie(request, ".ASPXAUTH") != null) {
             String xAuth = readServletCookie(request,".ASPXAUTH").get();
             TokenStore token = authService.GetTokenStore(xAuth);
             if (token == null) {
@@ -83,5 +83,15 @@ public class AuthFilter extends OncePerRequestFilter {
         return Jsoup.clean(
                 StringEscapeUtils.escapeHtml4(StringEscapeUtils.escapeEcmaScript(StringUtils.replace(str, "'", "''")))
                 , Safelist.basic());
+    }
+
+    public static String findCookie(HttpServletRequest request, String name){
+        Cookie[] cookieArray = request.getCookies();
+        for (Cookie cookie : cookieArray) {
+            if (name.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

@@ -32,6 +32,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -43,6 +44,9 @@ import java.util.Arrays;
 public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthClient> {
 
     private final Logger logger = LoggerFactory.getLogger(BaseAuthorizationService.class);
+
+    @Value("${demoAppBaseURL}")
+    public String demoAppBaseURL;
 
     @Autowired
     SettingsService settingsService;
@@ -67,7 +71,9 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
 
     private final String codeChallengeMethod = "S256";
 
-    private final String authorizationRedirectURL = "https://apidemo.cyberark.app:4200/RedirectResource";
+    private String getAuthorizationRedirectURL(){
+        return this.demoAppBaseURL + ":4200/RedirectResource";
+    }
 
     public BaseAuthorizationService() { }
 
@@ -79,7 +85,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     public String buildAuthorizeURL(AuthorizationMetadataRequest metadataRequest) throws IOException {
         try {
             AuthorizeUrlBuilder authorizeUrlBuilder = this.getClient(metadataRequest.clientId, metadataRequest.clientSecret)
-                    .authorizeUrl(this.authorizationRedirectURL)
+                    .authorizeUrl(this.getAuthorizationRedirectURL())
                     .setResponseType(metadataRequest.responseType)
                     .setScope(this.getScopesSupported());
 
@@ -104,7 +110,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
         TokenHolder tokenHolder;
         try {
             TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
-                    .requestToken(tokenMetadataRequest.authorizationCode, this.authorizationRedirectURL)
+                    .requestToken(tokenMetadataRequest.authorizationCode, this.getAuthorizationRedirectURL())
                     .setGrantType(tokenMetadataRequest.grantType.name());
 
             if (tokenMetadataRequest.codeVerifier != null){
@@ -172,7 +178,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
                         .buildAPIEndpoint("Token", this.getAppId());
                     requestPreview.payload.clientId = this.getClientId(metadataRequest.clientId);
                     requestPreview.payload.clientSec = this.getClientSecret(metadataRequest.clientSec);
-                    requestPreview.payload.redirectUrl = this.authorizationRedirectURL;
+                    requestPreview.payload.redirectUrl = this.getAuthorizationRedirectURL();
                     requestPreview.payload.authorizationCode = metadataRequest.authorizationCode;
                     requestPreview.payload.codeVerifier = metadataRequest.codeVerifier;
                     break;

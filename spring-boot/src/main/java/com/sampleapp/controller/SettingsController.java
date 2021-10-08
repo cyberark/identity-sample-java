@@ -19,6 +19,8 @@ package com.sampleapp.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.sampleapp.entity.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,8 @@ public class SettingsController {
 	@Autowired
 	private SettingsService settingsService;
 
+	private final Logger logger = LoggerFactory.getLogger(SettingsController.class);
+
 	@PutMapping("updateSettings")
 	public ResponseEntity<JsonNode> updateSettings(@RequestBody JsonNode body, HttpServletRequest request) throws IOException {
 		Response response = new Response();
@@ -44,6 +48,7 @@ public class SettingsController {
 			response.Result = "Settings updated successfully";
 			return new ResponseEntity(response, HttpStatus.OK);
 		}catch (Exception e){
+			logger.error("Exception occurred : ", e);
 			response.Success = false;
 			response.ErrorMessage = "Settings not updated.";
 			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,9 +62,10 @@ public class SettingsController {
 			response.Result =  settingsService.getSettings();
 			return new ResponseEntity(response, HttpStatus.OK);
 		}catch (Exception ex){
+			logger.error("Exception occurred : ", ex);
 			response.Success = false;
 			response.ErrorMessage = "Failed to fetch settings.";
-			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

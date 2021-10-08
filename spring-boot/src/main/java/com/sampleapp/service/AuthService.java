@@ -27,9 +27,11 @@ import com.sampleapp.entity.AuthRequest;
 import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.entity.GrantType;
+import com.sampleapp.entity.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.*;
@@ -61,6 +63,9 @@ public class AuthService {
 
 	@LoadBalanced
 	private final RestTemplate restTemplate;
+
+	@Value("${demoAppBaseURL}")
+	public String demoAppBaseURL;
 
 	public AuthService(RestTemplateBuilder builder) {
 		this.restTemplate = builder.build();
@@ -133,7 +138,7 @@ public class AuthService {
 			}
 		} catch (Exception ex){
 			logger.error("Exception occurred : ", ex);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -169,7 +174,7 @@ public class AuthService {
 			return result;
 		} catch (Exception ex){
 			logger.error("Exception occurred : ", ex);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -227,7 +232,7 @@ public class AuthService {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("code", advanceLoginRequest.getAuthorizationCode());
 			map.add("grant_type", GrantType.authorization_code.name());
-			map.add("redirect_uri", "https://apidemo.cyberark.app:8080/RedirectResource");
+			map.add("redirect_uri", this.demoAppBaseURL + ":8080/RedirectResource");
 			map.add("client_id", advanceLoginRequest.getClientId());
 			map.add("code_verifier", advanceLoginRequest.getCodeVerifier());
 

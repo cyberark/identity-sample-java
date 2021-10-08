@@ -61,7 +61,7 @@ export class BasicLoginService {
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + authentication_token);
 
-    let url = `https://${environment.apiFqdn}/oauth2/authorize/${environment.oauthAppId}?scope=${environment.oauthScope}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=https://apidemo.cyberark.app:8080/RedirectResource`;
+    let url = `https://${environment.apiFqdn}/oauth2/authorize/${environment.oauthAppId}?scope=${environment.oauthScope}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/RedirectResource`;
 
     return this.http.get<any>(url, { headers: head, withCredentials: true});
   }

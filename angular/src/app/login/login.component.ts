@@ -19,7 +19,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractContro
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { getStorage, setStorage } from '../utils';
+import { getStorage, setStorage, APIErrStr } from '../utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -360,11 +360,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   getErrorMessage(error): string {
-    let errorMessage = error.message;
-    if (error.error && error.error.Message) {
-      errorMessage = error.error.Message;
-    }
-    return errorMessage;
+    console.error(error);
+    return APIErrStr; 
   }
 
   onLoginError(message) {

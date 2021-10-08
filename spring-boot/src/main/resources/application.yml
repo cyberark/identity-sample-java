@@ -30,3 +30,5 @@ server:
     key-store-type: PKCS12
     key-store-password: <PASSWORD>
     key-store: classpath:<KEYSTORE_NAME>.p12
+
+demoAppBaseURL: https://apidemo.cyberark.app

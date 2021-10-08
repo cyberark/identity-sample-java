@@ -20,8 +20,9 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
-import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
+import { getStorage, setStorage, Settings, validateAllFormFields, APIErrStr } from '../utils';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -111,11 +112,16 @@ export class RegisterComponent implements OnInit {
             userControls.DisplayName.setValue(user.DisplayName);
             userControls.MobileNumber.setValue(user.MobileNumber);
           } else {
-            this.setMessage("error", data.Message);
+            this.setMessage("error", data.Message); 
           }
         },
         error: error => {
-          this.setMessage("error", error.message);
+          let errorMessage = APIErrStr;
+          if (error.status == HttpStatusCode.Forbidden && error.error) {
+            errorMessage = error.error.ErrorMessage;
+          }
+          console.error(error);
+          this.setMessage("error", errorMessage); 
         }
       });
       this.update = true;
@@ -192,7 +198,12 @@ export class RegisterComponent implements OnInit {
           }
         },
         error: error => {
-          this.setMessage("error", error.message);
+          let errorMessage = APIErrStr;
+          if (error.status == HttpStatusCode.Forbidden && error.error) {
+            errorMessage = error.error.ErrorMessage;
+          }
+          console.error(error);
+          this.setMessage("error", errorMessage); 
         }
       });
     } else {
@@ -220,11 +231,13 @@ export class RegisterComponent implements OnInit {
               }
             },
             error: error => {
-              this.setMessage("error", error.message);
+              console.error(error);
+              this.setMessage("error", APIErrStr); 
             }
           });
         },
         error: error => {
+          console.error(error);
           this.setMessage("error", error.message);
         }
       });

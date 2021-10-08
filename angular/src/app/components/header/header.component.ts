@@ -62,9 +62,9 @@ export class HeaderComponent implements OnInit {
             console.log("Incorrect data response");
           }
         }, 
-        error: () => {
+        error: error => {
           this.loading = false;
-          console.log("Error response");
+          console.error(error);
         }
       });
     } else {
@@ -139,7 +139,7 @@ export class HeaderComponent implements OnInit {
         }
       },
       error: error => {
-        console.log(error);
+        console.error(error);
       }
     });
   }

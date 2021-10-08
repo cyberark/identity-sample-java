@@ -19,6 +19,7 @@ package com.sampleapp.controller;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.sampleapp.entity.Response;
 import com.sampleapp.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,24 +43,20 @@ public class UserOpsController {
 	@PutMapping("/userops/{uuid}")
 	public ResponseEntity<JsonNode> updateUser(HttpServletRequest request, @RequestBody User user,
 			@PathVariable String uuid) throws JsonProcessingException {
-		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");	
-		Cookie[] cookieArray = request.getCookies();
-		for (Cookie cookie : cookieArray) {
-			if (cookie.getName().equals(".ASPXAUTH")) {
-				return userOpsService.updateUser(cookie.getValue(), uuid, user, enableMFAWidgetFlow);
-			}
+		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null) {
+			return userOpsService.updateUser(token, uuid, user, enableMFAWidgetFlow);
 		}
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
 
 	@GetMapping("/userops/{uuid}")
 	public ResponseEntity<JsonNode> getUser(HttpServletRequest request, @PathVariable String uuid) {
-		Cookie[] cookieArray = request.getCookies();
-		for (Cookie cookie : cookieArray) {
-			if (cookie.getName().equals(".ASPXAUTH")) {
-				return userOpsService.getUser(uuid, cookie.getValue());
-			}
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null){
+			return userOpsService.getUser(uuid, token);
 		}
-		return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
 }

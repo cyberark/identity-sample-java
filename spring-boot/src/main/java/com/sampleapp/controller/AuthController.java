@@ -59,7 +59,7 @@ public class AuthController {
 			return this.authService.startAuthenticationWithObject(authRequest,response, enableMFAWidgetFlow);
 		} catch (Exception e) {
 			logger.error("Exception occurred : ", e);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 	}

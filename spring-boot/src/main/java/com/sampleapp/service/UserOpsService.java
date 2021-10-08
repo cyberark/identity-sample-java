@@ -19,6 +19,7 @@ package com.sampleapp.service;
 import com.sampleapp.Repos.TokenStoreRepository;
 import com.sampleapp.Repos.UserRepository;
 import com.sampleapp.entity.DBUser;
+import com.sampleapp.entity.Response;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.entity.User;
 import org.slf4j.Logger;
@@ -110,10 +111,10 @@ public class UserOpsService {
 				dbUser.setMobileNumber((user.getMobileNumber()));
 				repo.save(dbUser);
 			}
-			return new ResponseEntity<JsonNode>(response, HttpStatus.OK);
+			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (RestClientException e) {
 			logger.error("Exception occurred : ", e);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -132,10 +133,10 @@ public class UserOpsService {
 			objNode.remove("Name");
 			objNode.put("Name", nameArr[0]);
 			objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex){
 			logger.error("Exception occurred : ", ex);
-			return new ResponseEntity<JsonNode>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
