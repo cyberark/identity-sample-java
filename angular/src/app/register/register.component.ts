@@ -74,6 +74,7 @@ export class RegisterComponent implements OnInit {
       ])],
       "ConfirmPassword": ['', Validators.required],
       "MobileNumber": [''],
+      "MFA": [false],
     }, { updateOn: 'blur' });
 
     const settings: Settings = JSON.parse(getStorage("settings"));

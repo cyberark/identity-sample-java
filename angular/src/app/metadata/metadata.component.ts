@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { AuthorizationFlow, getStorage } from '../utils';
+import { APIErrStr, AuthorizationFlow, getStorage } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 
@@ -37,6 +37,7 @@ export class Metadata implements OnInit {
   hideTokensAccordian = false;
   isOauthFlow = getStorage('authFlow') === AuthorizationFlow.OAUTH;
   heading: string = this.isOauthFlow ? 'OAuth Metadata' : 'OIDC Metadata';
+  errorMessage: string = APIErrStr;
 
   constructor(
     private router: Router,
@@ -66,7 +67,8 @@ export class Metadata implements OnInit {
         },
         error: error => {
           this.loading = false;
-          console.error(error);
+          this.errorMessage = error.error.ErrorMessage;
+          (<any>$('#errorPopup')).modal();
         }
       });
     } else {
@@ -89,7 +91,8 @@ export class Metadata implements OnInit {
         } 
       },
       error: error => {
-        console.error(error);
+        this.errorMessage = error.error.ErrorMessage;
+        (<any>$('#errorPopup')).modal();
       }
     });
   }

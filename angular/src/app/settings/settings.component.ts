@@ -58,7 +58,10 @@ export class SettingsComponent implements OnInit {
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
       "oauthAppId": ['', Validators.required],
-      "oauthServiceUserName": ['', Validators.required],
+      "oauthServiceUserName": ['', Validators.compose([
+        Validators.required,
+        Validators.pattern(".*@.*")
+      ])],
       "oauthServiceUserPassword": ['', Validators.compose([
         Validators.required,
         Validators.minLength(8),
