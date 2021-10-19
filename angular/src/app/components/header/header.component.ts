@@ -34,6 +34,8 @@ export class HeaderComponent implements OnInit {
   @Input() isHomeVisible: boolean = false;
   @Input() isSettingsVisible: boolean = false;
   @Input() isLogoutVisible: boolean = false;
+  @Input() isTOTPVisible: boolean = false;
+  @Input() isUserProfileVisible: boolean = false;
 
   page = "home";
   name = "";

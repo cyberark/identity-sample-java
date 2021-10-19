@@ -21,11 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.sampleapp.entity.Response;
 import com.sampleapp.entity.User;
+import com.sampleapp.entity.VerifyTotpReq;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +59,24 @@ public class UserOpsController {
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null){
 			return userOpsService.getUser(uuid, token);
+		}
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
+	}
+
+	@GetMapping("/userops/getTotpQR")
+	public ResponseEntity<JsonNode> getTotpQR(HttpServletRequest request) throws Exception {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null){
+			return userOpsService.getTotpQR(token);
+		}
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
+	}
+
+	@PostMapping("/userops/verifyTotp")
+	public ResponseEntity<JsonNode> verifyTotp(HttpServletRequest request, @RequestBody VerifyTotpReq req) throws Exception {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null){
+			return userOpsService.verifyTotp(token, req);
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}

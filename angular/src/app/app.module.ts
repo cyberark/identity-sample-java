@@ -42,6 +42,7 @@ import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
 import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
 import { M2MComponent } from './m2m/m2m.component';
 import { ErrorComponent } from './components/error/error.component';
+import { TOTPRegisterComponent } from './totpregister/totpregister.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { ErrorComponent } from './components/error/error.component';
     RedirectComponent,
     OAuthFlowComponent,
     M2MComponent,
+    TOTPRegisterComponent,
   ],
   imports: [
     BrowserModule,

@@ -40,9 +40,8 @@ Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widget
 * Add an entry under Trusted DNS Domains for API Calls - apidemo.cyberark.app
 
 For further reference
-| [Angular](./angular/README.md) | Frontend |
-|--------|-------------|
-| [Spring-boot](./spring-boot/README.md) | Backend |
+* Frontend - [Angular](./angular/README.md)
+* Backend - [Spring-boot](./spring-boot/README.md)
 
 ## Code Maintainers
 CyberArk Identity Team

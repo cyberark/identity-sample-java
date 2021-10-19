@@ -22,6 +22,8 @@ import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.Response;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.entity.User;
+import com.sampleapp.entity.VerifyTotpReq;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +120,18 @@ public class UserOpsService {
 		}
 	}
 
+	public ResponseEntity<JsonNode> getTotpQR(String token) {
+		try {
+			HttpHeaders headers = prepareForRequest(token);
+			HttpEntity<String> request = new HttpEntity<>("{\"DeviceId\":\"" + null + "\"}", headers);
+			String url = settingsService.getTenantURL() + "/mobile/GetUserThirdPartyOtp";
+			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
+			return new ResponseEntity(response, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception occurred : ", e);
+			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	//Get user information using specified UUID
 	public ResponseEntity<JsonNode> getUser(String uuid, String token) {
@@ -156,5 +170,18 @@ public class UserOpsService {
 			}
 		}
 		return false;
+	}
+
+	public ResponseEntity<JsonNode> verifyTotp(String token, VerifyTotpReq req) {
+		try {
+			HttpHeaders headers = prepareForRequest(token);
+			HttpEntity<String> request = new HttpEntity<>(req.toJSONString(), headers);
+			String url = settingsService.getTenantURL() + "/mobile/ValidateAndSetUserThirdPartyOtp";
+			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
+			return new ResponseEntity(response, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error("Exception occurred : ", e);
+			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }

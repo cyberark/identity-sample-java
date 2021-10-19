@@ -33,5 +33,7 @@ export const EndpointsConnector = {
     GetSettingsEndpoint: `${baseUrl}/getSettings`,
     UpdateSettingsEndpoint: `${baseUrl}/updateSettings`,
     RegisterEndpoint: `${baseUrl}/user/register`,
-    UserOpsURL: `${baseUrl}/userops/`
+    UserOpsURL: `${baseUrl}/userops/`,
+    getTotpQR: `${baseUrl}/userops/getTotpQR`,
+    verifyTotp: `${baseUrl}/userops/verifyTotp`
   }

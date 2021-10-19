@@ -15,10 +15,9 @@
 */
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserService } from '../user/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
-import { FormBuilder, FormGroup, NgForm, Validators, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, NgForm, FormControl } from '@angular/forms';
 import { getStorage, validateAllFormFields } from '../utils';
 
 @Component({

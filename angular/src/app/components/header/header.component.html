@@ -27,11 +27,15 @@
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/login')" href="login"
             (click)="onTabClick('login')">Login</a>
         </li>
+        <li class="nav-item" *ngIf="isTOTPVisible">
+          <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/totpregister')" href="totpregister"
+            (click)="onTabClick('totpregister')">TOTP Register</a>
+        </li>
         <li class="nav-item" *ngIf="checkFlow2UserPage()">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/fundtransfer')" href="fundtransfer"
             (click)="onTabClick('fundtransfer')">Fund Transfer</a>
         </li>
-        <li class="nav-item" *ngIf="checkFlow2UserPage()">
+        <li class="nav-item" *ngIf="isUserProfileVisible">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/user')" href="user"
             (click)="onTabClick('user')">User Profile</a>
         </li>

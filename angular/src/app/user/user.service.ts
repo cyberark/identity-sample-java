@@ -17,7 +17,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { User } from '../user/user';
+import { User, verifyTotpReq } from '../user/user';
 import { map } from 'rxjs/operators';
 import {  EndpointsConnector } from '../EndpointsConnector';
 
@@ -55,5 +55,15 @@ export class UserService {
   setSettings(custom: any) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint, custom, { headers: head, withCredentials: true });
+  }
+
+  getTotpQR() {
+    let head = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get<any>(EndpointsConnector.getTotpQR, { headers: head, withCredentials: true });
+  }
+
+  verifyTotp(body: verifyTotpReq) {
+    let head = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<any>(EndpointsConnector.verifyTotp, body, { headers: head, withCredentials: true });
   }
 }

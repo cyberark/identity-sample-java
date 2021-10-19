@@ -27,3 +27,8 @@ export class User {
     "OfficeNumber" = '';
     "HomeNumber" = '';
 }
+
+export class verifyTotpReq {
+    uuid: string = "";
+    otpCode: string = "";
+}
