@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       confirmPassword: ['', Validators.required]
     });
 
-    if (getStorage("username") !== null) {
+    if (getStorage("userId") !== null) {
       this.router.navigate(['user']);
     }
 

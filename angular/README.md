@@ -7,7 +7,7 @@
 cd angular
 npm i
 ```
-After installing all the dependencies, update the environment file
+After installing all the dependencies, update the angular/src/environments/environment.ts file
 ```console
 apiFqdn:"<YOUR_TENANT_FULLY_QUALIFIED_DOMAIN_NAME>",
 oauthAppId: "<YOUR_OAUTH_APPLICATION_ID>",

@@ -21,6 +21,7 @@ import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sampleapp.Repos.MfaUserMappingRepository;
 import com.sampleapp.Repos.TokenStoreRepository;
 import com.sampleapp.entity.AdvanceLoginRequest;
 import com.sampleapp.entity.AuthRequest;
@@ -54,6 +55,9 @@ public class AuthService {
 
 	@Autowired
 	private TokenStoreRepository tokenStoreRepository;
+	
+	@Autowired
+	private MfaUserMappingRepository mfaUserMappingRepository;
 
 	@Autowired
 	private UserService userService;
@@ -178,9 +182,9 @@ public class AuthService {
 		}
 	}
 
-	public String CreateSession(Integer userId){
+	public String CreateSession(Integer userId, String mfaToken){
 		String sessionUuid = java.util.UUID.randomUUID().toString();
-		tokenStoreRepository.save(new TokenStore(userId,sessionUuid,null));
+		tokenStoreRepository.save(new TokenStore(userId,sessionUuid,mfaToken));
 		return sessionUuid;
 	}
 
@@ -246,4 +250,37 @@ public class AuthService {
 			throw ex;
 		}
     }
+
+	public JsonNode setAuthCookie(Boolean enableMFAWidgetFlow, AdvanceLoginRequest advanceLoginRequest, HttpServletResponse httpServletResponse) throws Exception {
+		try {
+			String accessToken = receiveOAuthTokenCCForUser(advanceLoginRequest);
+			String sessionUuid = "";
+			if(enableMFAWidgetFlow){
+				Integer userId = mfaUserMappingRepository.findByMfaUserId(advanceLoginRequest.getClientId()).getUserId();
+				sessionUuid = CreateSession(userId, accessToken);
+			}
+
+			HttpHeaders headers = setHeaders(accessToken);
+			HttpEntity<String> request = new HttpEntity<>(headers);
+
+			String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
+			ResponseEntity<JsonNode> getResponse = restTemplate.exchange(url, HttpMethod.GET, request, JsonNode.class);
+			JsonNode response = getResponse.getBody();
+			String mfaUsername = response.get("Result").get("Name").asText();
+
+			Cookie cookie = new Cookie(".ASPXAUTH", accessToken);
+			cookie.setHttpOnly(true);
+			cookie.setSecure(true);
+			cookie.setPath("/");
+			httpServletResponse.addCookie(cookie);
+
+			ObjectNode objectNode = new ObjectMapper().createObjectNode();
+			objectNode.put("mfaUsername", mfaUsername);
+			objectNode.put("SessionUuid", sessionUuid);
+			return objectNode;
+		} catch (Exception e) {
+			logger.error("Exception occurred : ", e);
+			throw e;
+		}
+	}
 }

@@ -18,6 +18,10 @@ package com.sampleapp.Repos;
 
 import com.sampleapp.entity.MfaUserMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MfaUserMappingRepository extends JpaRepository<MfaUserMapping, Integer> {
+    @Query("SELECT t FROM MfaUserMapping t WHERE t.mfaUserId = :mfaUserId")
+    MfaUserMapping findByMfaUserId(@Param("mfaUserId") String mfaUserId);
 }

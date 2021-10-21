@@ -90,7 +90,7 @@ public class AuthController {
 			Arrays.fill(request.Password, ' ');
 
 			if (user != null) {
-				String sessionUuid = authService.CreateSession(user.getId());
+				String sessionUuid = authService.CreateSession(user.getId(), null);
 				ObjectMapper objectMapper = new ObjectMapper();
 				ObjectNode objectNode = objectMapper.createObjectNode();
 				objectNode.put("SessionUuid",sessionUuid);
@@ -116,6 +116,21 @@ public class AuthController {
 		Response response = new Response();
 		try {
 			response.Result =authService.CompleteLogin(advanceLoginRequest,httpServletResponse);
+			return new ResponseEntity(response, HttpStatus.OK);
+		}catch (Exception ex){
+			response.Success = false;
+			response.ErrorMessage = ex.getMessage();
+			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping({ "/setAuthCookie" })
+	public ResponseEntity<Response> SetAuthCookie(HttpServletRequest request, @RequestBody AdvanceLoginRequest advanceLoginRequest, HttpServletResponse httpServletResponse){
+		Response response = new Response();
+		try {
+			Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+			JsonNode data = authService.setAuthCookie(enableMFAWidgetFlow, advanceLoginRequest, httpServletResponse);
+			response.Result = data;
 			return new ResponseEntity(response, HttpStatus.OK);
 		}catch (Exception ex){
 			response.Success = false;

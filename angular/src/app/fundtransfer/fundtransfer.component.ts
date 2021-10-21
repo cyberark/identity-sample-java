@@ -47,7 +47,7 @@ export class FundTransferComponent implements OnInit {
             'amount': new FormControl(null)
           });
 
-        if (getStorage("username") == null) {
+        if (getStorage("userId") == null) {
             this.router.navigate(['/login']);
         }
         this.isFundTransferSuccessful = JSON.parse(this.route.snapshot.queryParamMap.get('isFundTransferSuccessful'));

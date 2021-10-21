@@ -43,15 +43,19 @@ export class BasicLoginService {
   }
 
   completeLoginUser(sessionUuid : string, authorizationCode : string, clientId : string, codeVerifier : string){
-    let head = new HttpHeaders()
-    .set('Content-Type', 'application/json')
-    .set('Accept', 'application/json')
-    .set('Access-Control-Allow-Methods', 'POST')
-    .set('Access-Control-Allow-Origin', '*');
+    let head = this.setHeaders();
     return this.http.post<any>(EndpointsConnector.CompleteLoginEndPoint, { sessionUuid, authorizationCode, clientId, codeVerifier }, { headers: head, withCredentials: true })
       .pipe(map(result => {
         return result;
       }));
+  }
+
+  private setHeaders() {
+    return new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json')
+      .set('Access-Control-Allow-Methods', 'POST')
+      .set('Access-Control-Allow-Origin', '*');
   }
 
   authorize(authentication_token : string, clientId : string, codeChallenge : string){
@@ -64,5 +68,13 @@ export class BasicLoginService {
     let url = `https://${environment.apiFqdn}/oauth2/authorize/${environment.oauthAppId}?scope=${environment.oauthScope}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/RedirectResource`;
 
     return this.http.get<any>(url, { headers: head, withCredentials: true});
+  }
+
+  setAuthCookie(sessionUuid : string, authorizationCode : string, clientId : string, codeVerifier : string){
+    const head = this.setHeaders();
+    return this.http.post<any>(EndpointsConnector.SetAuthCookie, { sessionUuid, authorizationCode, clientId, codeVerifier }, { headers: head, withCredentials: true})
+      .pipe(map(res => {
+        return res;
+      }));
   }
 }

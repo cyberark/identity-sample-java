@@ -35,5 +35,6 @@ export const EndpointsConnector = {
     RegisterEndpoint: `${baseUrl}/user/register`,
     UserOpsURL: `${baseUrl}/userops/`,
     getTotpQR: `${baseUrl}/userops/getTotpQR`,
-    verifyTotp: `${baseUrl}/userops/verifyTotp`
+    verifyTotp: `${baseUrl}/userops/verifyTotp`,
+    SetAuthCookie: `${baseUrl}/setAuthCookie`
   }

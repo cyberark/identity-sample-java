@@ -23,6 +23,8 @@ import { HeaderComponent } from '../components/header/header.component';
 import { getStorage, setStorage, Settings, validateAllFormFields, APIErrStr } from '../utils';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HttpStatusCode } from '@angular/common/http';
+import { AuthorizationService } from '../metadata/authorizationservice';
+import { BasicLoginService } from '../basiclogin/basiclogin.service';
 
 @Component({
   selector: 'app-root',
@@ -52,12 +54,14 @@ export class RegisterComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private domSanitizer: DomSanitizer,
+    private loginService: BasicLoginService,
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit() {
-    if (getStorage("username") !== null && (this.router.url == "/register")) {
+    if (getStorage("userId") !== null && (this.router.url == "/register")) {
       this.router.navigate(['user']);
-    } else if (getStorage("username") == null && (this.router.url == "/user")) {
+    } else if (getStorage("userId") == null && (this.router.url == "/user")) {
       this.router.navigate(['/login']);
     }
 
@@ -92,10 +96,6 @@ export class RegisterComponent implements OnInit {
           if (data.success) {
             let userControls = this.registerForm.controls;
             let user = data.Result;
-            if (user.DirectoryServiceType == "FDS") {
-              this.registerForm.disable();
-            } else {
-            }
             userControls.Name.setValue(user.Name);
             userControls.Mail.setValue(user.Mail);
             userControls.DisplayName.setValue(user.DisplayName);
@@ -197,6 +197,7 @@ export class RegisterComponent implements OnInit {
       });
     } else {
       user = Object.assign({}, form);
+      user.AutoLogin = true;
       this.userService.getClientIP().subscribe({
         next: ipData => {
           this.userService.register(user, ipData.ip, true).subscribe({
@@ -210,11 +211,41 @@ export class RegisterComponent implements OnInit {
                   setStorage("registerMessageType", "info");
                   setStorage("registerMessage", "User " + user.Name + " registered successfully. Enter your credentials here to proceed.")
                 }
-                if (document.cookie.includes('flow1'))
-                  this.router.navigate(['/login']);
-                else
-                  this.router.navigate(['/basiclogin']);
-
+                if(data.Result.Auth) {
+                  this.authorizationService.getPKCEMetadata().subscribe({
+                    next: d => {
+                      this.loginService.authorize(data.Result.Auth, data.Result.UserId, d.Result.codeChallenge).subscribe({
+                        next: auth => {
+                          this.loginService.setAuthCookie("", auth.Result.AuthorizationCode, data.Result.UserId, d.Result.codeVerifier).subscribe({
+                            next: res => {
+                              setStorage("mfaUsername", res.Result.mfaUsername);
+                              setStorage("sessionUuid", res.Result.SessionUuid);
+                              setStorage("userId", data.Result.UserId);
+                              if (document.cookie.includes('flow1'))
+                                this.router.navigate(['/loginprotocols']);
+                              else
+                                this.router.navigate(['/user']);
+                            },
+                            error: e => {
+                              console.error(e);
+                            }
+                          })
+                        },
+                        error: e => {
+                          console.error(e);
+                        }
+                      })
+                    },
+                    error: e => {
+                      console.error(e);
+                    }
+                  })
+                } else {
+                  if (document.cookie.includes('flow1'))
+                    this.router.navigate(['/login']);
+                  else
+                    this.router.navigate(['/basiclogin']);
+                }
               } else {
                 this.setMessage("error", data.Message);
               }

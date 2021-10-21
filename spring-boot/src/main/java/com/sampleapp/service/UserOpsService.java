@@ -97,7 +97,7 @@ public class UserOpsService {
 		String userJson = getJson(user);
 		HttpHeaders headers = prepareForRequest(token);
 		HttpEntity<String> request = new HttpEntity<>(userJson, headers);
-		String updateUserUrl = settingsService.getTenantURL() + "/CDirectoryService/ChangeUser";
+		String updateUserUrl = settingsService.getTenantURL() + "/user/UpdateProfile";
 		try {
 			ResponseEntity<JsonNode> result = restTemplate.exchange(updateUserUrl, HttpMethod.POST, request, JsonNode.class);
 			JsonNode response = result.getBody();
