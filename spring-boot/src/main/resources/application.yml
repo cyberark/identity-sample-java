@@ -30,5 +30,9 @@ server:
     key-store-type: PKCS12
     key-store-password: <PASSWORD>
     key-store: classpath:<KEYSTORE_NAME>.p12
+  servlet:
+    context-path: /api
 
 demoAppBaseURL: https://identitydemo.acmeinc.com
+backendServerPort: 8080
+frontendServerPort: 4200

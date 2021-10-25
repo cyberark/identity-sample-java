@@ -48,6 +48,9 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     @Value("${demoAppBaseURL}")
     public String demoAppBaseURL;
 
+    @Value("${frontendServerPort}")
+    public String frontendServerPort;
+
     @Autowired
     SettingsService settingsService;
 
@@ -72,7 +75,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     private final String codeChallengeMethod = "S256";
 
     private String getAuthorizationRedirectURL(){
-        return this.demoAppBaseURL + ":4200/RedirectResource";
+        return this.demoAppBaseURL + ":" + this.frontendServerPort + "/RedirectResource";
     }
 
     public BaseAuthorizationService() { }

@@ -113,7 +113,9 @@ public class UserService {
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
-		httpHeaders.set("X_FORWARDED_FOR", currentRequest.getHeader("CLIENT_IP"));
+		if (currentRequest.getHeader("CLIENT_IP") != null){
+			httpHeaders.set("X_FORWARDED_FOR", currentRequest.getHeader("CLIENT_IP"));
+		}
 		return httpHeaders;
 	}
 

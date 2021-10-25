@@ -39,9 +39,13 @@ Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widget
 * Navigate to Settings -> Authentication -> Security Settings -> API Security in the admin portal
 * Add an entry under Trusted DNS Domains for API Calls - identitydemo.acmeinc.com
 
-For further reference
-* Frontend - [Angular](./angular/README.md)
-* Backend - [Spring-boot](./spring-boot/README.md)
+## Prerequisite
+* Follow [Deployment Guide](https://identity-developer.cyberark.com/docs/sample-app-deployment-guide) to setup the sample app environment.
+
+## Build and Run Project 
+Refer README.md file under below mentioned folders.
+* Frontend - ./angular
+* Backend - ./spring-boot
 
 ## Code Maintainers
 CyberArk Identity Team

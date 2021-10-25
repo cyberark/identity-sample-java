@@ -71,6 +71,9 @@ public class AuthService {
 	@Value("${demoAppBaseURL}")
 	public String demoAppBaseURL;
 
+	@Value("${backendServerPort}")
+	public String backendServerPort;
+
 	public AuthService(RestTemplateBuilder builder) {
 		this.restTemplate = builder.build();
 	}
@@ -236,7 +239,7 @@ public class AuthService {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("code", advanceLoginRequest.getAuthorizationCode());
 			map.add("grant_type", GrantType.authorization_code.name());
-			map.add("redirect_uri", this.demoAppBaseURL + ":8080/RedirectResource");
+			map.add("redirect_uri", this.demoAppBaseURL + ":" + this.backendServerPort + "/api/RedirectResource");
 			map.add("client_id", advanceLoginRequest.getClientId());
 			map.add("code_verifier", advanceLoginRequest.getCodeVerifier());
 

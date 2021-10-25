@@ -64,6 +64,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "cyberark-identity-sample-app:build",
+            "disableHostCheck": true,
             "ssl": true,
             "sslCert": "ssl/server.crt",
             "sslKey": "ssl/server.key",

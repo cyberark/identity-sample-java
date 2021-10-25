@@ -16,7 +16,7 @@
 
 import { environment } from '../environments/environment';
 
-let baseUrl = `${environment.baseUrl}:${environment.serverPort}`;
+let baseUrl = `${environment.baseUrl}:${environment.serverPort}/api`;
 
 export const EndpointsConnector = {
     BasicLoginEndPoint : `${baseUrl}/BasicLogin`,

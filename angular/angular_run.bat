@@ -14,5 +14,5 @@
 ::  limitations under the License.
 :: 
 
-:: To spin up the angular project, run `ng serve` command under angular folder
-cd %~dp0 && ng serve
+:: To spin up the angular project, run `npm start` command under angular folder
+cd %~dp0 && npm start

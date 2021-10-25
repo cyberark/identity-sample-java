@@ -14,8 +14,8 @@
 ::  limitations under the License.
 :: 
 
-:: To spin up the angular project, run `ng serve` command under angular folder
-START "angular serve" cmd /c "cd %~dp0\angular && ng serve"
+:: To spin up the angular project, run `npm start` command under angular folder
+START "angular serve" cmd /c "cd %~dp0\angular && npm start"
 
 :: To spin up the tomcat server, run `mvn spring-boot:run` command under spring-boot folder
 START "spring boot run" cmd /c "cd %~dp0\spring-boot && mvn spring-boot:run"
