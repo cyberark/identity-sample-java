@@ -1,4 +1,4 @@
-# CyberArk Identity Demo Web App (Java)
+# CyberArk Identity Demo Web App (Angular - Java)
 **Status**: Community
 
 Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widgets to secure its web applications. This playground application shows all the possible variations that a developer from Acme has at her disposal for this. This app uses Java Spring backend and Angular JS frontend.
@@ -16,16 +16,16 @@ Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widget
 #### OIDC Client App
 * Create a OIDC Connect app
 * Navigate to Trust Section and give OpenID Connect Client Secret value
-* Add Resource application URL as https://apidemo.cyberark.app:4200/oidcflow
-* Add the Redirect destinations as https://apidemo.cyberark.app:4200/RedirectResource
+* Add Resource application URL as https://identitydemo.acmeinc.com:4200/oidcflow
+* Add the Redirect destinations as https://identitydemo.acmeinc.com:4200/RedirectResource
 * Under Permissions tab, add the MFA role created in the previous steps and give Run Access to generate Tokens.
 
 #### OAuth Client App
 * Create a OAuth 2.0 client app
 * Select Client ID Type as Confidential
 * Add the following Redirect destinations: 
-    https://apidemo.cyberark.app:8080/RedirectResource
-    https://apidemo.cyberark.app:4200/RedirectResource
+    https://identitydemo.acmeinc.com:8080/RedirectResource
+    https://identitydemo.acmeinc.com:4200/RedirectResource
 * Under Tokens tab, select Auth Code, Implicit, Client Creds, Resource Owner & Issue refresh tokens checkboxes
 * Under Scope tab, Add a scope "all" with .* as REST Regex
 * Under Permissions tab, add the MFA role created in the previous steps and give Run access to generate tokens
@@ -37,7 +37,7 @@ Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widget
 
 #### Trusted DNS for API calls
 * Navigate to Settings -> Authentication -> Security Settings -> API Security in the admin portal
-* Add an entry under Trusted DNS Domains for API Calls - apidemo.cyberark.app
+* Add an entry under Trusted DNS Domains for API Calls - identitydemo.acmeinc.com
 
 For further reference
 * Frontend - [Angular](./angular/README.md)

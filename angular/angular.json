@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "api-demo": {
+    "cyberark-identity-sample-app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/api-demo",
+            "outputPath": "dist/cyberark-identity-sample-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,11 +63,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "api-demo:build",
+            "browserTarget": "cyberark-identity-sample-app:build",
             "ssl": true,
             "sslCert": "ssl/server.crt",
             "sslKey": "ssl/server.key",
-            "host": "apidemo.cyberark.app",
+            "host": "identitydemo.acmeinc.com",
             "port": 4200
           },
           "configurations": {
@@ -76,14 +76,14 @@
               "optimization": false
             },
             "production": {
-              "browserTarget": "api-demo:build:production"
+              "browserTarget": "cyberark-identity-sample-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "api-demo:build"
+            "browserTarget": "cyberark-identity-sample-app:build"
           }
         },
         "test": {
@@ -120,7 +120,7 @@
         }
       }
     },
-    "api-demo-e2e": {
+    "cyberark-identity-sample-app-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -129,11 +129,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "api-demo:serve"
+            "devServerTarget": "cyberark-identity-sample-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "api-demo:serve:production"
+              "devServerTarget": "cyberark-identity-sample-app:serve:production"
             }
           }
         },
@@ -149,5 +149,5 @@
       }
     }
   },
-  "defaultProject": "api-demo"
+  "defaultProject": "cyberark-identity-sample-app"
 }
