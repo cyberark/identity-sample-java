@@ -116,6 +116,11 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     }
 
     @Override
+    public Boolean revokeToken(String accessToken) throws IOException {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public UserInfo getUserInfo(String accessToken) throws IOException {
         throw new NotImplementedException();
     }

@@ -74,10 +74,10 @@ export class M2MComponent implements OnInit {
     this.loading = true;
     this.tokenMetaReq.authFlow = AuthorizationFlow.OAUTH;
     if(this.selectedFlow === OAuthFlow.clientCreds) {
-        this.tokenMetaReq.grantType = GrantType.client_credentials;
+        this.tokenMetaReq.grant_type = GrantType.client_credentials;
     }else {
-        this.tokenMetaReq.grantType = GrantType.password;
-        this.tokenMetaReq.userName = this.username;
+        this.tokenMetaReq.grant_type = GrantType.password;
+        this.tokenMetaReq.user_name = this.username;
         this.tokenMetaReq.password = this.loginForm.get('password').value;
     }
 

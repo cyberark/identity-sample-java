@@ -18,8 +18,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
+import { AuthorizationService } from '../../metadata/authorizationservice';
 import { DomSanitizer } from '@angular/platform-browser';
-import { getStorage, setStorage } from 'src/app/utils';
+import { AuthorizationFlow, getStorage, revokeToken, setStorage } from '../../utils';
 
 const imgSrc = "../../../assets/images/acme_logo.png";
 
@@ -47,6 +48,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private userService: UserService,
+    private authorizationService: AuthorizationService,
     private sanitizer: DomSanitizer,
     private router: Router
   ) { }
@@ -131,6 +133,10 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
+    if (getStorage('accessToken') && getStorage('authFlow') === AuthorizationFlow.OIDC){
+      revokeToken(getStorage('accessToken'), this);
+    }
+    
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success) {

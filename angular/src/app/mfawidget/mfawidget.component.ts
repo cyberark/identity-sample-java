@@ -57,7 +57,7 @@ export class MFAWidgetComponent implements OnInit {
       next: pkceMetadata => {
         this.loginService.authorize(AuthData.Auth, getStorage('mfaUsername'), pkceMetadata.Result.codeChallenge).subscribe({
           next: data => {
-            this.loginService.completeLoginUser(getStorage("sessionUuid"), data.Result.AuthorizationCode, getStorage('mfaUsername'), pkceMetadata.Result.codeVerifier).subscribe({
+            this.loginService.completeLoginUser(getStorage("sessionUuid"), data.Result.AuthorizationCode, getStorage('mfaUsername'), pkceMetadata.Result.code_verifier).subscribe({
               next: data => {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);

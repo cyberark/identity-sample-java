@@ -64,6 +64,8 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
 
     public abstract TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException;
 
+    public abstract Boolean revokeToken(String accessToken) throws IOException;
+
     protected abstract String getAppId();
 
     protected abstract String getClientId(String clientId);

@@ -47,7 +47,7 @@ export enum OidcFlow {
 }
 
 export class PKCEMetaData {
-  codeVerifier: string;
+  code_verifier: string;
   codeChallenge: string;
 }
 
@@ -64,6 +64,7 @@ export class Settings {
   oauthScopesSupported: string;
   oidcAppId: string;
   oidcClientId: string;
+  oidcClientPassword: string
   oidcScopesSupported: string;
 }
 
@@ -76,13 +77,13 @@ export class AuthorizationMetadataRequest extends PKCEMetaData {
 
 export class TokenMetadataRequest extends PKCEMetaData {
   authFlow: AuthorizationFlow = AuthorizationFlow.OIDC;
-  authorizationCode: string;
-  grantType: GrantType = GrantType.authorization_code;
-  userName: string;
+  code: string;
+  grant_type: GrantType = GrantType.authorization_code;
+  user_name: string;
   password: string;
-  clientId: string;
-  clientSecret: string;
-  refreshToken: string;
+  client_id: string;
+  client_secret: string;
+  refresh_token: string;
 }
 
 /**
@@ -96,6 +97,23 @@ export const buildAuthorizeURL = (authRequest: AuthorizationMetadataRequest, con
       context.loading = false;
       context.authURL = data.Result.authorizeUrl;
       context.authorizeBtn.nativeElement.disabled = false;
+    },
+    error: error => {
+      console.error(error);
+      context.loading = false;
+    }
+  });
+}
+
+/**
+ * Revokes an Access Token
+ * @param accessToken Access Token to Revoke
+ * @param context any - The component class context
+ */
+export const revokeToken = (accessToken: String, context: any) => {
+  context.authorizationService.revokeToken(accessToken).subscribe({
+    next: data => {
+      context.loading = false;
     },
     error: error => {
       console.error(error);

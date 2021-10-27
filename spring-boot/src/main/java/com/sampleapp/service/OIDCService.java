@@ -89,6 +89,26 @@ public class OIDCService extends BaseAuthorizationService<OIDCClient> {
         }
     }
 
+    /**
+     *  Revoke Access Token using OIDCClient
+     *  @param accessToken Input string
+     *  @return true on success.
+     */
+    @Override
+    public Boolean revokeToken(String accessToken) throws IOException {
+        try {
+            OIDCClient oidcClient = new OIDCClient(settingsService.getTenantURL(), settingsService.getOIDCApplicationID(), settingsService.getOIDCClientID(), String.valueOf(settingsService.getOIDCClientPass()));
+
+            oidcClient.revokeToken(accessToken)
+                    .execute();
+            return true;
+        }
+        catch (IdentityException ex) {
+            logger.error("Exception at revokeToken() : ", ex);
+            throw ex;
+        }
+    }
+
     @Override
     public TokenHolder getTokenSetWithClientCreds(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         throw new NotImplementedException();

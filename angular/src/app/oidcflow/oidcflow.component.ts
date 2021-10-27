@@ -58,7 +58,7 @@ export class OidcFlowComponent implements OnInit {
       this.authorizationService.getPKCEMetadata().subscribe({
         next: pkceMetadata => {
           this.codeChallenge = pkceMetadata.Result.codeChallenge;
-          this.codeVerifier = pkceMetadata.Result.codeVerifier;
+          this.codeVerifier = pkceMetadata.Result.code_verifier;
           setStorage('codeVerifier', this.codeVerifier);
           authRequest.codeChallenge = pkceMetadata.Result.codeChallenge;
           authRequest.responseType = this.responseTypes.join(' ');

@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PKCEMetaData {
 
-    @JsonProperty("codeVerifier")
+    @JsonProperty("code_verifier")
     public String codeVerifier;
 
     @JsonProperty("codeChallenge")

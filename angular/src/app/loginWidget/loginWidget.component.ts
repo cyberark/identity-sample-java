@@ -45,7 +45,7 @@ export class LoginWidgetComponent implements OnInit {
     var me = this;
     const settings: Settings = JSON.parse(getStorage('settings'));
     this.tokenReq.authFlow = AuthorizationFlow.OAUTH;
-    this.tokenReq.grantType = GrantType.client_credentials;
+    this.tokenReq.grant_type = GrantType.client_credentials;
     this.authorizationService.getTokenSet(this.tokenReq).subscribe({
     next: data => {
       this.tokenSet = data.Result;
@@ -83,7 +83,7 @@ export class LoginWidgetComponent implements OnInit {
       next: pkceMetadata => {
         this.loginService.authorize(AuthData.Auth,  AuthData.User, pkceMetadata.Result.codeChallenge).subscribe({
           next: data => {
-            this.loginService.setAuthCookie("", data.Result.AuthorizationCode,AuthData.User,pkceMetadata.Result.codeVerifier).subscribe({
+            this.loginService.setAuthCookie("", data.Result.AuthorizationCode,AuthData.User,pkceMetadata.Result.code_verifier).subscribe({
               next: data => {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);

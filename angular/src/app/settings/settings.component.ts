@@ -83,7 +83,8 @@ export class SettingsComponent implements OnInit {
       "oidcClientId": ['', Validators.compose([
         Validators.required,
         Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')
-      ])],
+      ])], 
+      "oidcClientPassword": ['', Validators.required],
       "oidcScopesSupported": ['', Validators.required],
     });
 

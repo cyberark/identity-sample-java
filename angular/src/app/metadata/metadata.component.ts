@@ -17,7 +17,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { APIErrStr, AuthorizationFlow, getStorage, GrantType, OAuthFlow, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
+import { APIErrStr, AuthorizationFlow, getStorage, GrantType, OAuthFlow, revokeToken, setStorage, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -77,6 +77,7 @@ export class Metadata implements OnInit {
           this.hasRefreshToken = Object.keys(this.tokenSet).includes('refresh_token');
           this.getClaims(this.tokenSet['access_token']);
           this.getUserInfo(this.tokenSet['access_token']);
+          setStorage('accessToken', this.tokenSet['access_token']);
         },
         error: error => {
           this.loading = false;
@@ -91,6 +92,7 @@ export class Metadata implements OnInit {
       const token = this.isOauthFlow ? this.authResponse['access_token'] : this.authResponse['id_token'];
       this.getClaims(token);
       this.getUserInfo(token);
+      setStorage('accessToken', token);
       this.loading = false;
     }
   }
@@ -126,6 +128,9 @@ export class Metadata implements OnInit {
   dataKeys(object : Object) { return Object.keys(object); }
 
   onTryAnotherFlow(){
+    if (getStorage('accessToken') && !this.isOauthFlow){
+      revokeToken(getStorage('accessToken'), this);
+    }
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success) {
@@ -166,10 +171,10 @@ export class Metadata implements OnInit {
     this.loading = true;
     let tokenReqMetaData: TokenMetadataRequest = new TokenMetadataRequest();
     tokenReqMetaData.authFlow = AuthorizationFlow.OAUTH;
-    tokenReqMetaData.grantType = GrantType.refresh_token;
-    tokenReqMetaData.refreshToken = this.tokenSet['refresh_token'];
-    tokenReqMetaData.clientId = this.claims['unique_name'];
-    tokenReqMetaData.clientSecret = this.password;
+    tokenReqMetaData.grant_type = GrantType.refresh_token;
+    tokenReqMetaData.refresh_token = this.tokenSet['refresh_token'];
+    tokenReqMetaData.client_id = this.claims['unique_name'];
+    tokenReqMetaData.client_secret = this.password;
     this.authorizationService.getRefreshToken(tokenReqMetaData).subscribe({
       next: data => {
         this.tokenSet = {...this.tokenSet, ...data.Result};

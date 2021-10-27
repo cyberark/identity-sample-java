@@ -161,6 +161,24 @@ public class AuthorizationController {
         }
     }
 
+    @PostMapping("revokeToken")
+    public ResponseEntity<JsonNode> revokeToken(@RequestBody String accessToken) {
+
+        logger.info("revokeToken");
+        Response response = new Response();
+        try
+        {
+            response.Result = this.authFlows.getEnumMap().get(AuthorizationFlow.OIDC).revokeToken(accessToken);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
+            response.Success = false;
+            response.ErrorMessage = ex.getMessage();
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("claims")
     public ResponseEntity<JsonNode> claims(@RequestParam String token) throws IOException {
 

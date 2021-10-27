@@ -63,6 +63,8 @@ public class SettingsService {
 
 	public String getOIDCClientID() { return settings.get("oidcClientId").textValue(); }
 
+	public char[] getOIDCClientPass() { return settings.get("oidcClientPassword").textValue().toCharArray(); }
+
 	public String getOIDCScopesSupported() { return settings.get("oidcScopesSupported").textValue(); }
 
 

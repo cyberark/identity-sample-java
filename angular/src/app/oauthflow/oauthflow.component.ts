@@ -90,7 +90,7 @@ export class OAuthFlowComponent implements OnInit {
         next: data => {
           this.loading = false;
           authReqMetaData.codeChallenge = data.Result.codeChallenge;
-          setStorage('codeVerifier', data.Result.codeVerifier);
+          setStorage('codeVerifier', data.Result.code_verifier);
           buildAuthorizeURL(authReqMetaData, this);
         },
         error: error => {

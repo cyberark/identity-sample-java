@@ -16,7 +16,6 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { AuthorizationMetadataRequest, TokenMetadataRequest } from '../utils';
 import {  EndpointsConnector } from '../EndpointsConnector';
 
@@ -46,6 +45,11 @@ export class AuthorizationService {
     getRefreshToken(tokenMetadataRequest: TokenMetadataRequest){
         let head = this.getHeaders();
         return this.http.post<any>(EndpointsConnector.RefreshTokenEndPoint, tokenMetadataRequest, { headers: head, withCredentials: true })
+    }
+    
+    revokeToken(accessToken: String){
+        let head = this.getHeaders();
+        return this.http.post<any>(EndpointsConnector.RevokeTokenEndPoint, accessToken, { headers: head, withCredentials: true })
     }
 
     getTokenRequestPreview(tokenPreviewReq: TokenMetadataRequest){

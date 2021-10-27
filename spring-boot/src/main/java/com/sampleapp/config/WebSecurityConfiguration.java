@@ -32,7 +32,7 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register", "/updateSettings"};
+	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register", "/updateSettings", "/tokenSet"};
 
 	@Value("${demoAppBaseURL}")
 	public String demoAppBaseURL;

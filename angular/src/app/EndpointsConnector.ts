@@ -28,6 +28,7 @@ export const EndpointsConnector = {
     BuildAuthorizeURLEndPoint : `${baseUrl}/buildAuthorizeURL`,
     TokenSetEndPoint : `${baseUrl}/tokenSet`,
     RefreshTokenEndPoint : `${baseUrl}/refreshToken`,
+    RevokeTokenEndPoint : `${baseUrl}/revokeToken`,
     TokenRequestPreviewEndPoint : `${baseUrl}/tokenRequestPreview`,
     ClaimsEndPoint : `${baseUrl}/claims`,
     OIDCUserInfoEndPoint : `${baseUrl}/oidc/userInfo`,

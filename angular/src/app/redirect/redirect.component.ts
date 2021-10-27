@@ -64,11 +64,11 @@ export class RedirectComponent implements OnInit {
         const oauth_flow = getStorage('oauthflow_flow');
         const authFlow = getStorage('authFlow');
 
-        this.tokenReq.authorizationCode = this.authResponse['code'];
-        if (oauth_flow && oauth_flow === OAuthFlow.authPKCE || authFlow === AuthorizationFlow.OIDC) this.tokenReq.codeVerifier = getStorage('codeVerifier');
-        else this.tokenReq.clientSecret = getStorage('client_secret');
+        this.tokenReq.code = this.authResponse['code'];
+        if (oauth_flow && oauth_flow === OAuthFlow.authPKCE || authFlow === AuthorizationFlow.OIDC) this.tokenReq.code_verifier = getStorage('codeVerifier');
+        else this.tokenReq.client_secret = getStorage('client_secret');
         this.tokenReq.authFlow = AuthorizationFlow[authFlow];
-        this.tokenReq.clientId = getStorage('username');
+        this.tokenReq.client_id = getStorage('username');
         this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe({
             next: (data) => {
                 this.loading = false;

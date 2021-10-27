@@ -25,30 +25,30 @@ public class TokenMetadataRequest extends PKCEMetaData {
     @JsonProperty("authFlow")
     public AuthorizationFlow authFlow;
 
-    @JsonProperty("authorizationCode")
+    @JsonProperty("code")
     public String authorizationCode;
 
-    @JsonProperty("grantType")
+    @JsonProperty("grant_type")
     public GrantType grantType;
 
-    @JsonProperty("userName")
+    @JsonProperty("user_name")
     public String userName;
 
     @JsonProperty("password")
     public char[] password;
 
-    @JsonProperty("clientId")
+    @JsonProperty("client_id")
     public String clientId;
 
-    @JsonProperty("clientSecret")
+    @JsonProperty("client_secret")
     public char[] clientSec;
 
-    @JsonProperty("redirectUrl")
+    @JsonProperty("redirect_uri")
     public String redirectUrl;
 
     @JsonProperty("scope")
     public String scope;
 
-    @JsonProperty("refreshToken")
+    @JsonProperty("refresh_token")
     public String refreshToken;
 }
