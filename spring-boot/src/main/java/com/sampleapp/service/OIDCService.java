@@ -16,11 +16,11 @@
 
 package com.sampleapp.service;
 
-import com.cyberark.client.CyberArkIdentityOIDCClient;
+import com.cyberark.client.OIDCClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
 import com.sampleapp.entity.TokenMetadataRequest;
-import com.cyberark.exception.CyberArkIdentityException;
+import com.cyberark.exception.IdentityException;
 import com.sampleapp.entity.AuthorizationFlow;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCClient> {
+public class OIDCService extends BaseAuthorizationService<OIDCClient> {
 
     private final Logger logger = LoggerFactory.getLogger(OIDCService.class);
 
@@ -59,19 +59,19 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
 
 
     /**
-     *  Get CyberArkIdentityOIDCClient Instance to make authorized API requests.
+     *  Get OIDCClient Instance to make authorized API requests.
      *  @param clientId         OIDC App Client Id
      *  @param clientSecret     OIDC App Client Secret
-     *  @return CyberArkIdentityOIDCClient Instance to make authorized API requests.
+     *  @return OIDCClient Instance to make authorized API requests.
      *  @throws IOException
      */
     @Override
-    public CyberArkIdentityOIDCClient getClient(String clientId, char[] clientSecret) throws IOException {
-        return new CyberArkIdentityOIDCClient(settingsService.getTenantURL(), settingsService.getOIDCApplicationID(), settingsService.getOIDCClientID());
+    public OIDCClient getClient(String clientId, char[] clientSecret) throws IOException {
+        return new OIDCClient(settingsService.getTenantURL(), settingsService.getOIDCApplicationID(), settingsService.getOIDCClientID());
     }
 
     /**
-     *  Get UserInfo using CyberArkIdentityOIDCClient
+     *  Get UserInfo using OIDCClient
      *  @param accessToken Input string
      *  @return UserInfo An Object that holds user related info.
      */
@@ -83,7 +83,7 @@ public class OIDCService extends BaseAuthorizationService<CyberArkIdentityOIDCCl
                     .userInfo(accessToken)
                     .execute();
             return userInfo;
-        } catch (CyberArkIdentityException ex) {
+        } catch (IdentityException ex) {
             logger.error("Exception at getUserInfo() : ", ex);
             throw ex;
         }

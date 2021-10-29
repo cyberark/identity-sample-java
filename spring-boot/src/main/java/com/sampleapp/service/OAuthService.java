@@ -16,11 +16,11 @@
 
 package com.sampleapp.service;
 
-import com.cyberark.client.CyberArkIdentityOAuthClient;
+import com.cyberark.client.OAuthClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
+import com.cyberark.exception.IdentityException;
 import com.sampleapp.entity.TokenMetadataRequest;
-import com.cyberark.exception.CyberArkIdentityException;
 import com.sampleapp.entity.AuthorizationFlow;
 import org.apache.commons.lang.NotImplementedException;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuthClient>{
+public class OAuthService extends BaseAuthorizationService<OAuthClient>{
 
     private final Logger logger = LoggerFactory.getLogger(OAuthService.class);
 
@@ -64,12 +64,12 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
      *  @throws IOException
      */
     @Override
-    public CyberArkIdentityOAuthClient getClient(String clientId, char[] clientSec) throws IOException {
+    public OAuthClient getClient(String clientId, char[] clientSec) throws IOException {
         if (clientSec == null){
-            return new CyberArkIdentityOAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId);
+            return new OAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId);
         }
         else {
-            return new CyberArkIdentityOAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId, String.valueOf(clientSec));
+            return new OAuthClient(settingsService.getTenantURL(), settingsService.getOauthApplicationID(), clientId, String.valueOf(clientSec));
         }
     }
 
@@ -88,7 +88,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
                     .setScope(this.getScopesSupported())
                     .execute();
             return tokenHolder;
-        } catch (CyberArkIdentityException ex) {
+        } catch (IdentityException ex) {
             logger.error("Exception at getTokenSetWithClientCreds() : ", ex);
             throw ex;
         }
@@ -109,7 +109,7 @@ public class OAuthService extends BaseAuthorizationService<CyberArkIdentityOAuth
                     .setScope(this.getScopesSupported())
                     .execute();
             return tokenHolder;
-        } catch (CyberArkIdentityException ex) {
+        } catch (IdentityException ex) {
             logger.error("Exception at getTokenSetWithPassword() : ", ex);
             throw ex;
         }

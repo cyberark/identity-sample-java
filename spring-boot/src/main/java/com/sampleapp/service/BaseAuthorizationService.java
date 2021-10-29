@@ -17,15 +17,15 @@
 package com.sampleapp.service;
 
 import com.cyberark.client.AuthorizeUrlBuilder;
-import com.cyberark.client.CyberArkIdentityOAuthClient;
+import com.cyberark.client.OAuthClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
+import com.cyberark.exception.IdentityException;
 import com.sampleapp.entity.AuthorizationFlow;
 import com.sampleapp.entity.AuthorizationMetadataRequest;
 import com.sampleapp.entity.PKCEMetaData;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.TokenRequestPreview;
-import com.cyberark.exception.CyberArkIdentityException;
 import com.cyberark.requestBuilders.TokenRequest;
 import com.cyberark.utils.PKCEUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,7 +41,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 @Service
-public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthClient> {
+public abstract class BaseAuthorizationService<T extends OAuthClient> {
 
     private final Logger logger = LoggerFactory.getLogger(BaseAuthorizationService.class);
 
@@ -122,7 +122,7 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
             tokenHolder = tokenRequest.execute();
             return tokenHolder;
         }
-        catch (CyberArkIdentityException ex) {
+        catch (IdentityException ex) {
             logger.error("Exception at getTokenSet() : ", ex);
             throw ex;
         }
@@ -153,10 +153,10 @@ public abstract class BaseAuthorizationService<T extends CyberArkIdentityOAuthCl
     public JsonNode getClaims(String token) throws IOException {
         JsonNode claims;
         try {
-            claims = CyberArkIdentityOAuthClient.claims(token);
+            claims = OAuthClient.claims(token);
             return claims;
         }
-        catch (CyberArkIdentityException ex) {
+        catch (IdentityException ex) {
             logger.error("Exception at getClaims() : ", ex);
             throw ex;
         }
