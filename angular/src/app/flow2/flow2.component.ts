@@ -31,10 +31,10 @@ export class Flow2Component implements OnInit {
   }
 
   onSignUpClick() {
-    this.router.navigate(['register']);
+      this.router.navigateByUrl('/loginWidget', { state: { signUp: true } });
   }
 
   onLoginClick() {
-    this.router.navigate(['basiclogin']);
+     this.router.navigateByUrl('/loginWidget', { state: { signUp: false } });
   }
 }

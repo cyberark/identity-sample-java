@@ -72,7 +72,7 @@ public class AuthController {
 	@PostMapping("auth/out")
 	public ResponseEntity<JsonNode> logout(HttpServletRequest request,HttpServletResponse response) {
 		Cookie[] cookieArray = request.getCookies();
-		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow3");
 		String authToken = "";
 		for (Cookie cookie : cookieArray) {
 			if (cookie.getName().equals(".ASPXAUTH")) {
@@ -128,7 +128,7 @@ public class AuthController {
 	public ResponseEntity<Response> SetAuthCookie(HttpServletRequest request, @RequestBody AdvanceLoginRequest advanceLoginRequest, HttpServletResponse httpServletResponse){
 		Response response = new Response();
 		try {
-			Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+			Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow3");
 			JsonNode data = authService.setAuthCookie(enableMFAWidgetFlow, advanceLoginRequest, httpServletResponse);
 			response.Result = data;
 			return new ResponseEntity(response, HttpStatus.OK);

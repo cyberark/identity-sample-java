@@ -22,11 +22,13 @@ import { HomeComponent } from './home/home.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
+import { LoginWidgetComponent } from './loginWidget/loginWidget.component';
 import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
 import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
 import { Metadata } from './metadata/metadata.component';
+import { Flow3Component } from './flow3/flow3.component';
 import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
@@ -43,11 +45,13 @@ const routes: Routes = [
   { path: 'settings', component: SettingsComponent },
   { path: 'basiclogin', component: BasicLoginComponent },
   { path: 'mfawidget', component: MFAWidgetComponent },
+  { path: 'loginWidget', component: LoginWidgetComponent },
   { path: 'fundtransfer', component: FundTransferComponent },
   { path: 'flow1', component: Flow1Component },
   { path: 'loginprotocols', component: LoginProtocolComponent },
   { path: 'apionly', component: ApionlyComponent },
   { path: 'metadata', component: Metadata },
+  { path: 'flow3', component: Flow3Component },
   { path: 'flow2', component: Flow2Component },
   { path: 'oidcflow', component: OidcFlowComponent },
   { path: 'RedirectResource', component: RedirectComponent },

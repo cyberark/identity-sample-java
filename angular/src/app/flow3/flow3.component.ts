@@ -16,38 +16,25 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { getStorage } from '../utils';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'flow3',
+  templateUrl: './flow3.component.html',
 })
-export class HomeComponent implements OnInit {
+export class Flow3Component implements OnInit {
 
   constructor(
     private router: Router
   ) { }
 
   ngOnInit() {
-    if (getStorage("userId") !== null) {
-      this.router.navigate(['user']);
-    }
   }
 
-  onFlow1Start() {
-    document.cookie = 'flow=flow1';
-    this.router.navigate(['flow1'])
+  onSignUpClick() {
+    this.router.navigate(['register']);
   }
 
-  onFlow2Start() {
-    document.cookie = 'flow=flow2';
-    this.router.navigate(['flow2'])
+  onLoginClick() {
+    this.router.navigate(['basiclogin']);
   }
-
-  onFlow3Start() {
-    document.cookie = 'flow=flow3';
-    this.router.navigate(['flow3'])
-  }
-
 }

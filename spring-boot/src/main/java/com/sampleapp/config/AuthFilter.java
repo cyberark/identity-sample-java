@@ -50,7 +50,7 @@ public class AuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        Boolean enableMFAWidgetFlow = readServletCookie(request,"flow").get().equals("flow2");
+        Boolean enableMFAWidgetFlow = readServletCookie(request,"flow").get().equals("flow3");
         if (enableMFAWidgetFlow && findCookie(request, ".ASPXAUTH") != null) {
             String xAuth = readServletCookie(request,".ASPXAUTH").get();
             TokenStore token = authService.GetTokenStore(xAuth);

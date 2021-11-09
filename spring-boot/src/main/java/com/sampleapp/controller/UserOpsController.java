@@ -46,7 +46,7 @@ public class UserOpsController {
 	@PutMapping("/userops/{uuid}")
 	public ResponseEntity<JsonNode> updateUser(HttpServletRequest request, @RequestBody User user,
 			@PathVariable String uuid) throws JsonProcessingException {
-		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow2");
+		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow3");
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null) {
 			return userOpsService.updateUser(token, uuid, user, enableMFAWidgetFlow);

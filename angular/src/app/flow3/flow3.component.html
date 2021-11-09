@@ -5,20 +5,24 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title text-center">ACME UI + CyberArk Identity SignUp/SignIn Widget</h2>
+                        <h2 class="card-title text-center">ACME UI + MFA Widget</h2>
                         <ul class="container">
                             <li>This demo web app simulates a Acme.com securing their end user facing website using
-                                CyberArk SignUp/SignIn widget</li>
-                            <ul>
-                                    <li>Admin needs to map the role in CyberArk Admin portal for newly registereed user</li>
-                                </ul>
-                            <li>ACME authenticates the identity of end users using CyberArk Identity</li>
-                            <li>Profile update powered by CyberArk APIs</li>
+                                CyberArk MFA</li>
+                            <li>ACME stores the identity of end users in its own database</li>
+                            <li>Sign-up and Profile update powered by CyberArk APIs</li>
+                            <li>MFA challenges and set-up MFA served by CyberArk Identity MFA widget</li>
                             <li>The backend is driven by Java spring, while Angular JS is used for the front-end of the
                                 application.</li>
                         </ul>
                         <div class="diagram"></div>
-                        <p>The following APIs are used in this web application -</p>           
+                        <p>The following APIs are used in this web applicaiton -</p>
+                        <h5><b>Sign up</b></h5>
+                        <p>
+                            <a target="_blank"
+                                href="https://identity-developer.cyberark.com/reference#post_cdirectoryservice-signup">/CDirectoryService/Signup</a>
+                            - Create user in the cloud directory service and auto logs in
+                        </p>
                         <h5><b>Profile Update</b></h5>
                         <p>
                             <b>/user/UpdateProfile</b> - Update current user information.

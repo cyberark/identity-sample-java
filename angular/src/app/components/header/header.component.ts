@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit {
       case "/fundtransfer":
       case "/fundtransfer?isFundTransferSuccessful=true":
       case "/mfawidget?fromFundTransfer=true":
+      case "/loginWidget?fromFundTransfer=true":
       case "/user":
       case "/custom":
         this.page = "user";
@@ -103,9 +104,10 @@ export class HeaderComponent implements OnInit {
     return this.page == page;
   }
 
-  checkFlow2UserPage() {
-    return document.cookie.includes('flow2') && this.page === 'user';
+  checkFlow2_Flow3UserPage() {
+    return (document.cookie.includes('flow2') || document.cookie.includes('flow3')) && this.page === 'user';
   }
+
 
   checkSelectedTab(href: String) {
     if (this.router.url == href) {
@@ -118,7 +120,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onTabClick(href: String) {
-    if (href === 'login' && document.cookie.includes('flow2')) href = 'basiclogin';
+    if (href === 'login' && document.cookie.includes('flow3')) href = 'basiclogin';
     this.router.navigate([href]);
     return false;
   }
@@ -135,7 +137,17 @@ export class HeaderComponent implements OnInit {
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success == true) {
-          const routeToNavigate = document.cookie.includes('flow2') ? 'flow2' : 'flow1';
+          var routeToNavigate: string;
+          if(document.cookie.includes('flow1'))
+          {
+              routeToNavigate='flow1';
+          }
+          else if(document.cookie.includes('flow2'))
+          {
+              routeToNavigate='flow2';
+          }
+          else
+            routeToNavigate='flow3';
           localStorage.clear();
           this.router.navigate([routeToNavigate]);
         }

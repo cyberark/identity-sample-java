@@ -61,7 +61,7 @@ export class FundTransferComponent implements OnInit {
         if (!validateAllFormFields(this.fundTransferForm)) {
             return;
         }
-        this.router.navigate(['mfawidget'], { queryParams: { fromFundTransfer: true } });
+        document.cookie.includes('flow3') ? this.router.navigate(['mfawidget'], { queryParams: { fromFundTransfer: true } }) : this.router.navigate(['loginWidget'], { queryParams: { fromFundTransfer: true } }); 
     }
 
     numberOnly(event): boolean {

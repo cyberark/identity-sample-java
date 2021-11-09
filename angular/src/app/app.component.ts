@@ -27,6 +27,15 @@ export class AppComponent {
   title = 'CyberArk Identity API Demo';
 
   ngOnInit() {
-    document.cookie = document.cookie.includes('flow2') ? 'flow=flow2' : 'flow=flow1';
+    
+    if (document.cookie.includes('flow1'))
+      {
+        document.cookie='flow=flow1';
+      }
+      else if (document.cookie.includes('flow2'))
+      {
+        document.cookie='flow=flow2';
+      }
+      else document.cookie='flow=flow3';
   }
 }

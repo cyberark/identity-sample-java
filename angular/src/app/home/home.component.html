@@ -47,25 +47,26 @@
           </div>
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title text-center">Scenario 2: Acme wants to use CyberArk Identity only for MFA (2FA)</h5>
+              <h5 class="card-title text-center">Scenario 2: Acme wants to use CyberArk Identity SignUp/SignIn Widget</h5>
               <ul class="card-text">
-                <li>User identities stored in Acme demo app</li>
-                <li>Password entry UI built within the Acme demo app</li>
-                <li>MFA (2FA) uses CyberArk Identity MFA widget</li>
-                <li>
+                <li>Using CyberArk Identity SignUp/SignIn Widget</li>
+                <li>User registers an account with CyberArk Identity server</li>
+                <ul>
+                  <li>Admin needs to map the role in CyberArk Admin portal for newly registereed user</li>
+                </ul>
+                <li>User authenticates to CyberArk Identity server</li>
+                 <li>
                   Use cases:
                   <ul>
-                    <li>Sign-up using Acme UI</li>
-                    <li>Authentication (with MFA)</li>
-                    <li>User profile update to Acme database</li>
-                    <li>Implicit user profile update to CyberArk Identity using APIs</li>
-                    <li>Step-up MFA for funds transfer</li>
+                    <li>Authentication (with MFA) based on the configured policies</li>
+                    <li>User profile update using CyberArk Identity APIs</li>
+                    <li>Step-up Login Widget for funds transfer</li>
                   </ul>
                 </li>
                 <li>
                   Protocols used:
                   <ul>
-                    <li>OAuth (Authorization code)</li>
+                    <li>OAuth (Authorization code + PKCE) - OIDC access token is not useful in current scenario</li>
                     <li>For other flow, please refer to "Scenario1"</li>
                   </ul>
                 </li>
@@ -76,8 +77,42 @@
             </div>
           </div>
         </div>
-      </div>
 
+        <div class="row justify-content-center">
+          <div class="card-deck mt-5">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title text-center">Scenario 3: Acme wants to use CyberArk Identity only for MFA (2FA)</h5>
+                  <ul class="card-text">
+                    <li>User identities stored in Acme demo app</li>
+                    <li>Password entry UI built within the Acme demo app</li>
+                    <li>MFA (2FA) uses CyberArk Identity MFA widget</li>
+                    <li>
+                      Use cases:
+                      <ul>
+                        <li>Sign-up using Acme UI</li>
+                        <li>Authentication (with MFA)</li>
+                        <li>User profile update to Acme database</li>
+                        <li>Implicit user profile update to CyberArk Identity using APIs</li>
+                        <li>Step-up MFA for funds transfer</li>
+                      </ul>
+                    </li>
+                  <li>
+                  Protocols used:
+                  <ul>
+                    <li>OAuth (Authorization code + PKCE) - OIDC access token is not useful in current scenario</li>
+                    <li>For other flow, please refer to "Scenario1"</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="w-50 align-self-center p-3">
+                <div class="container btn btn-secondary p-3" (click)="onFlow3Start()">Start</div>
+              </div>
+            </div> 
+          </div>
+        </div>  
+      </div>
     </div>
   </div>
   <app-footer></app-footer>
