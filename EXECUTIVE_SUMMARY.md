@@ -4,7 +4,7 @@
 CyberArk Identity Sample Demo Web Application
 
 ## Functionality
-CyberArk Identity Sample Demo web application shows all the possible variations of CyberArk Identity Products. This app uses Java Spring backend and Angular JS frontend.
+CyberArk Identity Sample Demo web application shows all the possible variations of CyberArk Identity Products. This app uses Java Spring backend and Angular frontend.
 
 ## Business Purpose
 This is just to showcase the capabilities of the CyberArk Identity Products.
