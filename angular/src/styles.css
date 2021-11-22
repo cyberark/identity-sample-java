@@ -1,6 +1,6 @@
-@import'~bootstrap/dist/css/bootstrap.min.css';
-@import'../node_modules/@yaireo/tagify/dist/tagify.css';
+@import url('../node_modules/@yaireo/tagify/dist/tagify.css');
 @import url('../node_modules/font-awesome/css/font-awesome.min.css');
+@import url('~bootstrap/dist/css/bootstrap.min.css');
 
 * {
   margin: 0;
