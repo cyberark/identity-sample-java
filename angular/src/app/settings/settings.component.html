@@ -1,6 +1,6 @@
 <div class="container-fluid padding-0">
   <div *ngIf="loading" class="loader-screen">
-    <img class="loader" src="../../assets/images/Spinner.svg">
+    <img alt="spinner" class="loader" src="../../assets/images/Spinner.svg">
   </div>
   <app-header isHomeVisible=true></app-header>
   <div #divToScroll class="app-page">
@@ -8,7 +8,7 @@
       <h3 class="text-center font-weight-light p-3">Settings</h3>
       <div *ngIf="errorMessage != ''" class="user-error">
         <div class="error-image"><img
-            [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+           alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
         </div>
         <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
       </div>
@@ -21,7 +21,7 @@
             <span *ngIf="hasAppLogoError">Invalid file extension or file size has exceeded max limit of 1 MB</span>
           </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
           <div class="border p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>CyberArk Tenant</h5>
@@ -74,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="col">
+        <div class="col-md-6">
           <div class="border p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>OpenID Connect</h5>

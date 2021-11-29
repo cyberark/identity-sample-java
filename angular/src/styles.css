@@ -43,6 +43,7 @@ body {
   border                    : initial;
   padding                   : 6px;
   width                     : calc(100% - 150px);
+  overflow-wrap             : anywhere;
 }
 .customTagStyle span{
   color: #000;
