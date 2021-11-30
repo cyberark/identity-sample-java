@@ -55,6 +55,7 @@ export class Settings {
   tenantURL: string;
   loginSuffix: string;
   roleName: string;
+  mfaWidgetId: string;
   oauthAppId: string;
   oauthServiceUserName: string;
   oauthServiceUserPassword: string;

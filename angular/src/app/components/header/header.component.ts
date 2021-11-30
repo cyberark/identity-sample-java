@@ -18,7 +18,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { getStorage, setStorage } from 'src/app/utils';
 
 const imgSrc = "../../../assets/images/acme_logo.png";
@@ -91,6 +91,7 @@ export class HeaderComponent implements OnInit {
       case "/loginWidget?fromFundTransfer=true":
       case "/user":
       case "/custom":
+      case "/totpregister":
         this.page = "user";
         break;
     }
@@ -100,7 +101,7 @@ export class HeaderComponent implements OnInit {
     return appImage.substr(1, appImage.length - 2);
   }
 
-  checkPage(page: String) {
+  checkPage(page: string) {
     return this.page == page;
   }
 
@@ -109,7 +110,7 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  checkSelectedTab(href: String) {
+  checkSelectedTab(href: string) {
     if (this.router.url == href) {
       return true;
     }
@@ -119,7 +120,7 @@ export class HeaderComponent implements OnInit {
     return !this.checkSelectedTab('/register');
   }
 
-  onTabClick(href: String) {
+  onTabClick(href: string) {
     if (href === 'login' && document.cookie.includes('flow3')) href = 'basiclogin';
     this.router.navigate([href]);
     return false;
@@ -129,14 +130,10 @@ export class HeaderComponent implements OnInit {
     return this.homeMenu = !this.homeMenu;
   }
 
-  toggleSignOutMenu() {
-    return this.signOutMenu = !this.signOutMenu;
-  }
-
   logout() {
     this.loginService.logout().subscribe({
       next: data => {
-        if (data.success == true) {
+        if (data.success) {
           var routeToNavigate: string;
           if(document.cookie.includes('flow1'))
           {

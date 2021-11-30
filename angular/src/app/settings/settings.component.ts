@@ -16,7 +16,7 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, NgForm, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
@@ -57,6 +57,10 @@ export class SettingsComponent implements OnInit {
       ])],
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
+      "mfaWidgetId": ['', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')
+      ])],
       "oauthAppId": ['', Validators.required],
       "oauthServiceUserName": ['', Validators.compose([
         Validators.required,
