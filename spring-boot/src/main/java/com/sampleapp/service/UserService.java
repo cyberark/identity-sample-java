@@ -142,7 +142,7 @@ public class UserService {
 					ObjectNode objNode = (ObjectNode) createUserResponseBody;
 					objNode.remove("Message");
 					objNode.put("Message", "User name " + user.getName() + " is already in use.");
-					return createUserResponse;
+					return new ResponseEntity(createUserResponse.getBody(), HttpStatus.OK);
 				}
 			} else {
 				if (isMfa) {
@@ -179,7 +179,7 @@ public class UserService {
 		String getRoles = settingsService.getTenantURL() + "/Redrock/query";
 		HttpHeaders headers = prepareForRequestOauth();
 		HttpEntity<String> getRolesRequest = new HttpEntity<>(
-				"{ Script: \"Select * from Role WHERE Name = \'" + roleName + "\' ORDER BY Name COLLATE NOCASE \"}",
+				"{ \"Script\": \"Select ID as ID from Role WHERE Name = \'" + roleName + "\' ORDER BY Name COLLATE NOCASE \"}",
 				headers);
 		ResponseEntity<JsonNode> getRoleInfo = restTemplate.exchange(getRoles, HttpMethod.POST, getRolesRequest,
 				JsonNode.class);
