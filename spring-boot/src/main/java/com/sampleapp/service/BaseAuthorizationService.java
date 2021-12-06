@@ -129,6 +129,27 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     }
 
     /**
+     *  Get refresh token using CyberArkIdentityOAuthClient client
+     *  @param tokenMetadataRequest Input parameter
+     *  @return TokenHolder An Object that holds access_token, id_token, refresh_token, token_type, scope, expires_in
+     */
+    public TokenHolder getRefreshToken(TokenMetadataRequest tokenMetadataRequest) throws IOException {
+        TokenHolder tokenHolder;
+        try {
+            TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
+                    .refreshToken(tokenMetadataRequest.refreshToken)
+                    .setGrantType(tokenMetadataRequest.grantType.name());
+                    
+            tokenHolder = tokenRequest.execute();
+            return tokenHolder;
+        }
+        catch (IdentityException ex) {
+            logger.error("Exception at getRefreshToken() : ", ex);
+            throw ex;
+        }
+    }
+
+    /**
      *  Get PKCEMetaData which holds PKCEMetaData and CodeChallenge using CyberArkIdentityAuth client
      *  @return PKCEMetaData An Object that holds PKCEMetaData and CodeChallenge
      */

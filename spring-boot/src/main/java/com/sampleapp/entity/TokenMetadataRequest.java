@@ -48,4 +48,7 @@ public class TokenMetadataRequest extends PKCEMetaData {
 
     @JsonProperty("scope")
     public String scope;
+
+    @JsonProperty("refreshToken")
+    public String refreshToken;
 }

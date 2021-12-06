@@ -43,6 +43,11 @@ export class AuthorizationService {
         return this.http.post<any>(EndpointsConnector.TokenSetEndPoint, tokenMetadataRequest, { headers: head, withCredentials: true })
     }
 
+    getRefreshToken(tokenMetadataRequest: TokenMetadataRequest){
+        let head = this.getHeaders();
+        return this.http.post<any>(EndpointsConnector.RefreshTokenEndPoint, tokenMetadataRequest, { headers: head, withCredentials: true })
+    }
+
     getTokenRequestPreview(tokenPreviewReq: TokenMetadataRequest){
         let head = this.getHeaders();
         return this.http.post<any>(EndpointsConnector.TokenRequestPreviewEndPoint, tokenPreviewReq, { headers: head, withCredentials: true })
@@ -68,10 +73,10 @@ export class AuthorizationService {
     }
 
     readCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-            var c = ca[i];
+        let nameEQ = name + "=";
+        let ca = document.cookie.split(';');
+        for (const i of ca) {
+            let c = i;
             while (c.charAt(0)==' ') c = c.substring(1,c.length);
             if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
         }

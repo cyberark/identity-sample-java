@@ -16,6 +16,7 @@
 
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorComponent } from '../components/error/error.component';
 import { FooterComponent } from '../components/footer/footer.component';
@@ -29,7 +30,7 @@ describe('Metadata', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ Metadata, HeaderComponent, FooterComponent, ErrorComponent ],
-      imports: [RouterTestingModule, HttpClientTestingModule]
+      imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule]
     })
     .compileComponents();
   }));

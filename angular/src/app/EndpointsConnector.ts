@@ -27,6 +27,7 @@ export const EndpointsConnector = {
     PkceMetaDataEndPoint : `${baseUrl}/pkceMetaData`,
     BuildAuthorizeURLEndPoint : `${baseUrl}/buildAuthorizeURL`,
     TokenSetEndPoint : `${baseUrl}/tokenSet`,
+    RefreshTokenEndPoint : `${baseUrl}/refreshToken`,
     TokenRequestPreviewEndPoint : `${baseUrl}/tokenRequestPreview`,
     ClaimsEndPoint : `${baseUrl}/claims`,
     OIDCUserInfoEndPoint : `${baseUrl}/oidc/userInfo`,

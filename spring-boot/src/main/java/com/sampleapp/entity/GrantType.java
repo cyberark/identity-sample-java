@@ -17,5 +17,5 @@
 package com.sampleapp.entity;
 
 public enum GrantType {
-    authorization_code, client_credentials, password
+    authorization_code, client_credentials, password, refresh_token
 }

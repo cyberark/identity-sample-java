@@ -26,7 +26,6 @@ export class User {
     "Description" = '';
     "OfficeNumber" = '';
     "HomeNumber" = '';
-    "AutoLogin" = true;
 }
 
 export class verifyTotpReq {

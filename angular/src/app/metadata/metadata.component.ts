@@ -14,12 +14,13 @@
 * limitations under the License.
 */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { APIErrStr, AuthorizationFlow, getStorage } from '../utils';
+import { APIErrStr, AuthorizationFlow, getStorage, GrantType, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'metadata',
@@ -27,6 +28,7 @@ import { ajax, css } from "jquery";
   styleUrls: ['./metadata.component.css']
 })
 export class Metadata implements OnInit {
+  @ViewChild('proceedBtn', { static: true }) proceedBtn: ElementRef;
 
   tokenSet = {};
   claims = {};
@@ -38,8 +40,14 @@ export class Metadata implements OnInit {
   isOauthFlow = getStorage('authFlow') === AuthorizationFlow.OAUTH;
   heading: string = this.isOauthFlow ? 'OAuth Metadata' : 'OIDC Metadata';
   errorMessage: string = APIErrStr;
+  hasRefreshToken: boolean = false;
+  refreshTokenPostCall: string = "";
+  refreshTokenPostCallBody: string = "";
+  password: string = "";
+  refreshTokenForm: FormGroup;
 
   constructor(
+    private formBuilder: FormBuilder,
     private router: Router,
     private authorizationService: AuthorizationService,
     private loginService: LoginService,
@@ -49,6 +57,10 @@ export class Metadata implements OnInit {
     const state = history.state;
     delete state.navigationId;
     this.authResponse = state.authResponse;
+
+    this.refreshTokenForm = this.formBuilder.group({
+      password: ['', Validators.required],
+    });
 
     if (!this.authResponse || this.authResponse['error']) {
       this.hideAccordian = true;
@@ -62,6 +74,7 @@ export class Metadata implements OnInit {
         next: data => {
           this.loading = false;
           this.tokenSet = data.Result;
+          this.hasRefreshToken = Object.keys(this.tokenSet).includes('refresh_token');
           this.getClaims(this.tokenSet['access_token']);
           this.getUserInfo(this.tokenSet['access_token']);
         },
@@ -80,14 +93,13 @@ export class Metadata implements OnInit {
       this.getUserInfo(token);
       this.loading = false;
     }
-
   }
   
   getClaims(idToken : string) {
     this.authorizationService.getClaims(idToken).subscribe({
       next: data => {
-        if (data && data.Success == true) {
-            this.claims = data.Result;
+        if (data && data.Success) {
+          this.claims = data.Result;
         } 
       },
       error: error => {
@@ -101,8 +113,8 @@ export class Metadata implements OnInit {
     if (this.isOauthFlow) return;
     this.authorizationService.getUserInfo(accessToken).subscribe({
       next: data => {
-        if (data && data.Success == true) {
-            this.userInfo = data.Result;
+        if (data && data.Success) {
+          this.userInfo = data.Result;
         } 
       },
       error: error => {
@@ -116,15 +128,15 @@ export class Metadata implements OnInit {
   onTryAnotherFlow(){
     this.loginService.logout().subscribe({
       next: data => {
-        if (data.success == true) {
+        if (data.success) {
           var routeToNavigate: string;
           if(document.cookie.includes('flow1'))
           {
-              routeToNavigate='flow1';
+            routeToNavigate='flow1';
           }
           else if(document.cookie.includes('flow2'))
           {
-              routeToNavigate='flow2';
+            routeToNavigate='flow2';
           }
           else
             routeToNavigate='flow3';
@@ -139,12 +151,64 @@ export class Metadata implements OnInit {
     });
   }
 
+  showAccessTokenBtn(): boolean {
+    return this.hasRefreshToken && this.isOauthFlow;
+  }
+
+  onIssueNewAccessToken() {
+    this.refreshTokenPostCall = "";
+    this.refreshTokenPostCallBody = "";
+    this.proceedBtn.nativeElement.disabled = true;
+    (<any>$('#refreshTokenPopup')).modal();
+  }
+
+  onProceed() {
+    this.loading = true;
+    let tokenReqMetaData: TokenMetadataRequest = new TokenMetadataRequest();
+    tokenReqMetaData.authFlow = AuthorizationFlow.OAUTH;
+    tokenReqMetaData.grantType = GrantType.refresh_token;
+    tokenReqMetaData.refreshToken = this.tokenSet['refresh_token'];
+    tokenReqMetaData.clientId = this.claims['unique_name'];
+    tokenReqMetaData.clientSecret = this.password;
+    this.authorizationService.getRefreshToken(tokenReqMetaData).subscribe({
+      next: data => {
+        this.tokenSet = {...this.tokenSet, ...data.Result};
+        this.getClaims(data.Result.access_token);
+        this.loading = false;
+      },
+      error: error => {
+        console.error(error);
+        this.loading = false;
+      }
+    })
+  }
+
+  onShowPreview() {
+    if(!validateAllFormFields(this.refreshTokenForm)) return;
+    this.password = this.refreshTokenForm.get('password').value;
+    const settings: Settings = JSON.parse(getStorage("settings"));
+    this.refreshTokenPostCall = `${settings.tenantURL}/oauth2/token/${settings.oauthAppId}`;
+    this.refreshTokenPostCallBody = `client_id=${getStorage("username")}\nclient_secret=${this.password}\ngrant_type=refresh_token\nrefresh_token=${this.tokenSet['refresh_token']}`;
+
+    this.proceedBtn.nativeElement.disabled = false;
+  }
+
+  isPwdEmpty() {
+    return this.password === "";
+  }
+
   onOk(){
     if(getStorage('authFlow') === AuthorizationFlow.OAUTH) {
       this.router.navigate(['oauthflow']);
     } else {
       this.router.navigate(['oidcflow']);
     }
+  }
+
+  public hasError = (controlName: string, errorName: string) => {
+    let form = this.refreshTokenForm;
+    let control = form.controls[controlName];
+    return ((control.invalid && (control.dirty || control.touched)) && control.hasError(errorName));
   }
 
   /**

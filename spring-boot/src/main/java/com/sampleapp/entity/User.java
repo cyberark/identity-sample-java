@@ -71,9 +71,6 @@ public class User {
 	@JsonProperty("country_code")
 	private String country;
 
-	@JsonProperty("AutoLogin")
-	private Boolean autoLogin;
-
 	public User(String displayName, String email, String name, char[] password) {
 		this.displayName = displayName;
 		this.mail = email;
@@ -150,14 +147,6 @@ public class User {
 
 	public void setMobileNumber(String mobileNumber) {
 		this.mobileNumber = mobileNumber;
-	}
-
-	public void setAutoLogin(Boolean autologin) {
-		this.autoLogin = autologin;
-	}
-
-	public Boolean getAutoLogin() {
-		return this.autoLogin;
 	}
 
 	public String getStreetLine1() {

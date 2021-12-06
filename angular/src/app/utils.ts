@@ -36,7 +36,8 @@ export enum OAuthFlow {
 export enum GrantType {
   authorization_code = "authorization_code",
   client_credentials = "client_credentials",
-  password = "password"
+  password = "password",
+  refresh_token = "refresh_token"
 }
 
 export enum OidcFlow {
@@ -81,6 +82,7 @@ export class TokenMetadataRequest extends PKCEMetaData {
   password: string;
   clientId: string;
   clientSecret: string;
+  refreshToken: string;
 }
 
 /**

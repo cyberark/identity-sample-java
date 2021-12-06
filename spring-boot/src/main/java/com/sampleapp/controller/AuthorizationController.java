@@ -123,6 +123,26 @@ public class AuthorizationController {
         }
     }
 
+    @PostMapping("refreshToken")
+    public ResponseEntity<JsonNode> getRefreshToken(@RequestBody TokenMetadataRequest metadataRequest) {
+
+        logger.info("Get Refresh Token");
+        Response response = new Response();
+        TokenHolder tokenHolder;
+        try
+        {
+            tokenHolder = this.authFlows.getEnumMap().get(metadataRequest.authFlow).getRefreshToken(metadataRequest);
+            response.Result = tokenHolder;
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
+            response.Success = false;
+            response.ErrorMessage = ex.getMessage();
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("tokenRequestPreview")
     public ResponseEntity<JsonNode> tokenRequestPreview(@RequestBody TokenMetadataRequest metadataRequest) {
 
