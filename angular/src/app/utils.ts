@@ -56,6 +56,7 @@ export class Settings {
   loginSuffix: string;
   roleName: string;
   mfaWidgetId: string;
+  loginWidgetId: string;
   oauthAppId: string;
   oauthServiceUserName: string;
   oauthServiceUserPassword: string;

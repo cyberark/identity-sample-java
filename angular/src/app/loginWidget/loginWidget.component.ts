@@ -20,7 +20,7 @@ import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow } from '../utils';
+import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings } from '../utils';
 @Component({
   selector: 'app-loginWidget',
   templateUrl: './loginWidget.component.html',
@@ -42,6 +42,7 @@ export class LoginWidgetComponent implements OnInit {
 
   ngOnInit() {
     var me = this;
+    const settings: Settings = JSON.parse(getStorage('settings'));
     this.tokenReq.authFlow = AuthorizationFlow.OAUTH;
     this.tokenReq.grantType = GrantType.client_credentials;
     this.authorizationService.getTokenSet(this.tokenReq).subscribe({
@@ -56,20 +57,14 @@ export class LoginWidgetComponent implements OnInit {
     complete: ()=> {
       LaunchLoginView({  
         "containerSelector": "#cyberark-login",
-        "initialTitle": "Login",
+        "widgetId": settings.loginWidgetId,
         "showSignup":  history.state.signUp,
-        "defaultTitle": "Authentication",
-        "allowSocialLogin": true,
-        "allowRememberMe": true,
-        "allowRegister": true,
-        "allowForgotUsername": false,
-        "apiFqdn": environment.apiFqdn,
-        "hideBackgroundImage": true,
-        "username": getStorage('username'),
         "allowSignUpLink": true,
         "signUpLinkText" : "Sign Up",
+        "apiFqdn": environment.apiFqdn,
+        "username": getStorage('username'),   
         "bearerToken": this.tokenSet['access_token'],
-        autoSubmitUsername:getStorage('username')? true :false,
+        autoSubmitUsername:getStorage('username')? true :false, 
         success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
       });
     }

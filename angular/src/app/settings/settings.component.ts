@@ -57,6 +57,10 @@ export class SettingsComponent implements OnInit {
       ])],
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
+      "loginWidgetId": ['', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')
+      ])],
       "mfaWidgetId": ['', Validators.compose([
         Validators.required,
         Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')

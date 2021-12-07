@@ -29,7 +29,7 @@
         </li>
         <li class="nav-item" *ngIf="isTOTPVisible">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/totpregister')" href="totpregister"
-            (click)="onTabClick('totpregister')">TOTP Register</a>
+            (click)="onTabClick('totpregister')">Register TOTP</a>
         </li>
         <li class="nav-item" *ngIf="checkFlow2_Flow3UserPage()">
           <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/fundtransfer')" href="fundtransfer"

@@ -49,6 +49,8 @@ public class SettingsService {
 
 	public String getMFAWidgetID() { return settings.get("mfaWidgetId").textValue(); }
 
+	public String getLoginWidgetID() { return settings.get("loginWidgetId").textValue(); }
+
 	public String getOauthApplicationID() { return settings.get("oauthAppId").textValue(); }
 
 	public String getOauthServiceUserName() { return settings.get("oauthServiceUserName").textValue(); }
