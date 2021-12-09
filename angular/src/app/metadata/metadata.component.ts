@@ -177,7 +177,8 @@ export class Metadata implements OnInit {
         this.loading = false;
       },
       error: error => {
-        console.error(error);
+        this.errorMessage = error.error.ErrorMessage;
+        (<any>$('#errorPopup')).modal();
         this.loading = false;
       }
     })
