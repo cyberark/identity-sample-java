@@ -16,6 +16,7 @@
 
 package com.sampleapp.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,10 +26,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register", "/updateSettings"};
+
+	@Value("${demoAppBaseURL}")
+	public String demoAppBaseURL;
+
+	@Value("${frontendServerPort}")
+	public String frontendServerPort;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -43,10 +53,16 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public CorsFilter corsFilter() {
-	    final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+		List<String> allowedOrigins = new ArrayList<>();
+		// TODO - Remove null value from list
+		allowedOrigins.add("null");
+		allowedOrigins.add(this.demoAppBaseURL + ":" + this.frontendServerPort);
+
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    final CorsConfiguration config = new CorsConfiguration();
 	    config.setAllowCredentials(true);
-	    config.addAllowedOrigin("*");
+		config.setAllowedOriginPatterns(allowedOrigins);
 		config.addAllowedHeader("*");
 	    config.addExposedHeader("Set-Cookie");
 		config.addAllowedMethod("POST");
