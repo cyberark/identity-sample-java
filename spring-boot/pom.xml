@@ -19,6 +19,7 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.0-M3</spring-cloud.version>
 		<kotlin.version>1.6.0</kotlin.version>
+		<log4j2.version>2.16.0</log4j2.version>
 	</properties>
 
 	<dependencies>
