@@ -34,17 +34,15 @@ export class AppComponent {
     private router: Router
   ) { }
 
-  ngOnInit() {
-    
-    if (document.cookie.includes('flow1'))
-      {
-        document.cookie='flow=flow1';
-      }
-      else if (document.cookie.includes('flow2'))
-      {
-        document.cookie='flow=flow2';
-      }
-      else document.cookie='flow=flow3';
+  ngOnInit() {    
+    let flow = "flow=flow1";
+    if (document.cookie.includes('flow2')) {
+      flow = 'flow=flow2';
+    }
+    else if (document.cookie.includes('flow3')) {
+      flow = 'flow=flow3';
+    }
+    document.cookie = flow;
 
     if (getStorage("settings") === null) {
       this.userService.getSettings().subscribe({
@@ -82,6 +80,6 @@ export class AppComponent {
       linkNode.type = 'text/css';
       linkNode.rel = 'stylesheet';
       document.getElementsByTagName('head')[0].appendChild(linkNode);
-    }
+    }    
   }
 }

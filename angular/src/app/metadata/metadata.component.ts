@@ -17,7 +17,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { APIErrStr, AuthorizationFlow, getStorage, GrantType, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
+import { APIErrStr, AuthorizationFlow, getStorage, GrantType, OAuthFlow, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -200,7 +200,12 @@ export class Metadata implements OnInit {
 
   onOk(){
     if(getStorage('authFlow') === AuthorizationFlow.OAUTH) {
-      this.router.navigate(['oauthflow']);
+      const oauthflow_flow = getStorage('oauthflow_flow');
+      if(oauthflow_flow === OAuthFlow.resourceOwner || oauthflow_flow === OAuthFlow.clientCreds) {
+        this.router.navigate(['m2m']);
+      }else{
+        this.router.navigate(['oauthflow']);
+      }
     } else {
       this.router.navigate(['oidcflow']);
     }

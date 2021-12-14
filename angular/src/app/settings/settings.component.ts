@@ -16,7 +16,7 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
@@ -55,7 +55,8 @@ export class SettingsComponent implements OnInit {
       "appImage": ['',],
       "tenantURL": ['', Validators.compose([
         Validators.required,
-        Validators.maxLength(80)
+        Validators.maxLength(80),
+        this.validateURL(),
       ])],
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
@@ -98,6 +99,19 @@ export class SettingsComponent implements OnInit {
       this.imagePreview = this.settings.appImage;
       this.settings.appImage = "";
       this.settingsForm.setValue(this.settings);
+    }
+  }
+
+  validateURL(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let isValid = false;
+      try {        
+        const url = new URL(control.value);
+        isValid = true;
+      } catch (error) {
+        isValid = false;
+      }
+      return isValid ? null : { validateURL: control.value };
     }
   }
 

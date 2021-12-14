@@ -29,7 +29,7 @@ export class OAuthFlowComponent implements OnInit {
   @ViewChild('authorizeBtn', { static: true }) authorizeBtn;
 
   loginForm: FormGroup;
-  username: string = getStorage('username');
+  username: string = getStorage('username') || '';
   selectedFlow: OAuthFlow = OAuthFlow.auth;
   loading = false;
   authURL = "Authorize URL";

@@ -21,6 +21,7 @@ import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
 import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings } from '../utils';
+import { ajax, css } from "jquery";
 @Component({
   selector: 'app-loginWidget',
   templateUrl: './loginWidget.component.html',
@@ -72,6 +73,10 @@ export class LoginWidgetComponent implements OnInit {
     
   }
 
+  onRetry(): void {
+    this.router.navigate(['flow2']);
+  }
+
   loginSuccessHandler(AuthData, context) {
     
     this.authorizationService.getPKCEMetadata().subscribe({
@@ -101,13 +106,8 @@ export class LoginWidgetComponent implements OnInit {
             });
           },
           error: error => {
-            if (error.error.Success == false) {
-              this.errorMessage = error.error.ErrorMessage;
-            }
-            setStorage("registerMessageType", "error");
-            setStorage("registerMessage", this.errorMessage);
-            console.error(error);
-            context.router.navigate(['loginWidget']);
+            this.errorMessage = error.error.ErrorMessage;
+            (<any>$('#errorPopup')).modal();
           }
         })
       }

@@ -41,7 +41,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -68,8 +67,7 @@
           },
           "configurations": {
             "development":{
-              "sourceMap": true,
-              "optimization": false
+              "browserTarget": "cyberark-identity-sample-app:build:development"
             },
             "production": {
               "browserTarget": "cyberark-identity-sample-app:build:production"
