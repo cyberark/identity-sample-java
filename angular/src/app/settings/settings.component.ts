@@ -21,6 +21,7 @@ import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
 import { UserService } from '../user/user.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-settings',
@@ -46,6 +47,7 @@ export class SettingsComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private appComp: AppComponent
   ) { }
 
   ngOnInit() {
@@ -139,6 +141,8 @@ export class SettingsComponent implements OnInit {
       next: d => {
         this.loading = false;
         setStorage('settings', JSON.stringify(data));
+        this.appComp.addChildNodes();
+        this.messageType = "info"
         this.errorMessage = d.Result;
         this.divToScroll.nativeElement.scrollTop = 0;
       },

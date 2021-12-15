@@ -61,7 +61,7 @@ export class LoginWidgetComponent implements OnInit {
         "showSignup":  history.state.signUp,
         "allowSignUpLink": true,
         "signUpLinkText" : "Sign Up",
-        "apiFqdn": environment.apiFqdn,
+        "apiFqdn": settings.tenantURL.split("/")[2],
         "username": getStorage('username'),   
         "bearerToken": this.tokenSet['access_token'],
         autoSubmitUsername:getStorage('username')? true :false, 

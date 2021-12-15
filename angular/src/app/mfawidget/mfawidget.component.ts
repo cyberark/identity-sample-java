@@ -45,7 +45,7 @@ export class MFAWidgetComponent implements OnInit {
     LaunchLoginView({
       "containerSelector": "#cyberark-login",
       "widgetId": settings.mfaWidgetId,
-      "apiFqdn": environment.apiFqdn,
+      "apiFqdn": settings.tenantURL.split("/")[2],
       "username": getStorage('mfaUsername'),
       autoSubmitUsername: true,
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },

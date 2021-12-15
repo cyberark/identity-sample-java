@@ -20,6 +20,7 @@ import { interval } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import {  EndpointsConnector } from '../EndpointsConnector';
+import { getStorage, Settings } from '../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -60,12 +61,14 @@ export class BasicLoginService {
 
   authorize(authentication_token : string, clientId : string, codeChallenge : string){
 
+    const settings: Settings = JSON.parse(getStorage('settings'));
+
     let head = new HttpHeaders()
     .set('Content-Type', 'application/json')
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + authentication_token);
 
-    let url = `https://${environment.apiFqdn}/oauth2/authorize/${environment.oauthAppId}?scope=${environment.oauthScope}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/api/RedirectResource`;
+    let url = `https://${settings.tenantURL.split("/")[2]}/oauth2/authorize/${settings.oauthAppId}?scope=${settings.oauthScopesSupported}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/api/RedirectResource`;
 
     return this.http.get<any>(url, { headers: head, withCredentials: true});
   }
