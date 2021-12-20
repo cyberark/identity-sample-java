@@ -56,7 +56,7 @@ export class SettingsComponent implements OnInit {
       "tenantURL": ['', Validators.compose([
         Validators.required,
         Validators.maxLength(80),
-        Validators.pattern('^(https)|(HTTPS)://.*\\..+')
+        Validators.pattern('^((https)|(HTTPS))://.*\\..+')
       ])],
       "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
