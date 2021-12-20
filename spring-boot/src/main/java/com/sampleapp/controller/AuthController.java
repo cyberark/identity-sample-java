@@ -69,6 +69,15 @@ public class AuthController {
 		return this.authService.advanceAuthenticationByObject(advAuthRequest,response);
 	}
 
+	@PostMapping("auth/beginChallenge")
+	public ResponseEntity<JsonNode> beginChallenge(HttpServletRequest request, @RequestBody AuthRequest authRequest) {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null){
+			return this.authService.startChallenge(token, authRequest);
+		}
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
+	}
+
 	@PostMapping("auth/out")
 	public ResponseEntity<JsonNode> logout(HttpServletRequest request,HttpServletResponse response) {
 		Cookie[] cookieArray = request.getCookies();

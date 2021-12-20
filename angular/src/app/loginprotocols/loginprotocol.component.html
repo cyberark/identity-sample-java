@@ -1,4 +1,7 @@
 <div class="container-fluid padding-0">
+    <div *ngIf="loading" class="loader-screen">
+        <img class="loader" alt="spinner" src="../../assets/images/Spinner.svg">
+    </div>
     <app-header isLogoutVisible=true></app-header>
     <div class="app-page">
         <div class="container">
@@ -24,6 +27,12 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">API + OIDC</h5>
+                        <div *ngIf="errorMessage !== ''" class="user-error">
+                            <div class="error-image"><img
+                               alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+                            </div>
+                            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+                        </div>
                         <div class="card-text">
                             Login functionality uses the 
                             <a target="_blank" href="https://identity-developer.cyberark.com/reference#post_security-startauthentication">/Security/StartAuthentication</a> and

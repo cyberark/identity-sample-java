@@ -16,8 +16,10 @@
 
 package com.sampleapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AuthRequest {
 
 	@JsonProperty("User")
@@ -25,6 +27,9 @@ public class AuthRequest {
 
 	@JsonProperty("Version")
 	private String version;
+
+	@JsonProperty("ChallengeStateId")
+	private String challengeStateId;
 
 	public String getUsername() {
 		return username;
@@ -40,5 +45,13 @@ public class AuthRequest {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	public String getChallengeStateId() {
+		return challengeStateId;
+	}
+
+	public void setChallengeStateId(String challengeStateId) {
+		this.challengeStateId = challengeStateId;
 	}
 }

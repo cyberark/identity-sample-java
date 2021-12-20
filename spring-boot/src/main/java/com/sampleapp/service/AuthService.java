@@ -286,4 +286,26 @@ public class AuthService {
 			throw e;
 		}
 	}
+
+	public ResponseEntity<JsonNode> startChallenge(String token, AuthRequest authRequest) {
+		try {
+			String url = settingsService.getTenantURL() + "/Security/StartChallenge";
+
+			String name = authRequest.getUsername();
+			authRequest.setUsername(name + "@" + settingsService.getLoginSuffix());
+
+			String req = new ObjectMapper().writeValueAsString(authRequest);
+			HttpEntity<String> request = new HttpEntity<>(req, setHeaders(token));
+			JsonNode challengeResponse = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
+
+			if (challengeResponse.get("success").asBoolean()) {
+				return new ResponseEntity<>(challengeResponse, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(challengeResponse, HttpStatus.BAD_REQUEST);
+			}
+		} catch (Exception ex){
+			logger.error("Exception occurred : ", ex);
+			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

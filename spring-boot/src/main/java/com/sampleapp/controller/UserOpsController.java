@@ -80,4 +80,13 @@ public class UserOpsController {
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
+
+	@GetMapping("/userops/challengeID")
+	public ResponseEntity<JsonNode> getChallengeID(HttpServletRequest request) throws Exception {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null){
+			return userOpsService.getChallengeID(token);
+		}
+		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
+	}
 }

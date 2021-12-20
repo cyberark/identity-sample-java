@@ -66,4 +66,9 @@ export class UserService {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post<any>(EndpointsConnector.verifyTotp, body, { headers: head, withCredentials: true });
   }
+
+  getChallengeID() {
+    let head = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.get<any>(EndpointsConnector.GetChallengeIDEndPoint, { headers: head, withCredentials: true });
+  }
 }

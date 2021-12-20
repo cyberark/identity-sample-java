@@ -16,6 +16,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../user/user.service';
+import { setStorage } from '../utils';
 
 @Component({
   selector: 'logic-protocol',
@@ -23,9 +25,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./loginprotocol.component.css']
 })
 export class LoginProtocolComponent implements OnInit {
+  loading = false;
+  messageType = "error";
+  errorMessage = "";
 
   constructor(
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -36,7 +42,25 @@ export class LoginProtocolComponent implements OnInit {
   }
 
   onApiOidcClick(){
-    this.router.navigate(['oidcflow'])
+    // Check if challenge is required to solve
+    this.loading = true;
+    this.userService.getChallengeID().subscribe(
+    {
+      next: (d) => {
+          this.loading = false;
+          if (d.Success && d.Result) {
+            setStorage('challengeStateID', d.Result);
+            this.router.navigate(['login']);
+          } else {
+            this.router.navigate(['oidcflow'])
+          }
+      },
+      error: (e) => {
+          this.loading = false;
+          this.errorMessage = e.error.ErrorMessage;
+          console.error(e);
+      }
+    });
   }
 
   onApiOAuthClick(){
@@ -45,5 +69,9 @@ export class LoginProtocolComponent implements OnInit {
 
   onM2MClick(){
     this.router.navigate(['m2m']);
+  }
+
+  checkMessageType() {
+    return this.messageType == "info";
   }
 }

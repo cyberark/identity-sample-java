@@ -43,6 +43,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Service
 public class UserOpsService {
 
@@ -56,6 +60,9 @@ public class UserOpsService {
 
 	@Autowired
 	private SettingsService settingsService;
+
+	@Autowired
+	private UserService userService;
 
 	@LoadBalanced
 	private final RestTemplate restTemplate;
@@ -183,5 +190,82 @@ public class UserOpsService {
 			logger.error("Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	public ResponseEntity<JsonNode> getChallengeID(String userCookie) {
+		try {
+			Response response = new Response();
+
+			String oauthToken = userService.receiveOAuthTokenForClientCreds();
+			String defaultAuthProfileID = getAppDetails(oauthToken);
+			if (defaultAuthProfileID == null)
+				return new ResponseEntity(response, HttpStatus.OK);
+
+			String profileName = getProfileName(oauthToken, defaultAuthProfileID);
+			String challengeID = challengeUser(userCookie, profileName);
+
+			if (challengeID == null)
+				return new ResponseEntity(response, HttpStatus.OK);
+
+			response.Result = challengeID;
+			return new ResponseEntity(response, HttpStatus.OK);
+
+		} catch (Exception ex) {
+			logger.error("Exception occurred : ", ex);
+			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private String getAppDetails(String token) throws Exception {
+		HttpHeaders headers = prepareForRequest(token);
+
+		// Get OIDC App Details
+		HttpEntity<String> appDetailsRequest = new HttpEntity<>("{\"_RowKey\":\"" + settingsService.getOIDCClientID() + "\"}", headers);
+		String appDetailsUrl = settingsService.getTenantURL() + "/saasManage/GetApplication";
+		JsonNode appResponse = restTemplate.exchange(appDetailsUrl, HttpMethod.POST, appDetailsRequest, JsonNode.class).getBody();
+
+		List<String> defaultProfileOptions = new ArrayList<>(Arrays.asList("AlwaysAllowed", "-1", "--"));
+
+		if (appResponse.get("success").asBoolean()) {
+			String defaultAuthProfile = appResponse.get("Result").get("DefaultAuthProfile").asText();
+
+			if (!defaultProfileOptions.contains(defaultAuthProfile)) {
+				return defaultAuthProfile;
+			}
+		} else {
+			throw new Exception(appResponse.get("Message").asText());
+		}
+		return null;
+	}
+
+	private String getProfileName(String token, String profileID) throws Exception {
+		HttpHeaders headers = prepareForRequest(token);
+
+		HttpEntity<String> getProfileRequest = new HttpEntity<>("{\"uuid\":\"" + profileID + "\"}", headers);
+		String getProfileUrl = settingsService.getTenantURL() + "/AuthProfile/GetProfile";
+		JsonNode response = restTemplate.exchange(getProfileUrl, HttpMethod.POST, getProfileRequest, JsonNode.class).getBody();
+
+		if (response.get("success").asBoolean()) {
+			return response.get("Result").get("Name").asText();
+		} else {
+			throw new Exception(response.get("Result").asText());
+		}
+	}
+
+	private String challengeUser(String userCookie, String profileName) throws Exception {
+		HttpHeaders headers = prepareForRequest(userCookie);
+
+		HttpEntity<String> challengeRequest = new HttpEntity<>("{\"profileName\":\"" + profileName + "\"}", headers);
+		String challengeUrl = settingsService.getTenantURL() + "/Security/ChallengeUser";
+		JsonNode response = restTemplate.exchange(challengeUrl, HttpMethod.POST, challengeRequest, JsonNode.class).getBody();
+
+		if (!response.get("success").asBoolean()){
+			if(response.get("Result") != null) {
+				return response.get("Result").get("ChallengeId").asText();
+			} else{
+				throw new Exception(response.get("Message").asText());
+			}
+		}
+		return null;
 	}
 }

@@ -2,13 +2,14 @@
   <div *ngIf="loading" class="loader-screen">
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
-  <app-header isHomeVisible=true isSignUpVisible=true></app-header>
+  <app-header isHomeVisible=true [isSignUpVisible]="isSignUpVisible"></app-header>
+  <app-error [onBtnClick]="onOk" [body]="errorMessage" [btnLabel]="popupBtnLabel"></app-error>
   <div class="app-page">
     <div class="container">
       <div class="row justify-content-center">
         <div class="card">
           <div class="card-body">
-            <h3 class="text-center font-weight-light mb-3">Login</h3>
+            <h3 class="text-center font-weight-light mb-3">{{loginHeader}}</h3>
             <form [formGroup]="loginForm" class="" autocomplete="off">
               <div *ngIf="authMessage != ''" class="login-error">
                 <div><img class="error-image"
@@ -53,7 +54,7 @@
                   Start Over
                 </button>
                 <button class="container btn btn-secondary" type="submit"
-                (click)="loginUser(loginForm.value)">{{loginButtonText}}</button>
+                (click)="loginUser()">{{loginButtonText}}</button>
               </div>
             </form>
           </div>

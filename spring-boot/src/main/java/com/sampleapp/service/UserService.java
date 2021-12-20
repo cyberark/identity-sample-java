@@ -90,7 +90,7 @@ public class UserService {
 		}
 	}
 
-	private String receiveOAuthTokenForClientCreds() throws Exception {
+	public String receiveOAuthTokenForClientCreds() throws Exception {
 		TokenMetadataRequest metadataRequest = new TokenMetadataRequest();
 		metadataRequest.grantType = GrantType.client_credentials;
 

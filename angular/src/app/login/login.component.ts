@@ -50,6 +50,10 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   secondMechanisms: JSON;
   showQRCode = false;
   QRImageSource: string;
+  loginHeader = "Login";
+  isSignUpVisible = true;
+  popupBtnLabel = "Start Over";
+  errorMessage = APIErrStr;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,10 +71,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       confirmPassword: ['', Validators.required]
     });
 
-    if (getStorage("userId") !== null) {
-      this.router.navigate(['user']);
-    }
-
     if (getStorage("registerMessageType") !== null) {
       this.messageType = getStorage("registerMessageType");
       this.authMessage = getStorage("registerMessage");
@@ -80,6 +80,18 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     if (this.loginPage == null) {
       this.loginPage = "username";
       this.loginButtonText = "Next";
+    }
+
+    if (getStorage('challengeStateID')) {
+      this.isSignUpVisible = false;
+      this.loginHeader = 'Additional authentication required to access this application';
+      const username = getStorage("username") !== null ? getStorage("username") : getStorage("mfaUsername");
+      this.formControls.username.setValue(username.split('@')[0]);
+      this.loginUser();
+    } else if (getStorage("userId")) {
+      this.isSignUpVisible = true;
+      this.loginHeader = 'Login';
+      this.router.navigate(['user']);
     }
   }
 
@@ -134,22 +146,22 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  loginUser(form: NgForm) {
+  loginUser() {
     // stop here if form is invalid
     if (!this.validateFormFields(this.getFormFieldsArray(this.loginPage)) || (this.loginPage == "reset" && !this.matchPasswords())) {
       return;
     }
 
     this.authMessage = "";
-    if (this.loginPage == "username") {
+    if (this.loginPage === "username" && getStorage('challengeStateID') === null) {
       this.loading = true;
       this.loginService.beginAuth(this.formControls.username.value).subscribe({
         next: data => {
           this.loading = false;
-          if (data.success == true) {
+          if (data.success) {
             if (data.Result.Summary == "LoginSuccess") {
               this.redirectToDashboard(data.Result);
-            } else if (data.success == true && data.Result.PodFqdn){
+            } else if (data.success && data.Result.PodFqdn){
               this.onLoginError(`Update Tenant URL to \"${data.Result.PodFqdn}\" in <u><a href="/settings">settings page</a></u>.`);
             } else {
               this.loginForm.get('username').disable();
@@ -164,6 +176,38 @@ export class LoginComponent implements OnInit, AfterContentChecked {
         },
         error: error => {
           this.onLoginError(this.getErrorMessage(error));
+        }
+      });
+    } else if (this.loginPage === "username" && getStorage('challengeStateID')){
+      this.loading = true;
+      this.loginService.beginChallenge(this.formControls.username.value, getStorage('challengeStateID')).subscribe({
+        next: data => {
+          this.loading = false;
+          if (data.success) {
+            if (data.Result.Summary === "LoginSuccess") {
+              this.redirectToDashboard(data.Result);
+            } else if (data.success && data.Result.PodFqdn){
+              this.onLoginError(`Update Tenant URL to \"${data.Result.PodFqdn}\" in <u><a href="/settings">settings page</a></u>.`);
+            } else {
+              this.loginForm.get('username').disable();
+              if (data.Result && data.Result.ClientHints && data.Result.ClientHints.AllowForgotPassword) {
+                this.allowForgotPassword = true;
+              }
+              this.runAuthSuccessFlow(data);
+            }
+          } else {
+            this.onLoginError(data.Message);
+          }
+        },
+        error: error => {
+          console.error(error);
+          if (error.error.Result && error.error.Result.Summary === "CannotSatisfyChallenges") {
+            this.loading = false;
+            this.errorMessage = error.error.Message;
+            (<any>$('#errorPopup')).modal();
+          } else {
+            this.onLoginError(error.error.Message ?? APIErrStr);
+          }
         }
       });
     } else {
@@ -258,10 +302,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           }
 
           if (challengeCount > 1) {
-            let secondMechanismsCount = Object.keys(this.challenges[1]["Mechanisms"]).length;
-            if (firstMechanismsCount == 1 || secondMechanismsCount == 1) {
-              this.secondMechanisms = this.challenges[1]["Mechanisms"];
-            }
+            this.secondMechanisms = this.challenges[1]["Mechanisms"];
           }
         }
         this.router.navigate(['login']);
@@ -325,11 +366,21 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     this.textAnswer = false;
     this.loginPage = "username";
     this.loginButtonText = "Next";
-    this.loginForm.get('username').enable();
+      
+    this.modifyUserNameControl();
     this.router.navigate(['login']);
     return false;
   }
 
+  modifyUserNameControl() {
+    if (getStorage('challengeStateID')) {
+      const username = getStorage("username") !== null ? getStorage("username") : getStorage("mfaUsername");
+      this.formControls.username.setValue(username.split('@')[0]);
+      this.loginForm.get('username').disable();
+    } else {
+      this.loginForm.get('username').enable();
+    }
+  }
   redirectToNextPage(data) {
     this.loginForm.controls["answer"].reset();
     if (data.Result.Summary === "StartNextChallenge") {
@@ -371,6 +422,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     this.resetFormFields(this.getFormFieldsArray(this.loginPage));
     if (this.loginPage && this.loginPage != "username" && this.loginPage != "reset") {
       this.startOver();
+    } else {
+      this.modifyUserNameControl();
     }
   }
 
@@ -412,6 +465,16 @@ export class LoginComponent implements OnInit, AfterContentChecked {
 
   redirectToDashboard(result: any) {
     this.setUserDetails(result);
+    if (getStorage('challengeStateID')){
+      setStorage('challengeStateID', null);
+      this.router.navigate(['oidcflow']);
+    } else {
+      this.router.navigate(['loginprotocols']);
+    }
+  }
+
+  onOk() {
+    setStorage('challengeStateID', null);
     this.router.navigate(['loginprotocols']);
   }
 
