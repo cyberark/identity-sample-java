@@ -69,15 +69,16 @@ export class RegisterComponent implements OnInit {
       "Name": ['', Validators.required],
       "Mail": ['', Validators.compose([
         Validators.required,
-        Validators.email
+        Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$")
       ])],
       "DisplayName": ['', Validators.required],
       "Password": ['', Validators.compose([
         Validators.required,
         Validators.pattern("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,64}$")
       ])],
+      
       "ConfirmPassword": ['', Validators.required],
-      "MobileNumber": [''],
+      "MobileNumber": ['',Validators.pattern("^\\+[0-9() +-]{4}[0-9() +-]{5,10}$")],
       "MFA": [false],
     }, { updateOn: 'blur' });
 
@@ -87,7 +88,6 @@ export class RegisterComponent implements OnInit {
         `background-image: url('${settings.appImage}'); background-size: contain;`
       );
     }
-
     if (getStorage("userId") !== null) {
       this.loading = true;
       this.userService.getById(getStorage("userId")).subscribe({

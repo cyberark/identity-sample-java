@@ -41,7 +41,7 @@
                       <label class="label required">Email Address</label>
                       <input class="form-control" formControlName="Mail" type="email" required>
                       <span *ngIf="hasError('Mail', 'required')">Required</span>
-                      <span *ngIf="hasError('Mail', 'email')">Must be valid email. EXAMPLE@YOURDOMAIN.COM</span>
+                      <span *ngIf="hasError('Mail', 'pattern')">Must be valid email. EXAMPLE@YOURDOMAIN.COM</span>
                     </div>
                   </div>
                   <div class="col-md-12">
@@ -70,10 +70,12 @@
                       <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
                     </div>
                   </div>
+                  
                   <div class="col-md-12">
                     <div class="form-group d-flex align-items-center">
                       <label class="label">Mobile Number</label>
                       <input class="form-control" formControlName="MobileNumber" name="mobileNumber">
+                      <span *ngIf="hasError('MobileNumber', 'pattern')">Must be valid phonenumber(+CCNNNNNNNNNN)</span>
                     </div>
                   </div>
                   <div class="col-md-12 mt-3">
