@@ -60,7 +60,8 @@ export class TOTPRegisterComponent implements OnInit {
                 },
                 error: (e) => {
                     this.loading = false;
-                    console.error(e);
+                    this.hasErrorOccurred = true;
+                    this.errorMessage = e.error.ErrorMessage;
                 }
             }
         )
@@ -85,9 +86,10 @@ export class TOTPRegisterComponent implements OnInit {
                 }
                 this.divToScroll.nativeElement.scrollTop = 0;
             },
-            error: e => {
+            error: err => {
                 this.loading = false;
-                console.error(e);
+                this.hasErrorOccurred = true;
+                this.errorMessage = err.error.ErrorMessage;
             }
         })
     }
