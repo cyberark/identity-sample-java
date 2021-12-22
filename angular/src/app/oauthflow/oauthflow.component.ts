@@ -23,6 +23,7 @@ import { AuthorizationFlow, AuthorizationMetadataRequest, buildAuthorizeURL, get
 @Component({
   selector: 'oauthflow',
   templateUrl: './oauthflow.component.html',
+  styleUrls: ['./oauthflow.component.css'],
 })
 
 export class OAuthFlowComponent implements OnInit {

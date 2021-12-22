@@ -125,19 +125,6 @@ export const getStorage = (key: string) => {
 }
 
 /**
- * post call body string with each param on new line
- * @param payload object having all the request body params
- * @returns string with body param with values in new lines
- */
-export const tokenEndpointBody = (payload: Object) => {
-  let resultStr = '';
-  Object.keys(payload).forEach(k => {
-      resultStr += `${k}=${payload[k]}\n`;
-  });
-  return resultStr;
-}
-
-/**
  * Validates are the form fields in the given form group
  * @param form form group instance to be validated
  * @returns true if all fields are valid otherwise false

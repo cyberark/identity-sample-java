@@ -27,9 +27,7 @@
             </div>
             <div class="m-3">
                 <h5 class="font-weight-light">Selected Flow + Authorize URL</h5>
-                <p class="p-3 border text-break preline">
-                    {{authURL.split('&').join('\n&')}}
-                </p>
+                <pre id="authURL" class="border text-break p-3">{{authURL.split('&').join('\n  &')}}</pre>
                 <div class="d-flex">
                     <div class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</div>
                     <button #authorizeBtn class="container btn btn-secondary" data-toggle="modal" data-target="#userConsent" disabled>Authorize</button>

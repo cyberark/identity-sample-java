@@ -72,8 +72,8 @@ export class RedirectComponent implements OnInit {
         this.authorizationService.getTokenRequestPreview(this.tokenReq).subscribe({
             next: (data) => {
                 this.loading = false;
-                this.tokenPostCall = data.Result.apiEndPoint;
-                this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
+                this.tokenPostCall = 'POST ' + data.Result.apiEndPoint;
+                this.tokenPostCallBody= data.Result.payload;
             },
             error: error => {
                 this.loading = false;

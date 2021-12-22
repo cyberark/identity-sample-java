@@ -49,14 +49,12 @@
                 </div>
                 <button class="container btn btn-secondary m-3" (click)="onBuildAuthUrl()">Build Authorize URL</button>
             </div>
-            <div class="container p-3">
-                <div class="d-flex flex-column">
-                    <h5 class="font-weight-light">Selected Flow + Authorize URL</h5>
-                    <p id="authURL" class="border text-break p-3">{{authURL.split('&').join('\n&')}}</p>
-                    <div class="d-flex">
-                        <button class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</button>
-                        <button #authorizeBtn class="container btn btn-secondary" data-toggle="modal" data-target="#userConsent" disabled>Authorize</button>
-                    </div>
+            <div class="m-3">
+                <h5 class="font-weight-light">Selected Flow + Authorize URL</h5>
+                <pre id="authURL" class="border text-break p-3">{{authURL.split('&').join('\n  &')}}</pre>
+                <div class="d-flex">
+                    <div class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</div>
+                    <button #authorizeBtn class="container btn btn-secondary" data-toggle="modal" data-target="#userConsent" disabled>Authorize</button>
                 </div>
             </div>
             <div class="modal fade" id="userConsent" tabindex="-1" role="dialog"

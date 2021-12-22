@@ -33,7 +33,7 @@ export class M2MComponent implements OnInit {
   username: string = getStorage('username');
   selectedFlow: OAuthFlow = OAuthFlow.clientCreds;
   loading = false;
-  tokenPostCall = "";
+  tokenPostCall = "Token URL";
   tokenPostCallBody = "";
   isPasswordVisible = true;
   tokenMetaReq = new TokenMetadataRequest();
@@ -85,9 +85,9 @@ export class M2MComponent implements OnInit {
       next: data => {
           this.loading = false;
           this.submitBtn.nativeElement.disabled = false;
-          this.tokenPostCall = data.Result.apiEndPoint;
-          this.tokenPostCallBody = tokenEndpointBody(data.Result.payload);
-      },
+          this.tokenPostCall = 'POST ' + data.Result.apiEndPoint;
+          this.tokenPostCallBody= data.Result.payload;
+        },
       error: error => {
           this.loading = false;
           console.error(error);

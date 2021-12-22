@@ -1,3 +1,7 @@
 #cyberark-login {
- line-height: 1 !important;
+  line-height: 1 !important; 
+}
+
+::ng-deep .login-container {
+  margin-top: 100px !important;
 }
