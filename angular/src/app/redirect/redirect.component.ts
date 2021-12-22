@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, defaultErrStr, getStorage, OAuthFlow, tokenEndpointBody, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, defaultErrStr, getStorage, OAuthFlow, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',

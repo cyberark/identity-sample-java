@@ -18,7 +18,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, getStorage, GrantType, OAuthFlow, setStorage, tokenEndpointBody, TokenMetadataRequest, validateAllFormFields } from '../utils';
+import { AuthorizationFlow, getStorage, GrantType, OAuthFlow, setStorage, TokenMetadataRequest, validateAllFormFields } from '../utils';
 
 @Component({
   selector: 'm2m',
