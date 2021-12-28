@@ -17,7 +17,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
-import { FormGroup, NgForm, FormControl } from '@angular/forms';
+import { FormGroup, NgForm, FormControl, Validators } from '@angular/forms';
 import { getStorage, validateAllFormFields } from '../utils';
 
 @Component({
@@ -36,6 +36,8 @@ export class FundTransferComponent implements OnInit {
     fundTransferForm: FormGroup;
     messageType = "error";
     errorMessage = "";
+    popUpBody = "Your funds were transferred successfully";
+    iconSrc = "../../assets/images/green_check.png";
 
     constructor(
         private router: Router,
@@ -44,7 +46,7 @@ export class FundTransferComponent implements OnInit {
 
     ngOnInit() {
         this.fundTransferForm = new FormGroup({
-            'amount': new FormControl(null)
+            'amount': new FormControl(null, Validators.min(1))
           });
 
         if (getStorage("userId") == null) {
@@ -53,7 +55,7 @@ export class FundTransferComponent implements OnInit {
         this.isFundTransferSuccessful = JSON.parse(this.route.snapshot.queryParamMap.get('isFundTransferSuccessful'));
 
         if (this.isFundTransferSuccessful) {
-            this.setMessage("info", "Funds transferred successfully");
+            (<any>$('#errorPopup')).modal();
         }
     }
 
@@ -81,11 +83,6 @@ export class FundTransferComponent implements OnInit {
     checkMessageType() {
         return this.messageType == "info";
     }
-   
-    setMessage(messageType: string, message: string) {
-        this.messageType = messageType;
-        this.errorMessage = message;
-    }
 
     checkSelectedTab(href: string) {
         if (this.router.url == href) {
@@ -93,10 +90,11 @@ export class FundTransferComponent implements OnInit {
         }
     }
 
-    onClick(event) {
-        if (event.target.attributes.id && event.target.attributes.id !== "" && event.target.attributes.id.nodeValue === "signOutButton") {
-            return;
-        }
-        this.header.signOutMenu = false;
+    showPage(){
+        return !this.router.url.includes('isFundTransferSuccessful');
+    }
+
+    onDone() {
+        this.router.navigateByUrl('/fundtransfer');
     }
 }

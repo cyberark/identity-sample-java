@@ -1,9 +1,9 @@
 <div class="container-fluid padding-0">
   <div *ngIf="loading" class="loader-screen">
-    <img class="loader" src="../../assets/images/Spinner.svg">
+    <img alt="spinner" class="loader" src="../../assets/images/Spinner.svg">
   </div>
   <app-header isHomeVisible=true [isSignUpVisible]="isSignUpVisible"></app-header>
-  <app-error [onBtnClick]="onOk" [body]="errorMessage" [btnLabel]="popupBtnLabel"></app-error>
+  <app-error [btnClick]="onOk" [body]="errorMessage" [btnLabel]="popupBtnLabel"></app-error>
   <div class="app-page">
     <div class="container">
       <div class="row justify-content-center">
@@ -13,7 +13,7 @@
             <form [formGroup]="loginForm" class="" autocomplete="off">
               <div *ngIf="authMessage != ''" class="login-error">
                 <div><img class="error-image"
-                    [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
+                  alt="successfailicon"  [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
                 </div>
                 <div class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#000' : '#cc3300'"  [innerHTML]="authMessage"></div>
               </div>

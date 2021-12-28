@@ -26,7 +26,8 @@ export class ErrorComponent implements OnInit {
     @Input() title: string = 'Error';
     @Input() body: string = defaultErrStr;
     @Input() btnLabel: string = 'Retry';
-    @Input() onBtnClick: () => void;
+    @Input() btnClick: () => void;
+    @Input() iconSrc: string = '';
 
     constructor(
         private router: Router,
