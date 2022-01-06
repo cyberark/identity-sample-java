@@ -162,3 +162,22 @@ export const validateAllFormFields = (form: FormGroup): boolean => {
   });
   return valid;
 }
+
+/**
+ * Adds login.js and login.css to the dom
+ * @param settings settings object from settings pages
+ * @param callback login.js on laod callback
+ */
+export const addChildNodes = (settings: Settings, callback: (this: GlobalEventHandlers, ev: Event) => any) => {
+  let node = document.createElement('script');
+  node.src = settings.tenantURL + "/vfslow/lib/uibuild/standalonelogin/login.js";
+  node.type = 'text/javascript';
+  node.onload = callback;
+  document.getElementsByTagName('head')[0].appendChild(node);
+
+  let linkNode = document.createElement('link');
+  linkNode.href = settings.tenantURL + "/vfslow/lib/uibuild/standalonelogin/css/login.css";
+  linkNode.type = 'text/css';
+  linkNode.rel = 'stylesheet';
+  document.getElementsByTagName('head')[0].appendChild(linkNode);
+}

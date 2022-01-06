@@ -15,12 +15,11 @@
 */
 
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings } from '../utils';
+import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings, addChildNodes } from '../utils';
 import { ajax, css } from "jquery";
 import { UserService } from '../user/user.service';
 
@@ -90,7 +89,9 @@ export class LoginWidgetComponent implements OnInit {
       config["autoSubmitUsername"] = username ? true : false;
     }
 
-    LaunchLoginView(config);
+    addChildNodes(settings, () => {
+      LaunchLoginView(config);
+    });
   }
 
   onRetry(): void {

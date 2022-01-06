@@ -15,12 +15,11 @@
 */
 
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, Settings } from '../utils';
+import { getStorage, setStorage, APIErrStr, Settings, addChildNodes } from '../utils';
 
 @Component({
   selector: 'app-mfawidget',
@@ -42,14 +41,16 @@ export class MFAWidgetComponent implements OnInit {
     var me = this;
     const settings: Settings = JSON.parse(getStorage('settings'));
 
-    LaunchLoginView({
-      "containerSelector": "#cyberark-login",
-      "widgetId": settings.mfaWidgetId,
-      "apiFqdn": settings.tenantURL.split("/")[2],
-      "username": getStorage('mfaUsername'),
-      autoSubmitUsername: true,
-      success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
-    });
+    addChildNodes(settings, () => {
+      LaunchLoginView({
+        "containerSelector": "#cyberark-login",
+        "widgetId": settings.mfaWidgetId,
+        "apiFqdn": settings.tenantURL.split("/")[2],
+        "username": getStorage('mfaUsername'),
+        autoSubmitUsername: true,
+        success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
+      });
+    })
   }
   loginSuccessHandler(AuthData, context) {
 
