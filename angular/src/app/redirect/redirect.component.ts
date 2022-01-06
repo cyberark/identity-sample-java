@@ -17,7 +17,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthorizationService } from '../metadata/authorizationservice';
-import { AuthorizationFlow, defaultErrStr, getStorage, OAuthFlow, TokenMetadataRequest } from '../utils';
+import { AuthorizationFlow, defaultErrStr, getStorage, OAuthFlow, setStorage, TokenMetadataRequest } from '../utils';
 
 @Component({
     selector: 'redirect',
@@ -52,6 +52,10 @@ export class RedirectComponent implements OnInit {
             this.loading = true;
             this.authResponse = this.parseParms(window.location.search.substring(1));
             this.tokenEndpointPreview();
+        }
+        const access_token = this.authResponse['id_token'] ?? this.authResponse['access_token']
+        if (access_token){
+            setStorage('accessToken', access_token);
         }
     }
 
