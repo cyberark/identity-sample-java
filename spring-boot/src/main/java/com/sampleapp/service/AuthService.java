@@ -141,7 +141,7 @@ public class AuthService {
 				}
 				return new ResponseEntity<JsonNode>(advAuthBody, advAuthHeader, HttpStatus.OK);
 			} else {
-				return advAuthResp;
+				return new ResponseEntity<JsonNode>(advAuthBody, setHeaders(), HttpStatus.OK);
 			}
 		} catch (Exception ex){
 			logger.error("Exception occurred : ", ex);
