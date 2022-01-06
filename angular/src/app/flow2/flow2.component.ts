@@ -16,6 +16,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { setStorage } from '../utils';
 
 @Component({
   selector: 'flow2',
@@ -31,10 +32,10 @@ export class Flow2Component implements OnInit {
   }
 
   onSignUpClick() {
-      this.router.navigateByUrl('/loginWidget', { state: { signUp: true } });
-  }
+    setStorage("showSignUpWidget", "true");
+    this.router.navigateByUrl('/loginWidget');  }
 
   onLoginClick() {
-     this.router.navigateByUrl('/loginWidget', { state: { signUp: false } });
-  }
+    setStorage("showSignUpWidget", "false");
+    this.router.navigateByUrl('/loginWidget');  }
 }

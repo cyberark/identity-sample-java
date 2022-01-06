@@ -35,14 +35,14 @@ export class Metadata implements OnInit {
   userInfo = {};
   authResponse = {};
   loading = false;
-  hideAccordian = false; 
+  hideAccordian = false;
   hideTokensAccordian = false;
   isOauthFlow = getStorage('authFlow') === AuthorizationFlow.OAUTH;
   heading: string = this.isOauthFlow ? 'OAuth Metadata' : 'OIDC Metadata';
   errorMessage: string = APIErrStr;
   hasRefreshToken: boolean = false;
-  refreshTokenPostCall: string = "";
-  refreshTokenPostCallBody: string = "";
+  refreshTokenPostCall: string = "API Request";
+  refreshTokenPostCallBody: any = "";
   password: string = "";
   refreshTokenForm: FormGroup;
 
@@ -96,13 +96,13 @@ export class Metadata implements OnInit {
       this.loading = false;
     }
   }
-  
-  getClaims(idToken : string) {
+
+  getClaims(idToken: string) {
     this.authorizationService.getClaims(idToken).subscribe({
       next: data => {
         if (data && data.Success) {
           this.claims = data.Result;
-        } 
+        }
       },
       error: error => {
         this.errorMessage = error.error.ErrorMessage;
@@ -111,13 +111,13 @@ export class Metadata implements OnInit {
     });
   }
 
-  getUserInfo(accessToken : string){
+  getUserInfo(accessToken: string) {
     if (this.isOauthFlow) return;
     this.authorizationService.getUserInfo(accessToken).subscribe({
       next: data => {
         if (data && data.Success) {
           this.userInfo = data.Result;
-        } 
+        }
       },
       error: error => {
         console.error(error);
@@ -125,27 +125,25 @@ export class Metadata implements OnInit {
     });
   }
 
-  dataKeys(object : Object) { return Object.keys(object); }
+  dataKeys(object: Object) { return Object.keys(object); }
 
-  onTryAnotherFlow(){
-    if (getStorage('accessToken') && !this.isOauthFlow){
+  onTryAnotherFlow() {
+    if (getStorage('accessToken') && !this.isOauthFlow) {
       revokeToken(getStorage('accessToken'), this);
     }
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success) {
           var routeToNavigate: string;
-          if(document.cookie.includes('flow1'))
-          {
-            routeToNavigate='flow1';
+          if (document.cookie.includes('flow1')) {
+            routeToNavigate = 'flow1';
           }
-          else if(document.cookie.includes('flow2'))
-          {
-            routeToNavigate='flow2';
+          else if (document.cookie.includes('flow2')) {
+            routeToNavigate = 'flow2';
           }
           else
-            routeToNavigate='flow3';
-            
+            routeToNavigate = 'flow3';
+
           localStorage.clear();
           this.router.navigate([routeToNavigate]);
         }
@@ -161,7 +159,7 @@ export class Metadata implements OnInit {
   }
 
   onIssueNewAccessToken() {
-    this.refreshTokenPostCall = "";
+    this.refreshTokenPostCall = "Request API";
     this.refreshTokenPostCallBody = "";
     this.proceedBtn.nativeElement.disabled = true;
     (<any>$('#refreshTokenPopup')).modal();
@@ -177,7 +175,7 @@ export class Metadata implements OnInit {
     tokenReqMetaData.client_secret = this.password;
     this.authorizationService.getRefreshToken(tokenReqMetaData).subscribe({
       next: data => {
-        this.tokenSet = {...this.tokenSet, ...data.Result};
+        this.tokenSet = { ...this.tokenSet, ...data.Result };
         this.getClaims(data.Result.access_token);
         this.loading = false;
       },
@@ -190,12 +188,17 @@ export class Metadata implements OnInit {
   }
 
   onShowPreview() {
-    if(!validateAllFormFields(this.refreshTokenForm)) return;
+    if (!validateAllFormFields(this.refreshTokenForm)) return;
     this.password = this.refreshTokenForm.get('password').value;
     const settings: Settings = JSON.parse(getStorage("settings"));
-    this.refreshTokenPostCall = `${settings.tenantURL}/oauth2/token/${settings.oauthAppId}`;
-    this.refreshTokenPostCallBody = `client_id=${getStorage("username")}\nclient_secret=${this.password}\ngrant_type=refresh_token\nrefresh_token=${this.tokenSet['refresh_token']}`;
-
+    let postCallBody = {
+      "client_id": getStorage("username"),
+      "client_secret": this.password,
+      "grant_type": "refresh_token",
+      "refresh_token": this.tokenSet['refresh_token']
+    };
+    this.refreshTokenPostCall = `POST ${settings.tenantURL}/oauth2/token/${settings.oauthAppId}`;
+    this.refreshTokenPostCallBody = postCallBody;
     this.proceedBtn.nativeElement.disabled = false;
   }
 
@@ -203,12 +206,12 @@ export class Metadata implements OnInit {
     return this.password === "";
   }
 
-  onOk(){
-    if(getStorage('authFlow') === AuthorizationFlow.OAUTH) {
+  onOk() {
+    if (getStorage('authFlow') === AuthorizationFlow.OAUTH) {
       const oauthflow_flow = getStorage('oauthflow_flow');
-      if(oauthflow_flow === OAuthFlow.resourceOwner || oauthflow_flow === OAuthFlow.clientCreds) {
+      if (oauthflow_flow === OAuthFlow.resourceOwner || oauthflow_flow === OAuthFlow.clientCreds) {
         this.router.navigate(['m2m']);
-      }else{
+      } else {
         this.router.navigate(['oauthflow']);
       }
     } else {

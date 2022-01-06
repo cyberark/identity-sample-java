@@ -22,15 +22,17 @@ declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
 import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings } from '../utils';
 import { ajax, css } from "jquery";
+import { UserService } from '../user/user.service';
+
 @Component({
   selector: 'app-loginWidget',
   templateUrl: './loginWidget.component.html',
   styleUrls: ['./loginWidget.component.css']
 })
+
 export class LoginWidgetComponent implements OnInit {
 
-  private fromFundTransfer = false;
-  tokenReq= new TokenMetadataRequest();
+  tokenReq = new TokenMetadataRequest();
   errorMessage: string = APIErrStr;
   tokenSet = {};
 
@@ -38,52 +40,75 @@ export class LoginWidgetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private loginService: BasicLoginService,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
     var me = this;
     const settings: Settings = JSON.parse(getStorage('settings'));
-    this.tokenReq.authFlow = AuthorizationFlow.OAUTH;
-    this.tokenReq.grant_type = GrantType.client_credentials;
-    this.authorizationService.getTokenSet(this.tokenReq).subscribe({
-    next: data => {
-      this.tokenSet = data.Result;
-    },
-    error: error => {
-      this.errorMessage = error.error.ErrorMessage;
-      (<any>$('#errorPopup')).modal();
-    },
+    const showSignUpWidget = getStorage("showSignUpWidget") === "true";
 
-    complete: ()=> {
-      LaunchLoginView({  
-        "containerSelector": "#cyberark-login",
-        "widgetId": settings.loginWidgetId,
-        "showSignup":  history.state.signUp,
-        "allowSignUpLink": true,
-        "signUpLinkText" : "Sign Up",
-        "apiFqdn": settings.tenantURL.split("/")[2],
-        "username": getStorage('username'),   
-        "bearerToken": this.tokenSet['access_token'],
-        autoSubmitUsername:getStorage('username')? true :false, 
-        success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
+    if (showSignUpWidget) {
+      this.tokenReq.authFlow = AuthorizationFlow.OAUTH;
+      this.tokenReq.grant_type = GrantType.client_credentials;
+      this.authorizationService.getTokenSet(this.tokenReq).subscribe({
+        next: data => {
+          this.tokenSet = data.Result;
+        },
+        error: error => {
+          this.showError(me, error);
+        },
+        complete: () => {
+          this.loginView(me, settings, showSignUpWidget);
+        }
       });
     }
-  });
-    
+    else {
+      this.loginView(me, settings, showSignUpWidget);
+    }
+
+  }
+
+  loginView(me, settings, showSignUpWidget) {
+    let config = {
+      "containerSelector": "#cyberark-login",
+      "showSignup": showSignUpWidget,
+      "allowSignUpLink": true,
+      "signUpLinkText": "Sign Up",
+      "apiFqdn": settings.tenantURL.split("/")[2],
+      success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
+    };
+
+    if (showSignUpWidget) {
+      config["bearerToken"] = this.tokenSet['access_token'];
+    }
+    else {
+      const username = getStorage('username');
+      config["widgetId"] = settings.loginWidgetId;
+      config["username"] = username;
+      config["autoSubmitUsername"] = username ? true : false;
+    }
+
+    LaunchLoginView(config);
   }
 
   onRetry(): void {
     this.router.navigate(['flow2']);
   }
 
+  showError(context, error) {
+    context.errorMessage = error.error.ErrorMessage;
+    (<any>$('#errorPopup')).modal();
+  }
+
   loginSuccessHandler(AuthData, context) {
-    
+
     this.authorizationService.getPKCEMetadata().subscribe({
       next: pkceMetadata => {
-        this.loginService.authorize(AuthData.Auth,  AuthData.User, pkceMetadata.Result.codeChallenge).subscribe({
+        this.loginService.authorize(AuthData.Auth, AuthData.User, pkceMetadata.Result.codeChallenge).subscribe({
           next: data => {
-            this.loginService.setAuthCookie("", data.Result.AuthorizationCode,AuthData.User,pkceMetadata.Result.code_verifier).subscribe({
+            this.loginService.setAuthCookie("", data.Result.AuthorizationCode, AuthData.User, pkceMetadata.Result.code_verifier).subscribe({
               next: data => {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);
@@ -100,19 +125,19 @@ export class LoginWidgetComponent implements OnInit {
                 }
               },
               error: error => {
-                console.error(error);
+                this.showError(context, error);
                 context.router.navigate(['loginWidget']);
               }
             });
           },
           error: error => {
-            this.errorMessage = error.error.ErrorMessage;
-            (<any>$('#errorPopup')).modal();
+            this.showError(context, error);
           }
         })
       }
     });
   }
+
   setUserDetails(result: any) {
     setStorage("userId", result.UserId);
     setStorage("username", result.User);

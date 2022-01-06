@@ -71,7 +71,7 @@ export class SettingsComponent implements OnInit {
       "oauthAppId": ['', Validators.required],
       "oauthServiceUserName": ['', Validators.compose([
         Validators.required,
-        Validators.pattern(".*@.*")
+        Validators.pattern(".*@.+")
       ])],
       "oauthServiceUserPassword": ['', Validators.compose([
         Validators.required,
