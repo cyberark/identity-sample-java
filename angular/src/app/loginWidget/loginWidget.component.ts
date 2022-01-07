@@ -114,7 +114,7 @@ export class LoginWidgetComponent implements OnInit {
                 if (data && data.Success == true) {
                   context.setUserDetails(AuthData);
                   context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
-
+                  setStorage("showSignUpWidget", "false");
                   if (context.fromFundTransfer) {
                     context.router.navigate(['fundtransfer'], { queryParams: { isFundTransferSuccessful: true } });
                   } else {
