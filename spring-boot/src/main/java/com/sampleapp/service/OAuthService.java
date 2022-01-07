@@ -20,6 +20,7 @@ import com.cyberark.client.OAuthClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
 import com.cyberark.exception.IdentityException;
+import com.sampleapp.entity.OIDCTokens;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.AuthorizationFlow;
 import org.apache.commons.lang.NotImplementedException;
@@ -116,7 +117,7 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     }
 
     @Override
-    public Boolean revokeToken(String accessToken) throws IOException {
+    public Boolean revokeToken(OIDCTokens oidcTokens) throws IOException {
         throw new NotImplementedException();
     }
 

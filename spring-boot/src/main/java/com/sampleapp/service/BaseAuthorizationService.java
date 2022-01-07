@@ -26,6 +26,7 @@ import com.sampleapp.entity.AuthorizationMetadataRequest;
 import com.sampleapp.entity.PKCEMetaData;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.TokenRequestPreview;
+import com.sampleapp.entity.OIDCTokens;
 import com.cyberark.requestBuilders.TokenRequest;
 import com.cyberark.utils.PKCEUtil;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -64,7 +65,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
 
     public abstract TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException;
 
-    public abstract Boolean revokeToken(String accessToken) throws IOException;
+    public abstract Boolean revokeToken(OIDCTokens oidcTokens) throws IOException;
 
     protected abstract String getAppId();
 

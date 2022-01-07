@@ -133,8 +133,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    if (getStorage('accessToken') && getStorage('authFlow') === AuthorizationFlow.OIDC){
-      revokeToken(getStorage('accessToken'), this);
+    if (getStorage('oidcTokens') && getStorage('authFlow') === AuthorizationFlow.OIDC) {
+      revokeToken(JSON.parse(getStorage('oidcTokens')), this);
     }
     
     this.loginService.logout().subscribe({

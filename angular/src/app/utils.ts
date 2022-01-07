@@ -86,6 +86,12 @@ export class TokenMetadataRequest extends PKCEMetaData {
   refresh_token: string;
 }
 
+export class OIDCTokens {
+  authResponseIDToken: string;
+  authResponseAccessToken: string;
+  tokenResponseAccessToken: string;
+}
+
 /**
  * Fetches the authorization URL
  * @param authRequest AuthorizationMetadataRequest
@@ -106,12 +112,13 @@ export const buildAuthorizeURL = (authRequest: AuthorizationMetadataRequest, con
 }
 
 /**
- * Revokes an Access Token
+ * Revoke Access Token, ID Token using OIDCClient
+ * Revoking ID Token as the lifetime of ID Token is equivalent to Access Token
  * @param accessToken Access Token to Revoke
  * @param context any - The component class context
  */
-export const revokeToken = (accessToken: String, context: any) => {
-  context.authorizationService.revokeToken(accessToken).subscribe({
+export const revokeToken = (oidcTokens: OIDCTokens, context: any) => {
+  context.authorizationService.revokeToken(oidcTokens).subscribe({
     next: data => {
       context.loading = false;
     },

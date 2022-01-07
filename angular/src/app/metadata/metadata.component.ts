@@ -17,7 +17,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../login/login.service';
-import { APIErrStr, AuthorizationFlow, getStorage, GrantType, OAuthFlow, revokeToken, setStorage, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
+import { APIErrStr, AuthorizationFlow, getStorage, GrantType, OAuthFlow, OIDCTokens, revokeToken, setStorage, Settings, TokenMetadataRequest, validateAllFormFields } from '../utils';
 import { AuthorizationService } from './authorizationservice';
 import { ajax, css } from "jquery";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -45,6 +45,7 @@ export class Metadata implements OnInit {
   refreshTokenPostCallBody: any = "";
   password: string = "";
   refreshTokenForm: FormGroup;
+  oidcTokens: OIDCTokens;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -77,7 +78,11 @@ export class Metadata implements OnInit {
           this.hasRefreshToken = Object.keys(this.tokenSet).includes('refresh_token');
           this.getClaims(this.tokenSet['access_token']);
           this.getUserInfo(this.tokenSet['access_token']);
-          setStorage('accessToken', this.tokenSet['access_token']);
+          this.oidcTokens = JSON.parse(getStorage('oidcTokens'));
+          if (this.oidcTokens) {
+            this.oidcTokens.tokenResponseAccessToken = this.tokenSet['access_token'];
+            setStorage('oidcTokens', JSON.stringify(this.oidcTokens));
+          }
         },
         error: error => {
           this.loading = false;
@@ -92,7 +97,6 @@ export class Metadata implements OnInit {
       const token = this.isOauthFlow ? this.authResponse['access_token'] : this.authResponse['id_token'];
       this.getClaims(token);
       this.getUserInfo(token);
-      setStorage('accessToken', token);
       this.loading = false;
     }
   }
@@ -118,7 +122,7 @@ export class Metadata implements OnInit {
         if (data && data.Success) {
           this.userInfo = data.Result;
         }
-      },
+      },  
       error: error => {
         console.error(error);
       }
@@ -128,8 +132,8 @@ export class Metadata implements OnInit {
   dataKeys(object: Object) { return Object.keys(object); }
 
   onTryAnotherFlow() {
-    if (getStorage('accessToken') && !this.isOauthFlow) {
-      revokeToken(getStorage('accessToken'), this);
+    if (getStorage('oidcTokens') && !this.isOauthFlow) {
+      revokeToken(JSON.parse(getStorage('oidcTokens')), this);
     }
     this.loginService.logout().subscribe({
       next: data => {

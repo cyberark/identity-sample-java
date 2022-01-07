@@ -23,6 +23,7 @@ import com.sampleapp.entity.AuthorizationMetadataRequest;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.PKCEMetaData;
 import com.sampleapp.entity.Response;
+import com.sampleapp.entity.OIDCTokens;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -162,13 +163,13 @@ public class AuthorizationController {
     }
 
     @PostMapping("revokeToken")
-    public ResponseEntity<JsonNode> revokeToken(@RequestBody String accessToken) {
+    public ResponseEntity<JsonNode> revokeToken(@RequestBody OIDCTokens oidcTokens) {
 
         logger.info("revokeToken");
         Response response = new Response();
         try
         {
-            response.Result = this.authFlows.getEnumMap().get(AuthorizationFlow.OIDC).revokeToken(accessToken);
+            response.Result = this.authFlows.getEnumMap().get(AuthorizationFlow.OIDC).revokeToken(oidcTokens);
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {

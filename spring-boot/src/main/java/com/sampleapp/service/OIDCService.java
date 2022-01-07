@@ -20,6 +20,7 @@ import com.cyberark.client.OIDCClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
 import com.sampleapp.entity.TokenMetadataRequest;
+import com.sampleapp.entity.OIDCTokens;
 import com.cyberark.exception.IdentityException;
 import com.sampleapp.entity.AuthorizationFlow;
 import org.apache.commons.lang.NotImplementedException;
@@ -90,17 +91,28 @@ public class OIDCService extends BaseAuthorizationService<OIDCClient> {
     }
 
     /**
-     *  Revoke Access Token using OIDCClient
-     *  @param accessToken Input string
+     *  Revoke Access Tokens, ID Token using OIDCClient
+     *  Revoking ID Token as the lifetime of id_token is equivalent to Access Token
+     *  @param oidcTokens Holds Access Token and ID Token received from Authorize Response(Frontend) and also Access Token received from Token Endpoint (Backend).
      *  @return true on success.
      */
     @Override
-    public Boolean revokeToken(String accessToken) throws IOException {
+    public Boolean revokeToken(OIDCTokens oidcTokens) throws IOException {
         try {
             OIDCClient oidcClient = new OIDCClient(settingsService.getTenantURL(), settingsService.getOIDCApplicationID(), settingsService.getOIDCClientID(), String.valueOf(settingsService.getOIDCClientPass()));
 
-            oidcClient.revokeToken(accessToken)
-                    .execute();
+            if (oidcTokens.authResponseAccessToken != null) {
+                oidcClient.revokeToken(oidcTokens.authResponseAccessToken)
+                        .execute();
+            }
+            if (oidcTokens.authResponseIDToken != null) {
+                oidcClient.revokeToken(oidcTokens.authResponseIDToken)
+                        .execute();
+            }
+            if (oidcTokens.tokenResponseAccessToken != null) {
+                oidcClient.revokeToken(oidcTokens.tokenResponseAccessToken)
+                        .execute();
+            }
             return true;
         }
         catch (IdentityException ex) {
