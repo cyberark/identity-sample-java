@@ -12,7 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "12": "^1.0.2",
     "@angular/common": "^13.0.0",
     "@angular/compiler": "^13.0.0",
     "@angular/core": "^13.0.0",
