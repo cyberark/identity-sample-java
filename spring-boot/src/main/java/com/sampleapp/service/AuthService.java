@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import java.net.URLEncoder;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sampleapp.Repos.MfaUserMappingRepository;
-import com.sampleapp.Repos.TokenStoreRepository;
 import com.sampleapp.entity.AdvanceLoginRequest;
 import com.sampleapp.entity.AuthRequest;
 import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.TokenStore;
+import com.sampleapp.repos.MfaUserMappingRepository;
+import com.sampleapp.repos.TokenStoreRepository;
 import com.sampleapp.entity.GrantType;
 import com.sampleapp.entity.Response;
 import org.slf4j.Logger;

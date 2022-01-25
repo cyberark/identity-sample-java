@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,13 @@
 
 package com.sampleapp.service;
 
-import com.sampleapp.Repos.TokenStoreRepository;
-import com.sampleapp.Repos.UserRepository;
 import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.Response;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.entity.User;
 import com.sampleapp.entity.VerifyTotpReq;
+import com.sampleapp.repos.TokenStoreRepository;
+import com.sampleapp.repos.UserRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

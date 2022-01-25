@@ -12,3 +12,6 @@ auth.*
 server.crt
 server.key
 sslkeystore.p12
+server.csr
+
+settings.json

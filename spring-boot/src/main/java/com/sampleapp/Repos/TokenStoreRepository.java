@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.sampleapp.Repos;
+package com.sampleapp.repos;
 
 import com.sampleapp.entity.TokenStore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 public interface TokenStoreRepository extends JpaRepository<TokenStore, Integer> {
 
     @Query("SELECT t FROM TokenStore t WHERE t.sessionUuid = :sessionUuid")

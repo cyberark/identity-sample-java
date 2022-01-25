@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.sampleapp.service;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.sampleapp.Repos.MfaUserMappingRepository;
-import com.sampleapp.Repos.UserRepository;
 import com.cyberark.entities.TokenHolder;
 import com.sampleapp.entity.AuthFlows;
 import com.sampleapp.entity.AuthorizationFlow;
@@ -30,6 +28,9 @@ import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.MfaUserMapping;
 import com.sampleapp.entity.Response;
 import com.sampleapp.exception.RoleNotFoundException;
+import com.sampleapp.repos.MfaUserMappingRepository;
+import com.sampleapp.repos.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

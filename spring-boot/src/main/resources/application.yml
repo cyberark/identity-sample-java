@@ -2,20 +2,22 @@ spring:
   application:
     name: user-management-service
   datasource:
-    password: <YOUR_CUSTOM_DATABASE_PASSWORD>
-    url: jdbc:mysql://localhost:3306/customerDB
-    username: root
+    url: jdbc:h2:file:./customerDB;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
   jackson:
     mapper:
       accept_case_insensitive_properties: true
     property-naming-strategy: UPPER_CAMEL_CASE
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
 
 logging:
   level:
@@ -29,7 +31,7 @@ server:
     key-alias: demoapp
     key-store-type: PKCS12
     key-store-password: <PASSWORD>
-    key-store: classpath:<KEYSTORE_NAME>.p12
+    key-store: classpath:sslkeystore.p12
   servlet:
     context-path: /api
 
