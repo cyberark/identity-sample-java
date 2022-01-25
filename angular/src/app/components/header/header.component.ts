@@ -140,19 +140,8 @@ export class HeaderComponent implements OnInit {
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success) {
-          var routeToNavigate: string;
-          if(document.cookie.includes('flow1'))
-          {
-              routeToNavigate='flow1';
-          }
-          else if(document.cookie.includes('flow2'))
-          {
-              routeToNavigate='flow2';
-          }
-          else
-            routeToNavigate='flow3';
           localStorage.clear();
-          this.router.navigate([routeToNavigate]);
+          this.router.navigate(['home']);
         }
       },
       error: error => {

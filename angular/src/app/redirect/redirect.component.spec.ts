@@ -18,7 +18,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ErrorComponent } from '../components/error/error.component';
-import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { RedirectComponent } from './redirect.component';
 
@@ -28,7 +27,7 @@ describe('RedirectComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RedirectComponent, HeaderComponent, FooterComponent, ErrorComponent ],
+      declarations: [ RedirectComponent, HeaderComponent, ErrorComponent ],
       imports: [RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();

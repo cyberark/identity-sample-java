@@ -14,27 +14,24 @@
 * limitations under the License.
 */
 
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FooterComponent } from '../components/footer/footer.component';
-import { HeaderComponent } from '../components/header/header.component';
-import { Flow2Component } from './flow2.component';
+import { IntroComponent } from './intro.component';
 
-describe('Flow2Component', () => {
-  let component: Flow2Component;
-  let fixture: ComponentFixture<Flow2Component>;
+describe('IntroComponent', () => {
+  let component: IntroComponent;
+  let fixture: ComponentFixture<IntroComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ Flow2Component, HeaderComponent, FooterComponent ],
-      imports: [RouterTestingModule, HttpClientTestingModule]
+      declarations: [ IntroComponent ],
+      imports: [RouterTestingModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Flow2Component);
+    fixture = TestBed.createComponent(IntroComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

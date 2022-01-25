@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
   matchPasswordsCheck = true;
   loading = false;
   showConsent = false;
-  leftContainerStyle: SafeStyle = "";// = this.domSanitizer.bypassSecurityTrustStyle("");
+  appImage: string = "";
 
   @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
 
@@ -86,9 +86,7 @@ export class RegisterComponent implements OnInit {
 
     const settings: Settings = JSON.parse(getStorage("settings"));
     if (settings && settings.appImage) {
-      this.leftContainerStyle = this.domSanitizer.bypassSecurityTrustStyle(
-        `background-image: url('${settings.appImage}'); background-size: contain;`
-      );
+      this.appImage = settings.appImage;
     }
     if (getStorage("userId") !== null) {
       this.loading = true;

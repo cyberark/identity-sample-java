@@ -2,118 +2,61 @@
   <app-header isSettingsVisible=true></app-header>
   <div class="app-page">
     <div class="container">
-      <div class="text-white text-center">
-        <h1 class="text-white ">CyberArk Identity Demo Web App (Java)</h1>
-        <h5 class="text-white ">Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widgets to secure its web applications. This playground application shows all the possible variations that a developer from Acme has at her disposal for this. This app uses Java Spring backend and Angular frontend.</h5>
-        <br>
-        <h5 class="text-white">
-          For developer guides and API documentation, please visit 
-          <a href="https://identity-developer.cyberark.com/" target="_blank" style="color: #8ab4f8;">
-            CyberArk Identity Developer Program
-          </a>
-          website.
+      <div class="text-center">
+        <h5 class="pt-4">
+          Try out the different functionalities offered by CyberArk Identity for single page applications. You can easily embed these functionalities into your SPA using the JS SDK. Please check for the documentation here.
+        </h5>
+        <h5 class="pt-4">
+          Select the card you want to try out and then click on “Login” or “Signup” link in the card to try out different functionalities
         </h5>
       </div>
-      <div class="home-main-content">        
-        <div class="card-deck">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title text-center">Scenario 1: Acme wants to use its own UI with CyberArk Identity APIs</h5>
-              <ul class="card-text">
-                <li>User identities stored in CyberArk Identity</li>
-                <li>Authentication UI built within the Acme demo app</li>
-                <li>Authentication UI uses CyberArk Identity APIs</li>
-                <li>
-                  Use cases:
-                  <ul>
-                    <li>Sign-up using Acme UI</li>
-                    <li>Authentication (with MFA)</li>
-                    <li>User profile updates to CyberArk Identity using APIs</li>
-                  </ul>
-                </li>
-                <li>
-                  Protocol flows demonstrated:
-                  <ul>
-                    <li>OAuth (Authorization code, Authorization code with PKCE, Implicit, Client credentials, Resource owner password grant)</li>
-                    <li>OIDC (Authorization code, Authorization code with PKCE, Implicit, Hybrid)</li>
-                    <li>Non-standard (just APIs)</li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-            <div class="w-50 align-self-center p-3">
-              <div class="container btn btn-secondary p-3" (click)="onFlow1Start()">Start</div>
-            </div>
+      <div class="card-deck pt-5">
+        <div class="card bg-primary text-white">
+          <img src="../../assets/images/api_logo.png" style="width: 189px; height: 129px" class="align-self-center mt-4" alt="apilogo">
+          <div class="card-body">
+            <h4 class="card-title text-center">CyberArk Identity authentication APIs</h4>
+            <p class="card-text text-center">
+              Checkout this flow to understand how the authentication APIs can be used to authenticate a user and integrate these APIs with OAuth/OIDC protocols
+            </p>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title text-center">Scenario 2: Acme wants to use CyberArk Identity Sign Up/Sign In Widget</h5>
-              <ul class="card-text">
-                <li>Using CyberArk Identity Sign Up/Sign In Widget</li>
-                <li>User registers an account with CyberArk Identity server</li>
-                <ul>
-                  <li>Admin needs to map the role in CyberArk Admin portal for newly registered user</li>
-                </ul>
-                <li>User authenticates to CyberArk Identity server</li>
-                 <li>
-                  Use cases:
-                  <ul>
-                    <li>Authentication (with MFA) based on the configured policies</li>
-                    <li>User profile update using CyberArk Identity APIs</li>
-                    <li>Step-up Login Widget for funds transfer</li>
-                  </ul>
-                </li>
-                <li>
-                  Protocols used:
-                  <ul>
-                    <li>OAuth (Authorization code + PKCE) - OIDC access token is not useful in current scenario</li>
-                    <li>For other flow, please refer to "Scenario1"</li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-            <div class="w-50 align-self-center p-3">
-              <div class="container btn btn-secondary p-3" (click)="onFlow2Start()">Start</div>
+          <div class="p-3">
+            <div class="row justify-content-around px-5">
+              <div (click)="onFlow1Login()" class="btn btn-link font-weight-bold">Login</div>
+              <div (click)="onFlow1Signup()" class="btn btn-link font-weight-bold">Signup</div>
             </div>
           </div>
         </div>
-
-        <div class="row justify-content-center">
-          <div class="card-deck mt-5">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title text-center">Scenario 3: Acme wants to use CyberArk Identity only for MFA (2FA)</h5>
-                  <ul class="card-text">
-                    <li>User identities stored in Acme demo app</li>
-                    <li>Password entry UI built within the Acme demo app</li>
-                    <li>MFA (2FA) uses CyberArk Identity MFA widget</li>
-                    <li>
-                      Use cases:
-                      <ul>
-                        <li>Sign-up using Acme UI</li>
-                        <li>Authentication (with MFA)</li>
-                        <li>User profile update to Acme database</li>
-                        <li>Implicit user profile update to CyberArk Identity using APIs</li>
-                        <li>Step-up MFA for funds transfer</li>
-                      </ul>
-                    </li>
-                  <li>
-                  Protocols used:
-                  <ul>
-                    <li>OAuth (Authorization code + PKCE) - OIDC access token is not useful in current scenario</li>
-                    <li>For other flow, please refer to "Scenario1"</li>
-                    </ul>
-                  </li>
-                </ul>
-              </div>
-              <div class="w-50 align-self-center p-3">
-                <div class="container btn btn-secondary p-3" (click)="onFlow3Start()">Start</div>
-              </div>
-            </div> 
+        <div class="card bg-primary text-white">
+          <img src="../../assets/images/widget_logo.png" style="width: 129px; height: 156px" class="align-self-center mt-3" alt="widget_logo">
+          <div class="card-body">
+            <h4 class="card-title text-center">Widgets</h4>
+            <p class="card-text text-center">
+              Checkout this flow to understand how to embed the login and the signup widget into your web app and integrate the widgets with OAuth/OIDC protocols to generate tokens
+            </p>
           </div>
-        </div>  
+          <div class="p-3">
+            <div class="row justify-content-around px-5">
+              <div (click)="onFlow2Login()" class="btn btn-link font-weight-bold">Login</div>
+              <div (click)="onFlow2Signup()" class="btn btn-link font-weight-bold">Signup</div>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-primary text-white">
+          <img src="../../assets/images/2fa_logo.png" style="width: 152px; height: 102px" class="align-self-center mt-5" alt="2fa_logo">
+          <div class="card-body">
+            <h4 class="card-title text-center">CyberArk Identity as 2FA provider</h4>
+            <p class="card-text text-center">
+              Checkout this flow to understand how to embed the MFA widget for only second factor authentication and step-up authentication
+            </p>
+          </div>
+          <div class="p-3">
+            <div class="row justify-content-around px-5">
+              <div (click)="onFlow3Login()" class="btn btn-link font-weight-bold">Login</div>
+              <div (click)="onFlow3Signup()" class="btn btn-link font-weight-bold">Signup</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <app-footer></app-footer>
 </div>

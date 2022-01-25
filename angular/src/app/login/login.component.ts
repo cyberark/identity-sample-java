@@ -15,11 +15,10 @@
 */
 
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { getStorage, setStorage, APIErrStr } from '../utils';
+import { getStorage, setStorage, APIErrStr, Settings } from '../utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -51,10 +50,11 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   showQRCode = false;
   isPhoneCall = false;
   QRImageSource: string;
-  loginHeader = "Login";
+  loginHeader = "Login to Acme Inc !!";
   isSignUpVisible = true;
   popupBtnLabel = "Start Over";
   errorMessage = APIErrStr;
+  appImage = "";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -76,6 +76,11 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.messageType = getStorage("registerMessageType");
       this.authMessage = getStorage("registerMessage");
       setStorage("registerMessage", "");
+    }
+
+    const settings: Settings = JSON.parse(getStorage("settings"));
+    if (settings && settings.appImage) {
+      this.appImage = settings.appImage;
     }
 
     if (this.loginPage == null) {

@@ -14,22 +14,22 @@
 * limitations under the License.
 -->
 
-<div class="container-fluid padding-0">
+<div class="container-fluid">
     <div *ngIf="loading" class="loader-screen">
-        <img class="loader" src="../../assets/images/Spinner.svg">
+        <img alt="spinner" class="loader" src="../../assets/images/Spinner.svg">
     </div>
     <app-header isLogoutVisible=true></app-header>
     <div class="app-page">
-        <div class="container w-50 bg-white p-3">
+        <div class="card container w-50 bg-primary text-white p-3 mt-5">
             <div class="d-flex flex-column align-items-center w-50 mx-auto">
-                <h3 class="font-weight-light m-3">OIDC Flow</h3>
+                <h3 class="m-3">OIDC Flow</h3>
                 <select name="oidcflow" id="oidcflow" class="form-control w-100"
                     (change)="onSelect($event.target.value)">
                     <option value="auth">Authorization</option>
                     <option value="implicit">Implicit</option>
                     <option value="hybrid">Hybrid</option>
                 </select>
-                <h5 class="font-weight-light">response_type</h5>
+                <h5>response_type</h5>
                 <div class="d-flex w-100 justify-content-around">
                     <div class="form-check form-check-inline" [ngClass]="{'d-none': oidcFlow === 'implicit'}">
                         <input type="checkbox" class="form-check-input" name="code" id="code" disabled
@@ -50,10 +50,10 @@
                 <button class="container btn btn-secondary m-3" (click)="onBuildAuthUrl()">Build Authorize URL</button>
             </div>
             <div class="m-3">
-                <h5 class="font-weight-light">Selected Flow + Authorize URL</h5>
-                <pre id="authURL" class="border text-break p-3">{{authURL.split('&').join('\n  &')}}</pre>
+                <h5>Selected flow + Authorize URL</h5>
+                <pre id="authURL" class="border text-break p-3 text-white">{{authURL.split('&').join('\n  &')}}</pre>
                 <div class="d-flex">
-                    <div class="container btn btn-outline-secondary mr-5" (click)="onBack()">Back</div>
+                    <div class="container btn btn-secondary mr-5" (click)="onBack()">Back</div>
                     <button #authorizeBtn class="container btn btn-secondary" data-toggle="modal" data-target="#userConsent" disabled>Authorize</button>
                 </div>
             </div>
@@ -62,22 +62,20 @@
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="userConsentTitle">An application would like to access your account</h5>
+                            <h5 class="modal-title text-dark" id="userConsentTitle">An application would like to access your account</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body text-dark">
                             Signing in to the application "Demo App" will share openid, email and profile scope with the application.
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="container btn btn-outline-secondary mr-5" data-dismiss="modal">Back</button>
-                            <button type="button" class="container btn btn-secondary" data-dismiss="modal" (click)="onAccept()">Accept</button>
+                            <button type="button" class="container btn btn-secondary w-50" data-dismiss="modal" (click)="onAccept()">Accept</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
 </div>

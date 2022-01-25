@@ -16,7 +16,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { getStorage } from '../utils';
+import { getStorage, setStorage } from '../utils';
 
 @Component({
   selector: 'app-home',
@@ -35,19 +35,36 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onFlow1Start() {
+  onFlow1Login() {
     document.cookie = 'flow=flow1';
-    this.router.navigate(['flow1'])
+    this.router.navigate(['login'])
   }
 
-  onFlow2Start() {
+  onFlow1Signup() {
+    document.cookie = 'flow=flow1';
+    this.router.navigate(['register'])
+  }
+
+  onFlow2Login() {
     document.cookie = 'flow=flow2';
-    this.router.navigate(['flow2'])
+    setStorage("showSignUpWidget", "false");
+    this.router.navigate(['loginWidget'])
   }
 
-  onFlow3Start() {
+  onFlow2Signup() {
+    document.cookie = 'flow=flow2';
+    setStorage("showSignUpWidget", "true");
+    this.router.navigate(['loginWidget'])
+  }
+
+  onFlow3Login() {
     document.cookie = 'flow=flow3';
-    this.router.navigate(['flow3'])
+    this.router.navigate(['basiclogin'])
+  }
+
+  onFlow3Signup() {
+    document.cookie = 'flow=flow3';
+    this.router.navigate(['register'])
   }
 
 }

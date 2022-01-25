@@ -1,4 +1,4 @@
-<div class="container-fluid padding-0">
+<div class="container-fluid">
   <div *ngIf="loading" class="loader-screen">
     <img alt="spinner" class="loader" src="../../assets/images/Spinner.svg">
   </div>
@@ -6,10 +6,10 @@
   <div class="app-page">
     <div *ngIf="showPage()" class="container">
       <div class="row justify-content-center">
-        <div class="card">
+        <div class="card bg-primary text-white">
           <div class="card-body">
-            <h3 class="text-center font-weight-light mb-3">Fund Transfer</h3>
-            <div class="page-info">
+            <h3 class="text-center mb-3">Fund Transfer</h3>
+            <div class="page-info text-white">
               <div class="page-info-icon">
                 <p></p>
               </div>
@@ -20,7 +20,7 @@
             <div class="row margin-0">
               <div class="col margin-top-2p">
                 <form [formGroup]="fundTransferForm" class="col-8" autocomplete="off">
-                  <div class="form-group d-flex align-items-center m-3">
+                  <div class="form-group m-3">
                     <label class="required label">Amount</label>
                     <input class="form-control " placeholder="Enter Transfer Amount" formControlName="amount" required (keypress)="numberOnly($event)">
                     <span *ngIf="hasError('amount', 'required')">Required</span>
@@ -39,5 +39,4 @@
     </div>
     <app-error title="Fund transferred" [body]="popUpBody" btnLabel="Done" [btnClick]="onDone" [iconSrc]="iconSrc"></app-error>
   </div>
-  <app-footer></app-footer>
 </div>

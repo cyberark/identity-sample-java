@@ -1,14 +1,10 @@
 .apidemo-header {
-  box-shadow: 0 2px 4px #cccccc;
   position: fixed;
   top: 0;
   left: 0;
-  height: 52px;
   width: 100%;
+  padding: 15px;
   z-index: 1;
-  padding-left: 30px;
-  padding-right: 30px;
-  border-top: 4px solid transparent;
 }
 
 .apidemo-header img {
@@ -36,11 +32,11 @@
   margin-top: 8px;
 }
 
-.apidemo-header .navbar-light .navbar-nav .active>.nav-link,
-.apidemo-header .navbar-light .navbar-nav .nav-link.active,
-.apidemo-header .navbar-light .navbar-nav .nav-link.show,
-.apidemo-header .navbar-light .navbar-nav .show>.nav-link,
-.apidemo-header .navbar-light .navbar-nav .nav-item .btn.register-btn.active {
+.apidemo-header .navbar-dark .navbar-nav .active>.nav-link,
+.apidemo-header .navbar-dark .navbar-nav .nav-link.active,
+.apidemo-header .navbar-dark .navbar-nav .nav-link.show,
+.apidemo-header .navbar-dark .navbar-nav .show>.nav-link,
+.apidemo-header .navbar-dark .navbar-nav .nav-item .btn.register-btn.active {
   border-bottom: 4px solid #26e5c2;
 }
 

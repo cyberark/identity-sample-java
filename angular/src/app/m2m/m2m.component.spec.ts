@@ -2,7 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { M2MComponent } from './m2m.component';
 
@@ -12,7 +11,7 @@ describe('M2MComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ M2MComponent, HeaderComponent, FooterComponent ],
+      declarations: [ M2MComponent, HeaderComponent ],
       imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule]
     })
     .compileComponents();

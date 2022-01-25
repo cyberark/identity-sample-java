@@ -15,17 +15,28 @@
 */
 
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { getStorage, Settings } from '../utils';
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css']
+  selector: 'app-intro',
+  templateUrl: './intro.component.html',
 })
-export class FooterComponent implements OnInit {
+export class IntroComponent implements OnInit {
+    applogo: string = "";
 
-  constructor() { }
+    constructor(
+        private router: Router
+    ) { }
 
-  ngOnInit() {
-  }
+    ngOnInit(): void{
+        const settings: Settings = JSON.parse(getStorage("settings"));
+        if (settings && settings.appImage) {
+            this.applogo = settings.appImage;
+        }
+    }
 
+    onGetStarted(): void{
+        this.router.navigate(['home']);
+    }
 }

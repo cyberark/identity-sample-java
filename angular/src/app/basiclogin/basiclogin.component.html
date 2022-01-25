@@ -1,28 +1,28 @@
-<div class="container-fluid padding-0">
+<div class="container-fluid">
   <div *ngIf="loading" class="loader-screen">
     <img class="loader" src="../../assets/images/Spinner.svg">
   </div>
   <app-header isHomeVisible=true isSignUpVisible="true"></app-header>
   <div class="app-page">
     <div class="row justify-content-center">
-      <div class="card">
+      <div class="card bg-primary text-white">
         <div class="card-body">
-          <h3 class="text-center font-weight-light mb-3">Login</h3>
+          <h3 class="text-center mb-3">Login</h3>
           <form [formGroup]="loginForm" autocomplete="off">
             <div *ngIf="authMessage != ''" class="login-error">
               <div><img class="error-image"
                   [src]="checkMessageType() ? '../../assets/images/check.png' : '../../assets/images/issue_icon.png'" />
               </div>
-              <p class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#000' : '#cc3300'">
+              <p class="breaktext_now" style="order:2;" [style.color]="checkMessageType() ? '#fff' : '#cc3300'">
                 {{authMessage}}</p>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Username</label>
               <input class="form-control" formControlName="username" required>
               <span *ngIf="hasError('username', 'required')">Required</span>
               <span *ngIf="hasError('username', 'email')">Username pattern does not match</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Password</label>
               <input class="form-control" formControlName="password" type="password" required>
               <span *ngIf="hasError('password', 'required')">Required</span>
@@ -34,5 +34,4 @@
       </div>
     </div>
   </div>
-  <app-footer></app-footer>
 </div>

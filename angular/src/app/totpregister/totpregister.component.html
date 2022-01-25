@@ -1,19 +1,19 @@
-<div class="container-fluid padding-0">
+<div class="container-fluid">
     <div *ngIf="loading" class="loader-screen">
         <img class="loader" alt="spinner" src="../../assets/images/Spinner.svg">
     </div>
     <app-header isLogoutVisible=true isUserProfileVisible=true isTOTPVisible=true></app-header>
     <div #divToScroll class="app-page">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-6">
-                    <div class="bg-white p-4">
+            <div class="row justify-content-center mt-5">
+                <div class="col-8 card bg-primary text-white">
+                    <div class="p-4">
                         <h3 class="mb-3 text-center">TOTP Registration</h3>
                         <div *ngIf="errorMessage != ''" class="user-error">
                             <div class="error-image"><img
                                alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
                             </div>
-                            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+                            <p [style.color]="checkMessageType() ? '#fff' : '#cc3300'">{{errorMessage}}</p>
                         </div>
                         <div class="container">
                             <ol>
@@ -24,8 +24,8 @@
                             </ol>
                             <img [src]="qrSrc" alt="qr" class="mx-auto d-block">
                             <form [formGroup]="verifyCodeForm" autocomplete="off" class="mt-3">
-                                <div class="form-group d-flex align-items-center">
-                                  <label class="required label">Code</label>
+                                <div class="form-group">
+                                  <label class="required label">Code:</label>
                                   <input class="form-control" formControlName="otpCode" required type="number">
                                   <span *ngIf="hasError('otpCode', 'required')">Required</span>
                                 </div>
@@ -40,5 +40,4 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
 </div>

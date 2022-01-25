@@ -24,7 +24,6 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -32,12 +31,9 @@ import { BasicLoginComponent } from './basiclogin/basiclogin.component'
 import { MFAWidgetComponent } from './mfawidget/mfawidget.component';
 import { LoginWidgetComponent } from './loginWidget/loginWidget.component';
 import { FundTransferComponent } from './fundtransfer/fundtransfer.component';
-import { Flow1Component } from './flow1/flow1.component';
 import { LoginProtocolComponent } from './loginprotocols/loginprotocol.component';
 import { ApionlyComponent } from './apionly/apionly.component';
 import { Metadata } from './metadata/metadata.component';
-import { Flow3Component } from './flow3/flow3.component';
-import { Flow2Component } from './flow2/flow2.component';
 import { OidcFlowComponent } from './oidcflow/oidcflow.component';
 import { RedirectComponent } from './redirect/redirect.component';
 import { OAuthFlowComponent } from './oauthflow/oauthflow.component';
@@ -51,7 +47,6 @@ import { TOTPRegisterComponent } from './totpregister/totpregister.component';
     AppComponent,
     LoginComponent,
     HeaderComponent,
-    FooterComponent,
     ErrorComponent,
     RegisterComponent,
     HomeComponent,
@@ -60,12 +55,9 @@ import { TOTPRegisterComponent } from './totpregister/totpregister.component';
     MFAWidgetComponent,
     LoginWidgetComponent,
     FundTransferComponent,
-    Flow1Component,
     LoginProtocolComponent,
     ApionlyComponent,
     Metadata,
-    Flow3Component,
-    Flow2Component,
     OidcFlowComponent,
     RedirectComponent,
     OAuthFlowComponent,

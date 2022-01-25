@@ -1,13 +1,13 @@
-<div class="container-fluid padding-0">
+<div class="container-fluid">
     <div *ngIf="loading" class="loader-screen">
         <img class="loader" alt="spinner" src="../../assets/images/Spinner.svg">
     </div>
     <app-header isLogoutVisible=true></app-header>
     <div class="app-page">
-        <div class="container">
-            <h3 class="text-white text-center">Login Protocols</h3>
+        <div class="container py-3">
+            <h3 class="text-center">Login Protocols</h3>
             <div class="card-deck">
-                <div class="card">
+                <div class="card bg-primary text-white">
                     <div class="card-body">
                         <h5 class="card-title text-center">API only</h5>
                         <div class="card-text">
@@ -24,14 +24,14 @@
                         <button class="container btn btn-secondary" (click)="onApiOnlyClick()">Continue</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card bg-primary text-white">
                     <div class="card-body">
                         <h5 class="card-title text-center">API + OIDC</h5>
                         <div *ngIf="errorMessage !== ''" class="user-error">
                             <div class="error-image"><img
                                alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
                             </div>
-                            <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+                            <p [style.color]="checkMessageType() ? '#fff' : '#cc3300'">{{errorMessage}}</p>
                         </div>
                         <div class="card-text">
                             Login functionality uses the 
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="card-deck mt-3">
-                <div class="card">
+                <div class="card bg-primary text-white">
                     <div class="card-body">
                         <h5 class="card-title text-center">API + OAuth - User Interactive</h5>
                         <div class="card-text">
@@ -79,7 +79,7 @@
                         <button class="container btn btn-secondary" (click)="onApiOAuthClick()">Continue</button>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card bg-primary text-white">
                     <div class="card-body">
                         <h5 class="card-title text-center">API + OAuth - Machine To Machine</h5>
                         <div class="card-text">
@@ -105,5 +105,4 @@
             </div>
         </div>
     </div>
-    <app-footer></app-footer>
 </div>

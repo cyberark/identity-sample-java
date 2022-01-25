@@ -1,17 +1,17 @@
-<div class="container-fluid padding-0">
+<div class="container-fluid">
   <div *ngIf="loading" class="loader-screen">
     <img alt="spinner" class="loader" src="../../assets/images/Spinner.svg">
   </div>
   <app-header isHomeVisible=true></app-header>
   <div #divToScroll class="app-page">
-    <div class="container bg-white">
-      <h3 class="text-center font-weight-light p-3">Settings</h3>
-      <p class="font-weight-light p-3 text-dark"><b>Note: </b>Settings in this page are utilised to demonstrate the functionalities using this app. The settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to inappropriate behavior of the functionalities.</p>
+    <div class="container bg-primary text-white my-3 card">
+      <h3 class="text-center p-3">Settings</h3>
+      <p class="p-3 text-white"><b>Note: </b>Settings in this page are utilised to demonstrate the functionalities using this app. The settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to inappropriate behavior of the functionalities.</p>
       <div *ngIf="errorMessage != ''" class="user-error">
         <div class="error-image"><img
            alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
         </div>
-        <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
+        <p [style.color]="checkMessageType() ? '#fff' : '#cc3300'">{{errorMessage}}</p>
       </div>
       <form [formGroup]="settingsForm" class="row" autocomplete="off">
         <div class="container border p-3 mb-1 mx-3">
@@ -28,30 +28,30 @@
               <h5>CyberArk Tenant</h5>
               <img src="../../assets/images/cyberark-logo.png" alt="cyberark-logo" style="width: 28px;height: 28px;">
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">URL</label>
               <input class="form-control" formControlName="tenantURL" required placeholder="https://YOUR_TENANT.idaptive.app">
               <span *ngIf="hasError('tenantURL', 'required')">Required</span>
               <span *ngIf="hasError('tenantURL', 'maxlength')">URL should not be longer than 80 characters</span>
               <span *ngIf="hasError('tenantURL', 'pattern')">Invalid URL</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Login Suffix</label>
               <input class="form-control" formControlName="loginSuffix" required placeholder="Login Suffix">
               <span *ngIf="hasError('loginSuffix', 'required')">Required</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Role Name</label>
               <input class="form-control" formControlName="roleName" required placeholder="MFA Role Name">
               <span *ngIf="hasError('roleName', 'required')">Required</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Login Widget ID</label>
               <input class="form-control" formControlName="loginWidgetId" required placeholder="Login Widget ID">
               <span *ngIf="hasError('loginWidgetId', 'required')">Required</span>
               <span *ngIf="hasError('loginWidgetId', 'pattern')">Incorrect Login Widget ID</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">MFA Widget ID</label>
               <input class="form-control" formControlName="mfaWidgetId" required placeholder="MFA Widget ID">
               <span *ngIf="hasError('mfaWidgetId', 'required')">Required</span>
@@ -64,25 +64,25 @@
               <h5>OAuth 2.0</h5>
               <img src="../../assets/images/oauth_logo28x28.png" alt="oauth_logo" style="height: 28px;">
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Application ID</label>
               <input class="form-control" formControlName="oauthAppId" required placeholder="OAuth Client Application ID">
               <span *ngIf="hasError('oauthAppId', 'required')">Required</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Username</label>
               <input class="form-control" formControlName="oauthServiceUserName" required placeholder="Service Username">
               <span *ngIf="hasError('oauthServiceUserName', 'required')">Required</span>
               <span *ngIf="hasError('oauthServiceUserName', 'pattern')">Invalid format, expected format: loginName@Suffix</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Password</label>
               <input class="form-control" formControlName="oauthServiceUserPassword" required placeholder="Service User Password">
               <span *ngIf="hasError('oauthServiceUserPassword', 'required')">Required</span>
               <span *ngIf="hasError('oauthServiceUserPassword', 'minlength')">Password must be at least 8 characters long</span>
               <span *ngIf="hasError('oauthServiceUserPassword', 'maxlength')">Password should not be longer than 64 characters</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Scopes</label>
               <input class="customTagStyle" name="basic" formControlName="oauthScopesSupported" required placeholder="Space Separated OAuth Scopes" (change)="onOAuthScopeChange($event.target.value)">
               <span *ngIf="hasError('oauthScopesSupported', 'required')">Required</span>
@@ -95,23 +95,23 @@
               <h5>OpenID Connect</h5>
               <img src="../../assets/images/openid-icon-28x28.png" alt="openid-icon" style="height: 28px;">
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Application ID</label>
               <input class="form-control" formControlName="oidcAppId" required placeholder="OpenID Connect Application ID">
               <span *ngIf="hasError('oidcAppId', 'required')">Required</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Client ID</label>
               <input class="form-control" formControlName="oidcClientId" required placeholder="OpenID Connect Client ID">
               <span *ngIf="hasError('oidcClientId', 'required')">Required</span>
               <span *ngIf="hasError('oidcClientId', 'pattern')">Incorrect Client ID</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Client Secret</label>
               <input class="form-control" formControlName="oidcClientPassword" required placeholder="OpenID Connect Client Secret">
               <span *ngIf="hasError('oidcClientPassword', 'required')">Required</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Scopes</label>
               <input class="customTagStyle" name="basic" formControlName="oidcScopesSupported" required placeholder="openid email profile" (change)="onOIDCScopeChange($event.target.value)">
               <span *ngIf="hasError('oidcScopesSupported', 'required')">Required</span>
@@ -137,10 +137,9 @@
         </div>
       </form>
       <div class="d-flex justify-content-center p-3">
-        <div class="container btn btn-outline-secondary mr-5" (click)="onCancel()">Cancel</div>
+        <div class="container btn btn-secondary mr-5" (click)="onCancel()">Cancel</div>
         <div class="container btn btn-secondary" (click)="onSave()">Save</div>
       </div>
     </div>
   </div>
-  <app-footer></app-footer>
 </div>

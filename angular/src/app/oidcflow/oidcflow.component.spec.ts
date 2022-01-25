@@ -17,7 +17,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { OidcFlowComponent } from './oidcflow.component';
 
@@ -27,7 +26,7 @@ describe('OidcFlowComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OidcFlowComponent, HeaderComponent, FooterComponent ],
+      declarations: [ OidcFlowComponent, HeaderComponent ],
       imports: [RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();

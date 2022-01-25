@@ -18,7 +18,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 
 import { RegisterComponent } from './register.component';
@@ -29,7 +28,7 @@ describe('RegisterComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RegisterComponent, HeaderComponent, FooterComponent ],
+      declarations: [ RegisterComponent, HeaderComponent ],
       imports: [ReactiveFormsModule, RouterTestingModule, HttpClientTestingModule]
     })
     .compileComponents();

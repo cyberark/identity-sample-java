@@ -19,7 +19,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from '../app.component';
-import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { SettingsComponent } from './settings.component';
 
@@ -29,7 +28,7 @@ describe('SettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsComponent, HeaderComponent, FooterComponent ],
+      declarations: [ SettingsComponent, HeaderComponent ],
       imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule],
       providers: [AppComponent]
     })

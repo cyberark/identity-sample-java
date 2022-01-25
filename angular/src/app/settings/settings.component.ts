@@ -164,7 +164,7 @@ export class SettingsComponent implements OnInit {
   }
 
   onCancel(){
-    this.router.navigate(['/']);
+    this.router.navigate(['home']);
   }
 
   public hasError = (controlName: string, errorName: string) => {

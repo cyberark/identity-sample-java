@@ -1,5 +1,5 @@
 <header class="apidemo-header">
-  <nav class="navbar navbar-expand-md navbar-light">
+  <nav class="navbar navbar-expand-md navbar-dark">
     <div class="navbar-brand"><img [attr.src]="imageSource" alt="logo"></div>
     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsList"
       aria-controls="navbarsList" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleHomeMenu()">
@@ -9,7 +9,7 @@
     <div class="navbar-collapse collapse" id="navbarsList" [class.show]="this.homeMenu">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item" *ngIf="isHomeVisible">
-          <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/')" href="/" (click)="onTabClick('/')">
+          <a class="nav-link text-white" [class.active]="this.checkSelectedTab('/home')" href="home" (click)="onTabClick('/home')">
             Home
           </a>
         </li>
