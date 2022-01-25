@@ -1,4 +1,5 @@
 # CyberArk Identity Demo Web App (Angular - Java)
+
 **Status**: Community
 
 Acme Inc. is an imaginary company using CyberArk Identity APIs, SDKs, and widgets to secure its web applications. This playground application shows all the possible variations that a developer from Acme has at her disposal for this. This app uses Java Spring backend and Angular frontend.
@@ -24,4 +25,4 @@ CyberArk Identity Team
 ## License
 This project is licensed under Apache License 2.0 - see [`LICENSE`](LICENSE) for more details.
 
-Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
