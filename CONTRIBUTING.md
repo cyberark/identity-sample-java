@@ -1,3 +1,3 @@
 # Contributing
 
-Currently not looking for active contribution for this project.
+Currently not looking for any active contribution for this project.
