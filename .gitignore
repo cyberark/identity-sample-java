@@ -9,9 +9,7 @@ auth.*
 .vscode/tasks.json
 .project
 
-server.crt
-server.key
-sslkeystore.p12
-server.csr
-
-settings.json
+*.crt
+*.key
+*.p12
+*.csr
