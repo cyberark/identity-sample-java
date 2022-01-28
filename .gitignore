@@ -13,3 +13,5 @@ auth.*
 *.key
 *.p12
 *.csr
+
+*.db
