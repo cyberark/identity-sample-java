@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from '../components/header/header.component';
 import { FormGroup, NgForm, FormControl, Validators } from '@angular/forms';
 import { getStorage, validateAllFormFields } from '../utils';
+import { HeartBeatService } from '../heartbeat/heartbeat.service'; 
 
 @Component({
     selector: 'app-fundtransfer',
@@ -28,7 +29,6 @@ import { getStorage, validateAllFormFields } from '../utils';
 
 export class FundTransferComponent implements OnInit {
     @ViewChild(HeaderComponent, { static: true })
-    private header: HeaderComponent;
     private isFundTransferSuccessful = false;
 
     loading = false;
@@ -41,7 +41,8 @@ export class FundTransferComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private heartBeatService: HeartBeatService
     ) { }
 
     ngOnInit() {
@@ -52,6 +53,8 @@ export class FundTransferComponent implements OnInit {
         if (getStorage("userId") == null) {
             this.router.navigate(['/login']);
         }
+        this.heartBeatService.checkHeartBeat(this);
+
         this.isFundTransferSuccessful = JSON.parse(this.route.snapshot.queryParamMap.get('isFundTransferSuccessful'));
 
         if (this.isFundTransferSuccessful) {
@@ -63,6 +66,7 @@ export class FundTransferComponent implements OnInit {
         if (!validateAllFormFields(this.fundTransferForm)) {
             return;
         }
+        this.heartBeatService.checkHeartBeat(this);
         document.cookie.includes('flow3') ? this.router.navigate(['mfawidget'], { queryParams: { fromFundTransfer: true } }) : this.router.navigate(['loginWidget'], { queryParams: { fromFundTransfer: true } }); 
     }
 

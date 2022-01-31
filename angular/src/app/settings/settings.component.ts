@@ -84,6 +84,8 @@ export class SettingsComponent implements OnInit {
       ])], 
       "oidcClientPassword": ['', Validators.required],
       "oidcScopesSupported": ['', Validators.required],
+      "sessionTimeout": ['', Validators.required],
+      "mobileTimeout": ['', Validators.required]
     });
 
     document.querySelectorAll('input[name=basic]').forEach(ele => {

@@ -25,6 +25,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HttpStatusCode } from '@angular/common/http';
 import { AuthorizationService } from '../metadata/authorizationservice';
 import { BasicLoginService } from '../basiclogin/basiclogin.service';
+import { HeartBeatService } from '../heartbeat/heartbeat.service'; 
 
 @Component({
   selector: 'app-root',
@@ -55,7 +56,8 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private domSanitizer: DomSanitizer,
     private loginService: BasicLoginService,
-    private authorizationService: AuthorizationService
+    private authorizationService: AuthorizationService,
+    private heartBeatService: HeartBeatService
   ) { }
 
   ngOnInit() {
@@ -90,6 +92,7 @@ export class RegisterComponent implements OnInit {
     }
     if (getStorage("userId") !== null) {
       this.loading = true;
+      this.heartBeatService.checkHeartBeat(this);
       this.userService.getById(getStorage("userId")).subscribe({
         next: data => {
           this.loading = false;

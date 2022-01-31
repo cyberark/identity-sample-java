@@ -75,6 +75,13 @@ export class MFAWidgetComponent implements OnInit {
                 }
               },
               error: error => {
+                let errorMessage = APIErrStr;
+                if (error.error.Success == false) {
+                  errorMessage = error.error.ErrorMessage;
+                }
+                localStorage.clear();
+                setStorage("registerMessageType", "error");
+                setStorage("registerMessage", errorMessage);
                 console.error(error);
                 context.router.navigate(['basiclogin']);
               }

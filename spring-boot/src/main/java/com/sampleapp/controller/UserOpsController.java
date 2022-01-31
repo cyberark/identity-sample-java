@@ -16,8 +16,8 @@
 
 package com.sampleapp.controller;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.sampleapp.entity.Response;
 import com.sampleapp.entity.User;
@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sampleapp.service.UserOpsService;
 import com.sampleapp.config.AuthFilter;
@@ -44,38 +43,58 @@ public class UserOpsController {
 	private UserOpsService userOpsService;
 
 	@PutMapping("/userops/{uuid}")
-	public ResponseEntity<JsonNode> updateUser(HttpServletRequest request, @RequestBody User user,
-			@PathVariable String uuid) throws JsonProcessingException {
+	public ResponseEntity<JsonNode> updateUser(HttpServletRequest request, HttpServletResponse httpServletResponse, @RequestBody User user,
+											   @PathVariable String uuid) throws Exception {
 		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow3");
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null) {
+			try {
+				AuthFilter.checkHeartBeat(request, httpServletResponse, token);
+			} catch (Exception ex) {
+				return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.FORBIDDEN);
+			}
 			return userOpsService.updateUser(token, uuid, user, enableMFAWidgetFlow);
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
 
 	@GetMapping("/userops/{uuid}")
-	public ResponseEntity<JsonNode> getUser(HttpServletRequest request, @PathVariable String uuid) {
+	public ResponseEntity<JsonNode> getUser(HttpServletRequest request, HttpServletResponse httpServletResponse, @PathVariable String uuid) throws Exception{
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null){
+			try {
+				AuthFilter.checkHeartBeat(request, httpServletResponse, token);
+			} catch (Exception ex) {
+				return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.FORBIDDEN);
+			}
 			return userOpsService.getUser(uuid, token);
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
 
 	@GetMapping("/userops/getTotpQR")
-	public ResponseEntity<JsonNode> getTotpQR(HttpServletRequest request) throws Exception {
+	public ResponseEntity<JsonNode> getTotpQR(HttpServletRequest request, HttpServletResponse httpServletResponse) throws Exception {
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null){
+			try {
+				AuthFilter.checkHeartBeat(request, httpServletResponse, token);
+			} catch (Exception ex) {
+				return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.FORBIDDEN);
+			}
 			return userOpsService.getTotpQR(token);
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);
 	}
 
 	@PostMapping("/userops/verifyTotp")
-	public ResponseEntity<JsonNode> verifyTotp(HttpServletRequest request, @RequestBody VerifyTotpReq req) throws Exception {
+	public ResponseEntity<JsonNode> verifyTotp(HttpServletRequest request, HttpServletResponse httpServletResponse, @RequestBody VerifyTotpReq req) throws Exception {
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
 		if (token != null){
+			try {
+				AuthFilter.checkHeartBeat(request, httpServletResponse, token);
+			} catch (Exception ex) {
+				return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.FORBIDDEN);
+			}
 			return userOpsService.verifyTotp(token, req);
 		}
 		return new ResponseEntity(new Response(false, "User Session Ended. Please login again to proceed."), HttpStatus.FORBIDDEN);

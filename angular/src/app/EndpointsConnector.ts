@@ -40,5 +40,6 @@ export const EndpointsConnector = {
     verifyTotp: `${baseUrl}/userops/verifyTotp`,
     SetAuthCookie: `${baseUrl}/setAuthCookie`,
     GetChallengeIDEndPoint : `${baseUrl}/userops/challengeID`,
-    BeginChallengeEndPoint : `${baseUrl}/auth/beginChallenge`
+    BeginChallengeEndPoint : `${baseUrl}/auth/beginChallenge`,
+    HeartBeat: `${baseUrl}/HeartBeat`
   }

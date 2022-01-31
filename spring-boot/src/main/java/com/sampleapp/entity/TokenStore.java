@@ -19,6 +19,7 @@ package com.sampleapp.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
 public class TokenStore {
@@ -26,13 +27,15 @@ public class TokenStore {
     private Integer UserId;
     private String SessionUuid;
     private String MfaToken;
+    private Date lastActiveDateTime;
 
     public TokenStore(){
     }
-    public TokenStore(Integer userId,String sessionUuid,String mfaToken){
-    this.UserId = userId;
-    this.SessionUuid = sessionUuid;
-    this.MfaToken = mfaToken;
+    public TokenStore(Integer userId, String sessionUuid, String mfaToken, Date lastActiveDateTime) {
+        this.UserId = userId;
+        this.SessionUuid = sessionUuid;
+        this.MfaToken = mfaToken;
+        this.lastActiveDateTime = lastActiveDateTime;
     }
     @Id
     public Integer getUserId() {
@@ -60,4 +63,11 @@ public class TokenStore {
         MfaToken = mfaToken;
     }
 
+    public Date getLastActiveDateTime() {
+        return lastActiveDateTime;
+    }
+
+    public void setLastActiveDateTime(Date lastActiveDateTime) {
+        this.lastActiveDateTime = lastActiveDateTime;
+    }
 }

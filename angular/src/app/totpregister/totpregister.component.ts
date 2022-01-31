@@ -16,8 +16,8 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { UserService } from '../user/user.service';
+import { HeartBeatService } from '../heartbeat/heartbeat.service'; 
 import { validateAllFormFields } from '../utils';
 
 @Component({
@@ -36,8 +36,8 @@ export class TOTPRegisterComponent implements OnInit {
     hasErrorOccurred: boolean = false;
 
     constructor(
-        private router: Router,
         private userService: UserService,
+        private heartBeatService: HeartBeatService,
         private formBuilder: FormBuilder
     ) { }
 
@@ -46,6 +46,7 @@ export class TOTPRegisterComponent implements OnInit {
             "otpCode": ['', Validators.required]
         });
         this.loading = true;
+        this.heartBeatService.checkHeartBeat(this);
         this.userService.getTotpQR().subscribe(
             {
                 next: (d) => {

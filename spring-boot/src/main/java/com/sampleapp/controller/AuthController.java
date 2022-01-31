@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sampleapp.config.AuthFilter;
 import com.sampleapp.service.AuthService;
+import com.sampleapp.service.SettingsService;
 import com.sampleapp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,9 @@ public class AuthController {
 	private AuthService authService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private SettingsService settingsService;
+
 	private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	@PostMapping("auth/beginAuth")
@@ -91,6 +95,33 @@ public class AuthController {
 		return this.authService.logout(authToken, response, enableMFAWidgetFlow);
 	}
 	
+	@PostMapping("auth/logoutSession")
+	public ResponseEntity<JsonNode> logoutBySessionId(@RequestBody String sessionId, HttpServletResponse servletResponse) {
+		Response response = new Response();
+		try {
+			authService.logoutSession(sessionId, servletResponse);
+			return new ResponseEntity(response, HttpStatus.OK);
+		} catch(Exception ex){
+			logger.error("Exception occurred : ", ex);
+			response.Success = false;
+			response.ErrorMessage = ex.getMessage();
+			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping({"/HeartBeat"})
+	public ResponseEntity<JsonNode> HeartBeat(@RequestBody String sessionUuid, HttpServletResponse servletResponse) {
+		Response response = new Response();
+		try {
+			authService.heartBeat(sessionUuid, servletResponse);
+			return new ResponseEntity(response, HttpStatus.OK);
+		} catch (Exception ex) {
+			response.Success = false;
+			response.ErrorMessage = ex.getMessage();
+			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	@PostMapping({ "/BasicLogin" })
 	public ResponseEntity<JsonNode> BasicLogin(@RequestBody BasicLoginRequest request, HttpServletResponse httpServletResponse) {
 		Response response = new Response();
@@ -104,6 +135,7 @@ public class AuthController {
 				ObjectNode objectNode = objectMapper.createObjectNode();
 				objectNode.put("SessionUuid",sessionUuid);
 				objectNode.put("MFAUserName",userService.GetMFAUserName(user.getName()));
+				objectNode.put("MobileBackgroundInactiveTimeout", settingsService.getMobileInactiveTimeInSec());
 				response.Result = objectNode;
 			}else{
 				response.Success = false;

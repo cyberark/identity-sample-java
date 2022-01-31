@@ -41,6 +41,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.ArrayList;
@@ -112,7 +113,7 @@ public class UserOpsService {
 			objNode.put("UserName",  GetMFAUserName(user.getName()));
 
 			if(enableMFAWidgetFlow) {
-				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", 1);
+				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", RequestAttributes.SCOPE_REQUEST);
 				DBUser dbUser = repo.getOne(tokenStore.getUserId());
 				dbUser.setName(user.getName());
 				dbUser.setDisplayName(user.getDisplayName());

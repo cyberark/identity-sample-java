@@ -18,6 +18,9 @@ package com.sampleapp.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -45,6 +48,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 
@@ -175,7 +179,11 @@ public class AuthService {
 			respose.addCookie(authCookie);
 			ResponseEntity<JsonNode> result = this.restTemplate.exchange(tenant, HttpMethod.POST, request, JsonNode.class);
 			if (enableMFAWidgetFlow) {
-				Integer userId = ((TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", 1)).getUserId();
+				TokenStore tokenStore = ((TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", RequestAttributes.SCOPE_REQUEST));
+				if (tokenStore == null) {
+					return result;
+				}
+				Integer userId = tokenStore.getUserId();
 				tokenStoreRepository.deleteById(userId);
 			}
 			return result;
@@ -185,9 +193,9 @@ public class AuthService {
 		}
 	}
 
-	public String CreateSession(Integer userId, String mfaToken){
+	public String CreateSession(Integer userId, String mfaToken) throws Exception {
 		String sessionUuid = java.util.UUID.randomUUID().toString();
-		tokenStoreRepository.save(new TokenStore(userId,sessionUuid,mfaToken));
+		tokenStoreRepository.save(new TokenStore(userId, sessionUuid, mfaToken, getCurrentUtcTime()));
 		return sessionUuid;
 	}
 
@@ -209,6 +217,8 @@ public class AuthService {
 
 		TokenStore token =  tokenStoreRepository.findBySession(advanceLoginRequest.getSessionUuid());
 		DBUser dbuser = userService.Get(token.getUserId());
+
+		this.heartBeat(token.getSessionUuid(), httpServletResponse);
 
 		if(userService.GetMFAUserName(dbuser.getName()).equalsIgnoreCase(mfaUser)){
 
@@ -306,6 +316,67 @@ public class AuthService {
 		} catch (Exception ex){
 			logger.error("Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	public void logoutSession(String sessionUuid, HttpServletResponse servletResponse) throws Exception {
+		try {
+			TokenStore tokenStore = tokenStoreRepository.findBySession(sessionUuid);
+			if (tokenStore == null ) {
+				return;
+			}
+			if (tokenStore.getMfaToken() != null && !tokenStore.getMfaToken().isEmpty()) {
+				this.logout(tokenStore.getMfaToken(), servletResponse, false);
+			}
+			tokenStoreRepository.deleteById(tokenStore.getUserId());
+		} catch (Exception ex){
+			logger.error("Exception occurred : ", ex);
+			throw ex;
+		}
+	}
+
+	public void updateLastActiveDateTime(String sessionUuid) throws Exception {
+		TokenStore token =  tokenStoreRepository.findBySession(sessionUuid);
+		token.setLastActiveDateTime(this.getCurrentUtcTime());
+		tokenStoreRepository.save(token);
+	}
+
+	public boolean isSessionActive(String sessionUuid) {
+		try {
+			TokenStore token =  tokenStoreRepository.findBySession(sessionUuid);
+			Date lastActiveDateTime = token.getLastActiveDateTime();
+			Date currentDateTime = this.getCurrentUtcTime();
+
+			long sessionInactiveTime = settingsService.getSessionInactiveTimeInSec();
+			long differenceInSec = (currentDateTime.getTime() - lastActiveDateTime.getTime()) / 1000;
+
+			return differenceInSec <= sessionInactiveTime;
+		} catch (Exception ex) {
+			logger.error("Exception occurred : ", ex);
+			return false;
+		}
+	}
+
+	public static Date getCurrentUtcTime() throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		SimpleDateFormat ldf = new SimpleDateFormat("yyyy-MMM-dd HH:mm:ss");
+		Date d1 = null;
+		try {
+			d1 = ldf.parse( sdf.format(new Date()) );
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		return d1;
+	}
+
+	public void heartBeat(String sessionUuid, HttpServletResponse response) throws Exception {
+		if (this.isSessionActive(sessionUuid)) {
+			this.updateLastActiveDateTime(sessionUuid);
+		} else {
+			this.logoutSession(sessionUuid, response);
+			throw new Exception("User Session Ended. Please login again to proceed.");
 		}
 	}
 }

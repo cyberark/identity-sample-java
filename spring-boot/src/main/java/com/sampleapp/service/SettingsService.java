@@ -67,6 +67,10 @@ public class SettingsService {
 
 	public String getOIDCScopesSupported() { return settings.get("oidcScopesSupported").textValue(); }
 
+	public long getSessionInactiveTimeInSec() { return settings.get("sessionTimeout").asLong(); }
+
+	public long getMobileInactiveTimeInSec() { return settings.get("mobileTimeout").asLong(); }
+
 
 	/** Updates Settings to settings.json file.
 	 * @param body as Settings JSON

@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   secondAuthLoad = false;
   secondMechanisms: JSON;
   showQRCode = false;
+  isPhoneCall = false;
   QRImageSource: string;
   loginHeader = "Login";
   isSignUpVisible = true;
@@ -126,6 +127,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     let selectedAuthMethod = this.mechanisms[this.formControls.authMethod.value];
     this.showQRCode = false;
     this.textAnswer = false;
+    this.isPhoneCall = false;
 
     if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'Text') {
       this.textAnswer = true;
@@ -140,6 +142,9 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.showQRCode = true;
       this.QRImageSource = selectedAuthMethod.Image;
       this.answerErrorText = "QR Code scanning";
+    } else if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'StartOob' && selectedAuthMethod.Name == 'PF') {
+      this.answerErrorText = "Answering Phone call";
+      this.isPhoneCall = true;
     } 
     else {
       this.answerErrorText = "Code";
@@ -280,6 +285,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   runAuthSuccessFlow(data) {
+    this.loginForm.controls["answer"].reset();
     switch (this.loginPage) {
       case "username":
         this.sessionId = data.Result.SessionId;

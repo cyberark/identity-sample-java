@@ -25,11 +25,16 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.sampleapp.entity.Response;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.service.AuthService;
 import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.jsoup.Jsoup;
@@ -40,7 +45,7 @@ import org.springframework.util.StringUtils;
 public class AuthFilter extends OncePerRequestFilter {
 
     @Autowired
-    private AuthService authService;
+    private static AuthService authService;
 
     public AuthFilter(AuthService authService) {
         this.authService = authService;
@@ -57,7 +62,7 @@ public class AuthFilter extends OncePerRequestFilter {
             if (token == null) {
                 throw new SecurityException();
             }
-            RequestContextHolder.currentRequestAttributes().setAttribute("UserTokenStore", token, 1);
+            RequestContextHolder.currentRequestAttributes().setAttribute("UserTokenStore", token, RequestAttributes.SCOPE_REQUEST);
         }
         filterChain.doFilter(request, response);
     }
@@ -93,5 +98,20 @@ public class AuthFilter extends OncePerRequestFilter {
             }
         }
         return null;
+    }
+
+    public static ResponseEntity<JsonNode> checkHeartBeat(HttpServletRequest request, HttpServletResponse servletResponse, String authToken) throws Exception {
+        try {
+            if (readServletCookie(request, "flow").get().equals("flow3")) {
+                TokenStore tokenStore = authService.GetTokenStore(authToken);
+                if (tokenStore == null) {
+                    throw new SecurityException();
+                }
+                authService.heartBeat(tokenStore.getSessionUuid(), servletResponse);
+            }
+            return new ResponseEntity(new Response(), HttpStatus.OK);
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 }
