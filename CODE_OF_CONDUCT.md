@@ -3,13 +3,11 @@
 CyberArk is a leader in Privileged Access Management, thanks to its customers and community. We listen to our community and wish to provide additional relevant tools.  We believe that our mission is best served in an environment that is friendly, safe, and accepting; free from intimidation or harassment.
 Towards this end, CyberArk’s developers have created this Community Code of Conduct for the CyberArk open source community.  Our Code of Conduct sets the standard for how developers, and community members can work together in a respectful and collaborative manner.  Those who do not abide by this Code of Conduct will not be permitted to remain part of our community.
 
-
 ## Summary of Key Principles
 
 - Be respectful to others in the community at all times.
 - Report harassing or abusive behavior that you experience or witness at ReportAbuse@cyberark.com
 - The CyberArk community will not tolerate abusive or disrespectful behavior towards its members; anyone engaging in such behavior will be suspended from the CyberArk community.
-
 
 ## Scope
 
@@ -17,14 +15,12 @@ This Code of Conduct applies to all members of the CyberArk community, including
 This policy covers the usage of CyberArk hosted services, as well as the CyberArk website, CyberArk related events, and any other services offered by or on behalf of CyberArk (collectively, the "Service").
 This Code of Conduct is in addition to, and does not in any way nullify or invalidate, any other terms or conditions related to use of the Service.
 
-
 ## Maintaining a Friendly, Harassment-Free Space
 
 We are committed to providing a friendly, safe and welcoming environment for all, regardless of gender identity, sexual orientation, ability, ethnicity, religion, age, physical appearance, body size, race, or similar personal characteristics.
 We ask that you please respect that people have differences of opinion regarding technical choices, and that every design or implementation choice carries a trade-off and numerous costs. There is seldom a single right answer. A difference of technology preferences is not a license to be rude.
 Harassing other users of the Service for any reason is never tolerated, whether via public or private media. Any spamming, trolling, flaming, baiting, or other attention-stealing behavior is not welcome, and will not be tolerated.
 Even if your intent is not to harass or offend others, be mindful of how your comments might be perceived by others in the community.
-
 
 ## Unacceptable Behavior
 
