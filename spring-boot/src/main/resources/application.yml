@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:h2:file:./customerDB;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-    password: password
+    password: <PASSWORD>
     driverClassName: org.h2.Driver
   jackson:
     mapper:
@@ -28,7 +28,7 @@ logging:
 server:
   ssl:
     enabled: true
-    key-alias: demoapp
+    key-alias: sampleapp
     key-store-type: PKCS12
     key-store-password: <PASSWORD>
     key-store: classpath:sslkeystore.p12

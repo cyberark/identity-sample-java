@@ -1,0 +1,22 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+x509_extensions = v3_req
+distinguished_name = dn
+
+[dn]
+C = US
+ST = AZ
+L = Phoenix
+O = Acme Inc
+OU = Acme IT
+emailAddress = email@domain.com
+CN = identitydemo.acmeinc.com
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = localhost
+DNS.2 = identitydemo.acmeinc.com
