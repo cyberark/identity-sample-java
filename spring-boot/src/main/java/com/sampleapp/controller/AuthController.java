@@ -113,7 +113,8 @@ public class AuthController {
 	public ResponseEntity<JsonNode> HeartBeat(@RequestBody String sessionUuid, HttpServletResponse servletResponse) {
 		Response response = new Response();
 		try {
-			authService.heartBeat(sessionUuid, servletResponse);
+			String sessionId = AuthFilter.cleanIt(sessionUuid);
+			authService.heartBeat(sessionId, servletResponse);
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex) {
 			response.Success = false;
