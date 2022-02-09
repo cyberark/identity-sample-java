@@ -18,7 +18,7 @@ import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, Settings } from '../utils';
+import { getStorage, setStorage, APIErrStr, getAppImgStr } from '../utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -78,10 +78,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       setStorage("registerMessage", "");
     }
 
-    const settings: Settings = JSON.parse(getStorage("settings"));
-    if (settings && settings.appImage) {
-      this.appImage = settings.appImage;
-    }
+    this.appImage = getAppImgStr();
 
     if (this.loginPage == null) {
       this.loginPage = "username";

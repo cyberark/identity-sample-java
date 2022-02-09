@@ -16,7 +16,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { getStorage, Settings } from '../utils';
+import { getAppImgStr } from '../utils';
 
 @Component({
   selector: 'app-intro',
@@ -30,10 +30,7 @@ export class IntroComponent implements OnInit {
     ) { }
 
     ngOnInit(): void{
-        const settings: Settings = JSON.parse(getStorage("settings"));
-        if (settings && settings.appImage) {
-            this.applogo = settings.appImage;
-        }
+        this.applogo = getAppImgStr();
     }
 
     onGetStarted(): void{

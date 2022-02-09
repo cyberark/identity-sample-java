@@ -18,7 +18,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, NgForm, AbstractControl } from '@angular/forms';
 import { BasicLoginService } from './basiclogin.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getStorage, setStorage, validateAllFormFields } from '../utils';
+import { getAppImgStr, getStorage, setStorage, validateAllFormFields } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -32,6 +32,8 @@ export class BasicLoginComponent implements OnInit {
   authMessage = "";
   messageType = "error";
   loading = false;
+  appImage = "";
+
   constructor(
     private formBuilder: FormBuilder,
     private loginService: BasicLoginService,
@@ -52,7 +54,8 @@ export class BasicLoginComponent implements OnInit {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-   
+
+    this.appImage = getAppImgStr();
   }
 
   // Getter for easy access to form fields

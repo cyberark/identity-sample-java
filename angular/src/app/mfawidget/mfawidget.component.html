@@ -1,8 +1,43 @@
 <div class="container-fluid">
   <app-header isHomeVisible=true></app-header>
-  <head>
-</head> 
-
-  <div id="cyberark-login" class="app-page">
-</div>
+  <div class="app-page">
+    <div class="container h-100">
+      <div class="h-100 row justify-content-center align-items-center">
+        <div class="col m-5">
+          <div class="text-center" *ngIf="!isStepUp">
+            <h3>
+              The MFA widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the MFA widget
+            </h3>
+            <h5 class="mt-5">
+              The MFA widget is used by Acme Inc for second factor authentication at the time of login. The user will be prompted with the MFA setup at the user policy/app policy. The username will automatically be populated for the MFA widget.
+            </h5>
+            <h5 class="my-4">
+              The MFA widget internally uses the “/startAuthentication” and “/advanceAuthentication” API of CyberArk Identity to login the users to Acme Inc. The look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+            </h5>
+            <h5 class="my-4">
+              The widget can be integrated with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user. By default a one time authentication token will be returned by the widget. If the domain of Acme Inc is registered with CyberArk Identity, then the widget automatically generates cookies for Acme Inc domain.
+            </h5>
+            <h5 class="mt-4">
+              For more information of the widget please check the documentation here.
+            </h5>
+          </div>
+          <div class="text-center" *ngIf="isStepUp">
+            <h3>
+              The MFA widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the MFA widget
+            </h3>
+            <h5 class="mt-5">
+              The MFA widget is used by Acme Inc for step-up authentication when user tries to transfer the funds. The user will be prompted with the rules configured at the user policy/app policy.
+            </h5>
+            <h5 class="my-4">
+              The look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+            </h5>
+            <h5 class="mt-4">
+              For more information of the widget please check the documentation here.
+            </h5>
+          </div>
+        </div>
+        <div class="col m-5" id="cyberark-login"></div>
+      </div>
+    </div>
+  </div>
 </div>

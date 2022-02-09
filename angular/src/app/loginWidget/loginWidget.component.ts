@@ -34,6 +34,7 @@ export class LoginWidgetComponent implements OnInit {
   tokenReq = new TokenMetadataRequest();
   errorMessage: string = APIErrStr;
   tokenSet = {};
+  showSignUpWidget = false;
 
   constructor(
     private router: Router,
@@ -46,9 +47,9 @@ export class LoginWidgetComponent implements OnInit {
   ngOnInit() {
     var me = this;
     const settings: Settings = JSON.parse(getStorage('settings'));
-    const showSignUpWidget = getStorage("showSignUpWidget") === "true";
+    this.showSignUpWidget = getStorage("showSignUpWidget") === "true";
 
-    if (showSignUpWidget) {
+    if (this.showSignUpWidget) {
       this.tokenReq.authFlow = AuthorizationFlow.OAUTH;
       this.tokenReq.grant_type = GrantType.client_credentials;
       this.authorizationService.getTokenSet(this.tokenReq).subscribe({
@@ -59,27 +60,27 @@ export class LoginWidgetComponent implements OnInit {
           this.showError(me, error);
         },
         complete: () => {
-          this.loginView(me, settings, showSignUpWidget);
+          this.loginView(me, settings);
         }
       });
     }
     else {
-      this.loginView(me, settings, showSignUpWidget);
+      this.loginView(me, settings);
     }
 
   }
 
-  loginView(me, settings, showSignUpWidget) {
+  loginView(me, settings) {
     let config = {
       "containerSelector": "#cyberark-login",
-      "showSignup": showSignUpWidget,
+      "showSignup": this.showSignUpWidget,
       "allowSignUpLink": true,
       "signUpLinkText": "Sign Up",
       "apiFqdn": settings.tenantURL.split("/")[2],
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
     };
 
-    if (showSignUpWidget) {
+    if (this.showSignUpWidget) {
       config["bearerToken"] = this.tokenSet['access_token'];
     }
     else {

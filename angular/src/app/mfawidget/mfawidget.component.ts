@@ -29,6 +29,7 @@ import { getStorage, setStorage, APIErrStr, Settings, addChildNodes } from '../u
 export class MFAWidgetComponent implements OnInit {
 
   private fromFundTransfer = false;
+  isStepUp = true;
 
   constructor(
     private router: Router,
@@ -51,6 +52,8 @@ export class MFAWidgetComponent implements OnInit {
         success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
       });
     })
+
+    this.isStepUp = this.router.url.includes('fromFundTransfer');
   }
   loginSuccessHandler(AuthData, context) {
 

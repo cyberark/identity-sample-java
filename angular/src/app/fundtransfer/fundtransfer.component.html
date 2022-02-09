@@ -4,8 +4,8 @@
   </div>
   <app-header isLogoutVisible=true isUserProfileVisible=true isTOTPVisible=true></app-header>
   <div class="app-page">
-    <div *ngIf="showPage()" class="container">
-      <div class="row justify-content-center">
+    <div *ngIf="showPage()" class="container h-100">
+      <div class="h-100 row justify-content-center align-items-center">
         <div class="card bg-primary text-white">
           <div class="card-body">
             <h3 class="text-center mb-3">Fund Transfer</h3>
@@ -27,7 +27,7 @@
                     <span *ngIf="hasError('amount', 'min')">Invalid</span>
                   </div>
                   <div class="d-flex align-items-center justify-content-end mt-4">
-                    <button class="btn btn-secondary w-50" type="button"
+                    <button class="btn btn-secondary w-50" type="submit"
                     (click)="transferFunds(fundTransferForm.value)">{{submitButtonText}}</button>
                   </div>  
                 </form>
