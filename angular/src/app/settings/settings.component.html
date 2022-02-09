@@ -4,17 +4,17 @@
   </div>
   <app-header isHomeVisible=true></app-header>
   <div #divToScroll class="app-page">
-    <div class="container bg-primary text-white my-3 card">
+    <div class="container my-3">
       <h3 class="text-center p-3">Settings</h3>
-      <p class="p-3 text-white"><b>Note: </b>Settings in this page are utilised to demonstrate the functionalities using this app. The settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to inappropriate behavior of the functionalities.</p>
+      <h5 class="p-3">Note: Settings in this page are utilised to demonstrate the functionalities using this app. The settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to inappropriate behavior of the functionalities.</h5>
       <div *ngIf="errorMessage != ''" class="user-error">
         <div class="error-image"><img
            alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
         </div>
-        <p [style.color]="checkMessageType() ? '#fff' : '#cc3300'">{{errorMessage}}</p>
+        <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
       </div>
       <form [formGroup]="settingsForm" class="row" autocomplete="off">
-        <div class="container border p-3 mb-1 mx-3">
+        <div class="container p-3 mb-1 mx-3">
           <div class="row align-items-center">
             <label class="label col">Application Logo <br> (Supports: png, jpg, gif, ico, bmp)</label>
             <input type="file" class="form-control col" accept=".png,.jpg,.gif,.ico,.bmp" formControlName="appImage" (change)="onImageUpload($event)">
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="border p-3 mb-3">
+          <div class="border border-primary p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>CyberArk Tenant</h5>
               <img src="../../assets/images/cyberark-logo.png" alt="cyberark-logo" style="width: 28px;height: 28px;">
@@ -59,7 +59,7 @@
             </div>
 
           </div>
-          <div class="border p-3 mb-3">
+          <div class="border border-primary p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>OAuth 2.0</h5>
               <img src="../../assets/images/oauth_logo28x28.png" alt="oauth_logo" style="height: 28px;">
@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="border p-3 mb-3">
+          <div class="border border-primary p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>OpenID Connect</h5>
               <img src="../../assets/images/openid-icon-28x28.png" alt="openid-icon" style="height: 28px;">
@@ -117,17 +117,17 @@
               <span *ngIf="hasError('oidcScopesSupported', 'required')">Required</span>
             </div>
           </div>
-          <div class="border p-3 mb-3">
+          <div class="border border-primary p-3 mb-3">
             <div class="d-flex justify-content-between">
               <h5>Session Management</h5>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Session Timeout (sec)</label>
               <input class="form-control" formControlName="sessionTimeout" required placeholder="120" max="500" type="number">
               <span *ngIf="hasError('sessionTimeout', 'required')">Required</span>
               <span *ngIf="hasError('sessionTimeout', 'max')">Value should not be greater than 500 seconds.</span>
             </div>
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
               <label class="required label">Mobile Background Timeout (sec)</label>
               <input class="form-control" formControlName="mobileTimeout" required placeholder="60" max="500" type="number">
               <span *ngIf="hasError('mobileTimeout', 'required')">Required</span>
@@ -137,8 +137,8 @@
         </div>
       </form>
       <div class="d-flex justify-content-center p-3">
-        <div class="container btn btn-secondary mr-5" (click)="onCancel()">Cancel</div>
-        <div class="container btn btn-secondary" (click)="onSave()">Save</div>
+        <div class="container btn btn-secondary mr-5 w-25" (click)="onCancel()">Cancel</div>
+        <div class="container btn btn-secondary w-25" (click)="onSave()">Save</div>
       </div>
     </div>
   </div>

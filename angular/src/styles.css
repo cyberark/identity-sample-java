@@ -181,8 +181,8 @@ label.required::after {
   background-color: #192436!important;
 }
 
-.card {
-  border-radius: 60px;
+.border-primary {
+  border-color: #192436!important;
 }
 
 .btn-link {

@@ -188,3 +188,15 @@ export const addChildNodes = (settings: Settings, callback: (this: GlobalEventHa
   linkNode.rel = 'stylesheet';
   document.getElementsByTagName('head')[0].appendChild(linkNode);
 }
+
+/**
+ * Returns App image string from settings
+ */
+export const getAppImgStr = () => {
+  let imgStr = '';
+  const settings: Settings = JSON.parse(getStorage("settings"));
+  if (settings && settings.appImage) {
+    imgStr = settings.appImage;
+  }
+  return imgStr;
+}

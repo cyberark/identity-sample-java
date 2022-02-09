@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
-import { getStorage, setStorage, Settings, validateAllFormFields, APIErrStr } from '../utils';
+import { getStorage, setStorage, validateAllFormFields, APIErrStr, getAppImgStr } from '../utils';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HttpStatusCode } from '@angular/common/http';
 import { AuthorizationService } from '../metadata/authorizationservice';
@@ -84,10 +84,8 @@ export class RegisterComponent implements OnInit {
       "MFA": [false],
     }, { updateOn: 'blur' });
 
-    const settings: Settings = JSON.parse(getStorage("settings"));
-    if (settings && settings.appImage) {
-      this.appImage = settings.appImage;
-    }
+    this.appImage = getAppImgStr();
+
     if (getStorage("userId") !== null) {
       this.loading = true;
       this.heartBeatService.checkHeartBeat(this);
@@ -278,6 +276,10 @@ export class RegisterComponent implements OnInit {
     } else {
       this.router.navigate(['/']);
     }
+  }
+
+  checkScenario3() {
+    return !this.update && document.cookie.includes('flow3');
   }
 
   onClick(event) {

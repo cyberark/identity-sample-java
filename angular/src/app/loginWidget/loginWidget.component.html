@@ -1,7 +1,51 @@
 <div class="container-fluid">
   <app-header isHomeVisible=true></app-header>
-  <head></head> 
-  <div id="cyberark-login" class="app-page"></div>
-  <app-error [btnClick]="onRetry" [body]="errorMessage"></app-error>
+  <div class="app-page">
+    <div class="container h-100">
+      <div class="h-100 row justify-content-center align-items-center">
+        <div class="col m-5">
+          <div class="text-center" *ngIf="showSignUpWidget">
+            <h3>
+              The signup widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the signup widget
+            </h3>
+            <h5 class="mt-5">
+              The signup widget internally uses the “/Signup” API of CyberArk Identity to signup and create the users.
+            </h5>
+            <h5 class="my-3">
+              The fields on the signup widget and the look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+            </h5>
+            <h5 class="my-3">
+              The signup widget supports using a bearer token (or) captcha to create users.It can also be used along with Identity verification to prevent identity theft and consent management to get implicit consent of the user.
+            </h5>
+            <h5 class="my-3">
+              The widget can be integrated with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user if auto login is enabled.
+            </h5>
+            <h5 class="mt-3">
+              For more information of the widget please check the documentation here.
+            </h5>
+          </div>
+          <div class="text-center" *ngIf="!showSignUpWidget">
+            <h3>
+              The login widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the login widget
+            </h3>
+            <h5 class="mt-5">
+              The login widget internally uses the “/startAuthentication” and “/advanceAuthentication” API of CyberArk Identity to login the users to Acme Inc. The user will be prompted with the MFA setup at the user policy/app policy.
+            </h5>
+            <h5 class="my-4">
+              The look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+            </h5>
+            <h5 class="my-4">
+              The widget can be integrated with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user. By default a one time authentication token will be returned by the widget. If the domain of Acme Inc is registered with CyberArk Identity, then the widget automatically generates cookies for Acme Inc domain.
+            </h5>
+            <h5 class="mt-4">
+              For more information of the widget please check the documentation here.
+            </h5>
+          </div>
+        </div>
+        <div class="col m-5" id="cyberark-login"></div>
+      </div>
+    </div>
+    <app-error [btnClick]="onRetry" [body]="errorMessage"></app-error>
+  </div>
 </div>
   
