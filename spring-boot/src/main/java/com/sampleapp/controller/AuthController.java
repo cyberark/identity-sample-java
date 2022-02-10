@@ -21,6 +21,7 @@ import com.sampleapp.entity.AdvanceLoginRequest;
 import com.sampleapp.entity.AuthRequest;
 import com.sampleapp.entity.DBUser;
 import com.sampleapp.entity.Response;
+import com.sampleapp.entity.SessionMetadata;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -96,10 +97,10 @@ public class AuthController {
 	}
 	
 	@PostMapping("auth/logoutSession")
-	public ResponseEntity<JsonNode> logoutBySessionId(@RequestBody String sessionId, HttpServletResponse servletResponse) {
+	public ResponseEntity<JsonNode> logoutBySessionId(@RequestBody SessionMetadata sessionMetadata, HttpServletResponse servletResponse) {
 		Response response = new Response();
 		try {
-			authService.logoutSession(sessionId, servletResponse);
+			authService.logoutSession(sessionMetadata.getSessionUuid(), servletResponse);
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch(Exception ex){
 			logger.error("Exception occurred : ", ex);
@@ -110,10 +111,10 @@ public class AuthController {
 	}
 
 	@PostMapping({"/HeartBeat"})
-	public ResponseEntity<JsonNode> HeartBeat(@RequestBody String sessionUuid, HttpServletResponse servletResponse) {
+	public ResponseEntity<JsonNode> HeartBeat(@RequestBody SessionMetadata sessionMetadata, HttpServletResponse servletResponse) {
 		Response response = new Response();
 		try {
-			String sessionId = AuthFilter.cleanIt(sessionUuid);
+			String sessionId = AuthFilter.cleanIt(sessionMetadata.getSessionUuid());
 			authService.heartBeat(sessionId, servletResponse);
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex) {
