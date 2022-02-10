@@ -6,7 +6,7 @@ CERTS_DIR=./certs/
 cd "${CERTS_DIR}"
 
 # OpenSSL commands in case the certificate expired or not working
-# openssl req -x509 -nodes -new -sha256 -days 2048 -newkey rsa:2048 -keyout RootCA.key -out RootCA.pem -config "certificate.cnf"
+# openssl req -x509 -nodes -new -sha256 -days 2048 -newkey rsa:2048 -keyout RootCA.key -out RootCA.pem -subj "/C=US/CN=identitydemo.acmeinc.com"
 #
 # openssl x509 -outform pem -in RootCA.pem -out RootCA.crt
 #
