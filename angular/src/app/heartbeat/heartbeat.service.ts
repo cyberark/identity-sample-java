@@ -50,7 +50,7 @@ export class HeartBeatService {
 
     heartBeat(SessionUuid: string) {
         let head = new HttpHeaders().set('Content-Type', 'application/json');
-        return this.http.post<any>(EndpointsConnector.HeartBeat, SessionUuid, { headers: head, withCredentials: true })
+        return this.http.post<any>(EndpointsConnector.HeartBeat, {"SessionUuid":SessionUuid}, { headers: head, withCredentials: true })
             .pipe(map(data => {
             return data;
         }));
