@@ -5,7 +5,7 @@
 :: 
 :: openssl x509 -outform pem -in RootCA.pem -out RootCA.crt
 :: 
-:: openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/CN= server.local"
+:: openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/CN=server.local"
 :: 
 :: openssl x509 -req -sha256 -days 2048 -in server.csr -CA RootCA.pem -CAkey RootCA.key -CAcreateserial -extfile "certificate.cnf" -out server.crt
 :: 
