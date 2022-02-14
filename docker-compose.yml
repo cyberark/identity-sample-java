@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  identity-springboot:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-springboot
+    env_file: ./.env
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "demoAppBaseURL"    : "$demoAppBaseURL" ,
+        "backendServerPort" : "$backendServerPort" ,
+        "frontendServerPort": "$frontendServerPort" }'
+    ports:
+      - $backendServerPort:$backendServerPort
+
+  identity-angular:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile-angular
+    env_file: ./.env
+    depends_on:
+      - identity-springboot
+    ports:
+      - $frontendServerPort:$frontendServerPort

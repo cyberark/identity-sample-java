@@ -1,0 +1,14 @@
+FROM node:12-alpine
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY ./angular/package*.json /app/
+RUN npm install
+RUN npm install -g @angular/cli@13.2.0
+
+COPY ./angular/ /app/
+COPY ./certs  /app/ssl
+
+RUN npm cache clean --force
+RUN npm run build
+CMD ["ng","serve","--host", "0.0.0.0"]

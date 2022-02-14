@@ -1,0 +1,19 @@
+FROM maven:3.8.4-jdk-11 AS MAVEN_BUILD
+
+WORKDIR	/app
+
+COPY ./spring-boot/pom.xml .
+COPY ./spring-boot/src ./src
+
+COPY ./certs/sslkeystore.p12  ./src/main/resources/
+COPY ./spring-boot/libs ./libs
+
+
+RUN mvn clean package spring-boot:repackage
+
+FROM openjdk:11
+
+WORKDIR /app
+COPY --from=MAVEN_BUILD /app/target/cyberark-sampleapp-java-server.jar .
+
+ENTRYPOINT ["java", "-jar" , "cyberark-sampleapp-java-server.jar" ]
