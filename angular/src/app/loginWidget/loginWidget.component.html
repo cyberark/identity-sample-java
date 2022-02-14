@@ -6,39 +6,36 @@
         <div class="col m-5">
           <div class="text-center" *ngIf="showSignUpWidget">
             <h3>
-              The signup widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the signup widget
+              The admin of Acme Inc. creates the signup widget on the CyberArk Identity portal and downloads the HTML from the portal to embed the signup widget
             </h3>
             <h5 class="mt-5">
-              The signup widget internally uses the “/Signup” API of CyberArk Identity to signup and create the users.
+              The signup widget internally uses the <a target="_blank" href="https://identity-developer.cyberark.com/reference/post_cdirectoryservice-signup">“/Signup” API</a> of CyberArk Identity to signup and create the users.
             </h5>
             <h5 class="my-3">
-              The fields on the signup widget and the look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+              The signup widget’s fields and look and feel dynamically change based on the widget ID.
             </h5>
             <h5 class="my-3">
-              The signup widget supports using a bearer token (or) captcha to create users.It can also be used along with Identity verification to prevent identity theft and consent management to get implicit consent of the user.
-            </h5>
-            <h5 class="my-3">
-              The widget can be integrated with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user if auto login is enabled.
+              The signup widget supports creating users using a bearer token (or) captcha. You can use the widget alongside <a target="_blank" href="https://docs.cyberark.com/Product-Doc/OnlineHelp/Idaptive/Latest/en/Content/Integrations/Identity-Verification-Integration.htm">Identity verification</a> to prevent identity theft and consent management.
             </h5>
             <h5 class="mt-3">
-              For more information of the widget please check the documentation here.
+              You can integrate the widget with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user if auto-login is enabled.
             </h5>
           </div>
           <div class="text-center" *ngIf="!showSignUpWidget">
             <h3>
-              The login widget should be created on the CyberArk Identity portal and the HTML should be downloaded from the portal to embed the login widget
+              The admin of Acme Inc. creates the login widget on the CyberArk Identity portal and downloads the HTML from the portal to embed the login widget.
             </h3>
             <h5 class="mt-5">
-              The login widget internally uses the “/startAuthentication” and “/advanceAuthentication” API of CyberArk Identity to login the users to Acme Inc. The user will be prompted with the MFA setup at the user policy/app policy.
+              The login widget internally uses the <a target="_blank" href="https://identity-developer.cyberark.com/reference/post_security-startauthentication">“/StartAuthentication”</a> and <a target="_blank" href="https://identity-developer.cyberark.com/reference/post_security-advanceauthentication">“/AdvanceAuthentication”</a> API of CyberArk Identity to log in the users to Acme Inc. The widget prompts the user with the MFA as per the user policy/app policy.
             </h5>
             <h5 class="my-4">
-              The look and feel of the widget can be dynamically changed from the CyberArk Identity portal and the properties get rendered  based on the widget ID.
+              The login widget’s fields and look and feel dynamically change based on the widget ID
             </h5>
             <h5 class="my-4">
-              The widget can be integrated with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user. By default a one time authentication token will be returned by the widget. If the domain of Acme Inc is registered with CyberArk Identity, then the widget automatically generates cookies for Acme Inc domain.
+              You can integrate the widget with authentication and authorization protocols such as OIDC/SAML to generate tokens for the user. The widget returns a one-time authentication token by default. If Ame Inc. registers its domain with CyberArk Identity, the widget automatically generates cookies for the Acme Inc domain.
             </h5>
             <h5 class="mt-4">
-              For more information of the widget please check the documentation here.
+              For more information on the widget, please check the documentation <a target="_blank" href="https://identity-developer.cyberark.com/docs/login-widget">here</a>.
             </h5>
           </div>
         </div>
