@@ -18,8 +18,13 @@ package com.sampleapp.service;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.cyberark.client.UserMgmt;
+import com.cyberark.entities.SignUpResponse;
 import com.cyberark.entities.TokenHolder;
+import com.cyberark.requestBuilders.SignUpRequest;
 import com.sampleapp.entity.AuthFlows;
 import com.sampleapp.entity.AuthorizationFlow;
 import com.sampleapp.entity.GrantType;
@@ -125,46 +130,41 @@ public class UserService {
 		return setHeaders(token);
 	}
 
-	public ResponseEntity<JsonNode> createUser(User user, boolean isMfa, boolean enableMFAWidgetFlow) throws Exception{
-		String userJson = "";
+	public ResponseEntity<JsonNode> createUser(User user, boolean enableMFAWidgetFlow) throws Exception{
 		try {
-			userJson = getJson(user);
-			HttpHeaders headers = prepareForRequestOauth();
-			HttpEntity<String> createuserrequest = new HttpEntity<>(userJson, headers);
-			String createUserUrl = settingsService.getTenantURL() + "/CDirectoryService/Signup";
-			String updateRoleUrl = settingsService.getTenantURL() + "/Roles/UpdateRole";
-			ResponseEntity<JsonNode> createUserResponse = null;
-			createUserResponse = restTemplate.exchange(createUserUrl, HttpMethod.POST, createuserrequest,
-					JsonNode.class);
-			StringBuffer message = new StringBuffer("User name " + GetMFAUserName(user.getName()) + " is already in use.");
-			if (createUserResponse.getBody().get("Result").isNull()) {
-				if (createUserResponse.getBody().get("Message").asText().contains(message)) {
-					JsonNode createUserResponseBody = createUserResponse.getBody();
-					ObjectNode objNode = (ObjectNode) createUserResponseBody;
-					objNode.remove("Message");
-					objNode.put("Message", "User name " + user.getName() + " is already in use.");
-					return new ResponseEntity(createUserResponse.getBody(), HttpStatus.OK);
-				}
+			String bearerToken = receiveOAuthTokenForClientCreds();
+			UserMgmt userMgmt = new UserMgmt(settingsService.getTenantURL());
+			SignUpRequest signUpRequest = userMgmt.signUpWithBearerToken(bearerToken)
+					.setUserName(GetMFAUserName(user.getName()))
+					.setPassword(String.valueOf(user.getPassword()));
+
+			Map<String, Object> attributes = new HashMap<>();
+			attributes.put("Mail", user.getMail());
+			attributes.put("MobileNumber", user.getMobileNumber());
+			SignUpResponse signUpResponse = signUpRequest.setAdditionalAttributes(attributes)
+					.execute();
+
+			if (!signUpResponse.isSuccess() && signUpResponse.getResult().isNull()) {
+				return new ResponseEntity(signUpResponse, HttpStatus.OK);
 			} else {
-				if (isMfa) {
-					String roleUuid = getRoleUuid(settingsService.getRoleName());
+				HttpHeaders headers = prepareForRequestOauth();
+				String updateRoleUrl = settingsService.getTenantURL() + "/Roles/UpdateRole";
 
-					HttpEntity<String> updateRoleRequest = new HttpEntity<>(
-							"{\"Users\":{\"Add\":[\"" + createUserResponse.getBody().get("Result").get("UserId").asText()
-									+ "\"]},\"Name\":\"" + roleUuid + "\",\"Description\":\"\"}",
-							headers);
-					restTemplate.exchange(updateRoleUrl, HttpMethod.POST, updateRoleRequest, JsonNode.class);
-				}
+				String roleUuid = getRoleUuid(settingsService.getRoleName());
+				HttpEntity<String> updateRoleRequest = new HttpEntity<>(
+						"{\"Users\":{\"Add\":[\"" + signUpResponse.getResult().get("UserId").asText()
+								+ "\"]},\"Name\":\"" + roleUuid + "\",\"Description\":\"\"}",
+						headers);
+				restTemplate.exchange(updateRoleUrl, HttpMethod.POST, updateRoleRequest, JsonNode.class);
+
 				if(enableMFAWidgetFlow) {
-					saveToCustomDb(user, createUserResponse.getBody().get("Result").get("UserId").asText());
+					saveToCustomDb(user, signUpResponse.getResult().get("UserId").asText());
 				}
-
-				return createUserResponse;
 			}
 
 			Arrays.fill(user.password, ' ');
 
-			return createUserResponse;
+			return new ResponseEntity(signUpResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);

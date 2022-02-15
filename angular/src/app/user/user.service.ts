@@ -33,9 +33,9 @@ export class UserService {
     return this.http.get<any>(EndpointsConnector.UserOpsURL + `${id}`, { headers: head, withCredentials: true });
   }
 
-  register(user: User, clientIP: string, isMfa: boolean) {
+  register(user: User, clientIP: string) {
     let head = new HttpHeaders().set('Content-Type', 'application/json').set('CLIENT_IP', clientIP);
-    return this.http.post<any>(EndpointsConnector.RegisterEndpoint, {user: user, isMfa: isMfa}, { headers: head, withCredentials: true });
+    return this.http.post<any>(EndpointsConnector.RegisterEndpoint, user, { headers: head, withCredentials: true });
   }
 
   getClientIP(){

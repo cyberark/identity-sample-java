@@ -18,7 +18,7 @@ package com.sampleapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.sampleapp.entity.UserRegistration;
+import com.sampleapp.entity.User;
 import com.sampleapp.config.AuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +35,8 @@ public class UsersController {
 	private UserService userService;
 
 	@PostMapping("/user/register")
-	public ResponseEntity<JsonNode> createUser(HttpServletRequest request, @RequestBody UserRegistration userRegistration) throws Exception {
+	public ResponseEntity<JsonNode> createUser(HttpServletRequest request, @RequestBody User user) throws Exception {
 		Boolean enableMFAWidgetFlow = AuthFilter.readServletCookie(request,"flow").get().equals("flow3");
-		return userService.createUser(userRegistration.getUser(), userRegistration.getIsMfa(), enableMFAWidgetFlow);
+		return userService.createUser(user, enableMFAWidgetFlow);
 	}
 }
