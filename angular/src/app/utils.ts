@@ -66,6 +66,8 @@ export class Settings {
   oidcClientId: string;
   oidcClientPassword: string
   oidcScopesSupported: string;
+  siteKey: string;
+
 }
 
 export class AuthorizationMetadataRequest extends PKCEMetaData {
@@ -199,4 +201,13 @@ export const getAppImgStr = () => {
     imgStr = settings.appImage;
   }
   return imgStr;
+}
+
+export const getSiteKey = () => {
+  let siteKey = '';
+  const settings: Settings = JSON.parse(getStorage("settings"));
+  if (settings && settings.siteKey) {
+    siteKey = settings.siteKey;
+  }
+  return siteKey;
 }

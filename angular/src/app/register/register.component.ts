@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
-import { getStorage, setStorage, validateAllFormFields, APIErrStr, getAppImgStr } from '../utils';
+import { getStorage, setStorage, validateAllFormFields, APIErrStr, getAppImgStr, getSiteKey } from '../utils';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HttpStatusCode } from '@angular/common/http';
 import { AuthorizationService } from '../metadata/authorizationservice';
@@ -47,8 +47,11 @@ export class RegisterComponent implements OnInit {
   loading = false;
   showConsent = false;
   appImage: string = "";
+  reCaptchaToken: string;
 
   @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
+  siteKey: string;
+
 
   constructor(
     private router: Router,
@@ -85,6 +88,7 @@ export class RegisterComponent implements OnInit {
     }, { updateOn: 'blur' });
 
     this.appImage = getAppImgStr();
+    this.siteKey = getSiteKey();
 
     if (getStorage("userId") !== null) {
       this.loading = true;
@@ -165,7 +169,11 @@ export class RegisterComponent implements OnInit {
       this.registerUser(form);
     }
   }
-
+  public resolved(captchaResponseToken: string) {
+    this.reCaptchaToken =  captchaResponseToken;
+    console.log(`Resolved captcha with response: ${captchaResponseToken}`); 
+    // Write your logic here about once human verified what action you want to perform 
+    }
   registerUser(form: NgForm) {
     let user;
     this.loading = true;
@@ -196,6 +204,7 @@ export class RegisterComponent implements OnInit {
       });
     } else {
       user = Object.assign({}, form);
+      user.ReCaptchaToken = this.reCaptchaToken;
       this.userService.getClientIP().subscribe({
         next: ipData => {
           this.userService.register(user, ipData.ip).subscribe({

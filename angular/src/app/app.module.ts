@@ -41,6 +41,7 @@ import { HttpXsrfInterceptor } from './HttpXsrfInterceptor';
 import { M2MComponent } from './m2m/m2m.component';
 import { ErrorComponent } from './components/error/error.component';
 import { TOTPRegisterComponent } from './totpregister/totpregister.component';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { TOTPRegisterComponent } from './totpregister/totpregister.component';
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    RecaptchaModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({headerName: 'X-XSRF-TOKEN', cookieName: 'XSRF-TOKEN'})
   ],

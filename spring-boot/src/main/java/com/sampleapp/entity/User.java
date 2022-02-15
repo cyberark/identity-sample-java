@@ -71,6 +71,9 @@ public class User {
 	@JsonProperty("country_code")
 	private String country;
 
+	@JsonProperty("ReCaptchaToken")
+	public String ReCaptchaToken;
+
 	public User(String displayName, String email, String name, char[] password) {
 		this.displayName = displayName;
 		this.mail = email;

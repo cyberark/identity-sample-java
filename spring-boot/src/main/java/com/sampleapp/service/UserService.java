@@ -87,7 +87,7 @@ public class UserService {
 		String name = user.getName();
 		user.setName(GetMFAUserName(name));
 		try {
-			String json =  mapper.writeValueAsString(user);
+			String json = mapper.writeValueAsString(user);
 			user.setName(name);
 			return json;
 		} catch (JsonProcessingException e) {
@@ -102,7 +102,8 @@ public class UserService {
 
 		TokenHolder tokenHolder = null;
 		try {
-			tokenHolder = this.authFlows.getEnumMap().get(AuthorizationFlow.OAUTH).getTokenSetWithClientCreds(metadataRequest);
+			tokenHolder = this.authFlows.getEnumMap().get(AuthorizationFlow.OAUTH)
+					.getTokenSetWithClientCreds(metadataRequest);
 		} catch (IOException e) {
 			logger.error("Error occurred while fetching access_token : ", e);
 			throw new Exception(e.getMessage(), e);
@@ -112,29 +113,29 @@ public class UserService {
 	}
 
 	private HttpHeaders setHeaders(String token) {
-		HttpServletRequest currentRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		HttpServletRequest currentRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
 		HttpHeaders httpHeaders = new HttpHeaders();
-		
+
 		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
 		httpHeaders.set("cache-control", "no-cache");
 		httpHeaders.set("Authorization", "Bearer " + token);
-		if (currentRequest.getHeader("CLIENT_IP") != null){
+		if (currentRequest.getHeader("CLIENT_IP") != null) {
 			httpHeaders.set("X_FORWARDED_FOR", currentRequest.getHeader("CLIENT_IP"));
 		}
 		return httpHeaders;
 	}
 
-	private HttpHeaders prepareForRequestOauth()  throws Exception {
+	private HttpHeaders prepareForRequestOauth() throws Exception {
 		String token = receiveOAuthTokenForClientCreds();
 		return setHeaders(token);
 	}
 
-	public ResponseEntity<JsonNode> createUser(User user, boolean enableMFAWidgetFlow) throws Exception{
+	public ResponseEntity<JsonNode> createUser(User user, boolean enableMFAWidgetFlow) throws Exception {
 		try {
-			String bearerToken = receiveOAuthTokenForClientCreds();
 			UserMgmt userMgmt = new UserMgmt(settingsService.getTenantURL());
-			SignUpRequest signUpRequest = userMgmt.signUpWithBearerToken(bearerToken)
+			SignUpRequest signUpRequest = userMgmt.signUpWithCaptcha(user.ReCaptchaToken)
 					.setUserName(GetMFAUserName(user.getName()))
 					.setPassword(String.valueOf(user.getPassword()));
 
@@ -157,7 +158,7 @@ public class UserService {
 						headers);
 				restTemplate.exchange(updateRoleUrl, HttpMethod.POST, updateRoleRequest, JsonNode.class);
 
-				if(enableMFAWidgetFlow) {
+				if (enableMFAWidgetFlow) {
 					saveToCustomDb(user, signUpResponse.getResult().get("UserId").asText());
 				}
 			}
@@ -171,16 +172,17 @@ public class UserService {
 		}
 	}
 
-	public void saveToCustomDb(User user, String mfaUserId){
+	public void saveToCustomDb(User user, String mfaUserId) {
 		DBUser outUser = repo.save(user.getUser());
-		mfaUserMappingRepository.save(new MfaUserMapping(outUser.getId(),mfaUserId));
+		mfaUserMappingRepository.save(new MfaUserMapping(outUser.getId(), mfaUserId));
 	}
 
 	public String getRoleUuid(String roleName) throws RoleNotFoundException, Exception {
 		String getRoles = settingsService.getTenantURL() + "/Redrock/query";
 		HttpHeaders headers = prepareForRequestOauth();
 		HttpEntity<String> getRolesRequest = new HttpEntity<>(
-				"{ \"Script\": \"Select ID as ID from Role WHERE Name = \'" + roleName + "\' ORDER BY Name COLLATE NOCASE \"}",
+				"{ \"Script\": \"Select ID as ID from Role WHERE Name = \'" + roleName
+						+ "\' ORDER BY Name COLLATE NOCASE \"}",
 				headers);
 		ResponseEntity<JsonNode> getRoleInfo = restTemplate.exchange(getRoles, HttpMethod.POST, getRolesRequest,
 				JsonNode.class);
@@ -205,17 +207,18 @@ public class UserService {
 		try {
 			DBUser dbUser = repo.findOne(Example.of(exampleUser)).get();
 			Arrays.fill(exampleUser.Password, ' ');
-			return  dbUser;
-		}catch(Exception ex){
-			logger.error(ex.getMessage(),ex);
-			return  null;
+			return dbUser;
+		} catch (Exception ex) {
+			logger.error(ex.getMessage(), ex);
+			return null;
 		}
 	}
+
 	public DBUser Get(Integer id) {
 		return repo.findById(id).get();
 	}
 
-	public String GetMFAUserName(String name){
+	public String GetMFAUserName(String name) {
 		return name + "@" + settingsService.getLoginSuffix();
 	}
 }
