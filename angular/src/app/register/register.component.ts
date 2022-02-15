@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
   reCaptchaToken: string;
 
   @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
-  siteKey: string;
+  siteKey: string = "";
 
 
   constructor(
@@ -88,6 +88,7 @@ export class RegisterComponent implements OnInit {
     }, { updateOn: 'blur' });
 
     this.appImage = getAppImgStr();
+    debugger;
     this.siteKey = getSiteKey();
 
     if (getStorage("userId") !== null) {

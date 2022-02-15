@@ -134,7 +134,7 @@
                 <span *ngIf="hasError('MobileNumber', 'pattern')">Must be valid phonenumber(+CCNNNNNNNNNN)</span>
               </div>
               <div class="form-group">
-                <re-captcha (resolved)="resolved($event)" siteKey="6LfJt24eAAAAAODSkYQtRueqkPFcGeB1zJmxq3h_">
+                <re-captcha (resolved)="resolved($event)" siteKey="{{siteKey}}">
                 </re-captcha>
               </div>
               <div class="d-flex">
