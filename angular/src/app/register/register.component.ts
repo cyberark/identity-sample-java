@@ -198,7 +198,7 @@ export class RegisterComponent implements OnInit {
       user = Object.assign({}, form);
       this.userService.getClientIP().subscribe({
         next: ipData => {
-          this.userService.register(user, ipData.ip, true).subscribe({
+          this.userService.register(user, ipData.ip).subscribe({
             next: data => {
               this.loading = false;
               if (data.success == true) {
