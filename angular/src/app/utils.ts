@@ -67,6 +67,7 @@ export class Settings {
   oidcClientPassword: string
   oidcScopesSupported: string;
   siteKey: string;
+  isCaptchaEnabledInSettings: boolean;
 
 }
 
@@ -210,4 +211,12 @@ export const getSiteKey = () => {
     siteKey = settings.siteKey;
   }
   return siteKey;
+}
+
+export const getCaptchaStatus = () => {
+  const settings: Settings = JSON.parse(getStorage("settings"));
+  if (settings && settings.isCaptchaEnabledInSettings) {
+    return settings.isCaptchaEnabledInSettings;
+  }
+  return false;
 }

@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
 import { HeaderComponent } from '../components/header/header.component';
-import { getStorage, setStorage, validateAllFormFields, APIErrStr, getAppImgStr, getSiteKey } from '../utils';
+import { getStorage, setStorage, validateAllFormFields, APIErrStr, getAppImgStr, getSiteKey, getCaptchaStatus } from '../utils';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { HttpStatusCode } from '@angular/common/http';
 import { AuthorizationService } from '../metadata/authorizationservice';
@@ -48,9 +48,11 @@ export class RegisterComponent implements OnInit {
   showConsent = false;
   appImage: string = "";
   reCaptchaToken: string;
+  siteKey: string = "";
+  isCaptchaEnabled: boolean;
 
   @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
-  siteKey: string = "";
+ 
 
 
   constructor(
@@ -88,9 +90,9 @@ export class RegisterComponent implements OnInit {
     }, { updateOn: 'blur' });
 
     this.appImage = getAppImgStr();
-    debugger;
     this.siteKey = getSiteKey();
-
+    this.isCaptchaEnabled = getCaptchaStatus();
+    
     if (getStorage("userId") !== null) {
       this.loading = true;
       this.heartBeatService.checkHeartBeat(this);

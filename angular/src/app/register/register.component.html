@@ -133,7 +133,7 @@
                 <input class="form-control" formControlName="MobileNumber" name="mobileNumber">
                 <span *ngIf="hasError('MobileNumber', 'pattern')">Must be valid phonenumber(+CCNNNNNNNNNN)</span>
               </div>
-              <div class="form-group">
+              <div class="form-group" *ngIf="isCaptchaEnabled">
                 <re-captcha (resolved)="resolved($event)" siteKey="{{siteKey}}">
                 </re-captcha>
               </div>

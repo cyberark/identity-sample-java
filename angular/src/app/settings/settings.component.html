@@ -6,10 +6,12 @@
   <div #divToScroll class="app-page">
     <div class="container my-3">
       <h3 class="text-center p-3">Settings</h3>
-      <h5 class="p-3">Note: Settings in this page are utilized to demonstrate the functionalities using this app. The settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to inappropriate behavior of the functionalities.</h5>
+      <h5 class="p-3">Note: Settings in this page are utilized to demonstrate the functionalities using this app. The
+        settings must match exactly to the configured applications on the tenant. Incorrect configuration will lead to
+        inappropriate behavior of the functionalities.</h5>
       <div *ngIf="errorMessage != ''" class="user-error">
-        <div class="error-image"><img
-           alt="successfailicon" [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
+        <div class="error-image"><img alt="successfailicon"
+            [src]="checkMessageType() ? '../../assets/images/green_check.png' : '../../assets/images/issue_icon.png'" />
         </div>
         <p [style.color]="checkMessageType() ? '#000' : '#cc3300'">{{errorMessage}}</p>
       </div>
@@ -17,7 +19,8 @@
         <div class="container p-3 mb-1 mx-3">
           <div class="row align-items-center">
             <label class="label col">Application Logo <br> (Supports: png, jpg, gif, ico, bmp)</label>
-            <input type="file" class="form-control col" accept=".png,.jpg,.gif,.ico,.bmp" formControlName="appImage" (change)="onImageUpload($event)">
+            <input type="file" class="form-control col" accept=".png,.jpg,.gif,.ico,.bmp" formControlName="appImage"
+              (change)="onImageUpload($event)">
             <img [attr.src]="imagePreview" alt="default-logo" width="28px" height="28px" class="col-2">
             <span *ngIf="hasAppLogoError">Invalid file extension or file size has exceeded max limit of 1 MB</span>
           </div>
@@ -30,7 +33,8 @@
             </div>
             <div class="form-group">
               <label class="required label">URL</label>
-              <input class="form-control" formControlName="tenantURL" required placeholder="https://YOUR_TENANT.idaptive.app">
+              <input class="form-control" formControlName="tenantURL" required
+                placeholder="https://YOUR_TENANT.idaptive.app">
               <span *ngIf="hasError('tenantURL', 'required')">Required</span>
               <span *ngIf="hasError('tenantURL', 'maxlength')">URL should not be longer than 80 characters</span>
               <span *ngIf="hasError('tenantURL', 'pattern')">Invalid URL</span>
@@ -66,25 +70,32 @@
             </div>
             <div class="form-group">
               <label class="required label">Application ID</label>
-              <input class="form-control" formControlName="oauthAppId" required placeholder="OAuth Client Application ID">
+              <input class="form-control" formControlName="oauthAppId" required
+                placeholder="OAuth Client Application ID">
               <span *ngIf="hasError('oauthAppId', 'required')">Required</span>
             </div>
             <div class="form-group">
               <label class="required label">Username</label>
-              <input class="form-control" formControlName="oauthServiceUserName" required placeholder="Service Username">
+              <input class="form-control" formControlName="oauthServiceUserName" required
+                placeholder="Service Username">
               <span *ngIf="hasError('oauthServiceUserName', 'required')">Required</span>
-              <span *ngIf="hasError('oauthServiceUserName', 'pattern')">Invalid format, expected format: loginName@Suffix</span>
+              <span *ngIf="hasError('oauthServiceUserName', 'pattern')">Invalid format, expected format:
+                loginName@Suffix</span>
             </div>
             <div class="form-group">
               <label class="required label">Password</label>
-              <input class="form-control" formControlName="oauthServiceUserPassword" required placeholder="Service User Password">
+              <input class="form-control" formControlName="oauthServiceUserPassword" required
+                placeholder="Service User Password">
               <span *ngIf="hasError('oauthServiceUserPassword', 'required')">Required</span>
-              <span *ngIf="hasError('oauthServiceUserPassword', 'minlength')">Password must be at least 8 characters long</span>
-              <span *ngIf="hasError('oauthServiceUserPassword', 'maxlength')">Password should not be longer than 64 characters</span>
+              <span *ngIf="hasError('oauthServiceUserPassword', 'minlength')">Password must be at least 8 characters
+                long</span>
+              <span *ngIf="hasError('oauthServiceUserPassword', 'maxlength')">Password should not be longer than 64
+                characters</span>
             </div>
             <div class="form-group">
               <label class="required label">Scopes</label>
-              <input class="customTagStyle" name="basic" formControlName="oauthScopesSupported" required placeholder="Space Separated OAuth Scopes" (change)="onOAuthScopeChange($event.target.value)">
+              <input class="customTagStyle" name="basic" formControlName="oauthScopesSupported" required
+                placeholder="Space Separated OAuth Scopes" (change)="onOAuthScopeChange($event.target.value)">
               <span *ngIf="hasError('oauthScopesSupported', 'required')">Required</span>
             </div>
           </div>
@@ -97,23 +108,27 @@
             </div>
             <div class="form-group">
               <label class="required label">Application ID</label>
-              <input class="form-control" formControlName="oidcAppId" required placeholder="OpenID Connect Application ID">
+              <input class="form-control" formControlName="oidcAppId" required
+                placeholder="OpenID Connect Application ID">
               <span *ngIf="hasError('oidcAppId', 'required')">Required</span>
             </div>
             <div class="form-group">
               <label class="required label">Client ID</label>
-              <input class="form-control" formControlName="oidcClientId" required placeholder="OpenID Connect Client ID">
+              <input class="form-control" formControlName="oidcClientId" required
+                placeholder="OpenID Connect Client ID">
               <span *ngIf="hasError('oidcClientId', 'required')">Required</span>
               <span *ngIf="hasError('oidcClientId', 'pattern')">Incorrect Client ID</span>
             </div>
             <div class="form-group">
               <label class="required label">Client Secret</label>
-              <input class="form-control" formControlName="oidcClientPassword" required placeholder="OpenID Connect Client Secret">
+              <input class="form-control" formControlName="oidcClientPassword" required
+                placeholder="OpenID Connect Client Secret">
               <span *ngIf="hasError('oidcClientPassword', 'required')">Required</span>
             </div>
             <div class="form-group">
               <label class="required label">Scopes</label>
-              <input class="customTagStyle" name="basic" formControlName="oidcScopesSupported" required placeholder="openid email profile" (change)="onOIDCScopeChange($event.target.value)">
+              <input class="customTagStyle" name="basic" formControlName="oidcScopesSupported" required
+                placeholder="openid email profile" (change)="onOIDCScopeChange($event.target.value)">
               <span *ngIf="hasError('oidcScopesSupported', 'required')">Required</span>
             </div>
           </div>
@@ -123,13 +138,15 @@
             </div>
             <div class="form-group">
               <label class="required label">Session Timeout (sec)</label>
-              <input class="form-control" formControlName="sessionTimeout" required placeholder="120" max="500" type="number">
+              <input class="form-control" formControlName="sessionTimeout" required placeholder="120" max="500"
+                type="number">
               <span *ngIf="hasError('sessionTimeout', 'required')">Required</span>
               <span *ngIf="hasError('sessionTimeout', 'max')">Value should not be greater than 500 seconds.</span>
             </div>
             <div class="form-group">
               <label class="required label">Mobile Background Timeout (sec)</label>
-              <input class="form-control" formControlName="mobileTimeout" required placeholder="60" max="500" type="number">
+              <input class="form-control" formControlName="mobileTimeout" required placeholder="60" max="500"
+                type="number">
               <span *ngIf="hasError('mobileTimeout', 'required')">Required</span>
               <span *ngIf="hasError('mobileTimeout', 'max')">Value should not be greater than 500 seconds.</span>
             </div>
@@ -139,8 +156,15 @@
               <h5>ReCaptcha Settings</h5>
             </div>
             <div class="form-group">
+              <div class="form-check form-check-inline">
+                <input type="checkbox" class="form-check-input" formControlName="isCaptchaEnabledInSettings" 
+                (change)="onCheckCaptchaEnabled($event.target.checked)" checked="isCaptchaEnabledInSettings">
+                <label class="form-check-label">Enable Captcha for sign-up flow</label>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="isCaptchaEnabled">
               <label class="required label">Site Key</label>
-              <input class="form-control" formControlName="siteKey" required placeholder="Enter ReCaptcha Site Key" >
+              <input class="form-control" formControlName="siteKey" required placeholder="Enter ReCaptcha Site Key">
               <span *ngIf="hasError('siteKey', 'required')">Required</span>
             </div>
           </div>

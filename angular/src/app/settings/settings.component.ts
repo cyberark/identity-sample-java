@@ -16,7 +16,7 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
@@ -41,7 +41,8 @@ export class SettingsComponent implements OnInit {
   imagePreview: SafeResourceUrl;
   settings: Settings;
   hasAppLogoError = false;
-
+  isCaptchaEnabledInSettings = false;
+  isCaptchaEnabled: boolean;
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -92,7 +93,10 @@ export class SettingsComponent implements OnInit {
         Validators.required,
         Validators.max(500)
       ])],
-      "siteKey": ['', Validators.required]
+      "isCaptchaEnabledInSettings": ['',],
+      "siteKey": ['',Validators.compose([
+            this.requiredIfValidator(() => this.settingsForm.get('isCaptchaEnabledInSettings').value) 
+        ])]
     });
 
     document.querySelectorAll('input[name=basic]').forEach(ele => {
@@ -107,7 +111,29 @@ export class SettingsComponent implements OnInit {
       this.imagePreview = this.settings.appImage;
       this.settings.appImage = "";
       this.settingsForm.setValue(this.settings);
+      if(this.settings.isCaptchaEnabledInSettings) 
+        this.isCaptchaEnabled = true;
+      else
+        this.isCaptchaEnabled = false;
     }
+  }
+
+  onCheckCaptchaEnabled(isChecked: boolean) {
+      this.isCaptchaEnabled = isChecked;
+      if(isChecked)
+        this.settingsForm.controls.siteKey.setValue("");
+  }
+  
+  requiredIfValidator(predicate: { (): any; (): any; }) {
+    return ((formControl: AbstractControl) => {
+      if (!formControl.parent) {
+        return null;
+      }
+      if (predicate()) {
+        return Validators.required(formControl); 
+      }
+      return null;
+    })
   }
 
   onOIDCScopeChange(val: string) {
