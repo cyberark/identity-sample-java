@@ -71,6 +71,8 @@ public class SettingsService {
 
 	public long getMobileInactiveTimeInSec() { return settings.get("mobileTimeout").asLong(); }
 
+	public String getSiteKey() { return settings.get("siteKey").textValue(); }
+
 
 	/** Updates Settings to settings.json file.
 	 * @param body as Settings JSON

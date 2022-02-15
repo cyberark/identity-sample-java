@@ -134,6 +134,16 @@
               <span *ngIf="hasError('mobileTimeout', 'max')">Value should not be greater than 500 seconds.</span>
             </div>
           </div>
+          <div class="border border-primary p-3 mb-3">
+            <div class="d-flex justify-content-between">
+              <h5>ReCaptcha Settings</h5>
+            </div>
+            <div class="form-group">
+              <label class="required label">Site Key</label>
+              <input class="form-control" formControlName="siteKey" required placeholder="Enter ReCaptcha Site Key" >
+              <span *ngIf="hasError('siteKey', 'required')">Required</span>
+            </div>
+          </div>
         </div>
       </form>
       <div class="d-flex justify-content-center p-3">

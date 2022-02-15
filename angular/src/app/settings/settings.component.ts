@@ -91,7 +91,8 @@ export class SettingsComponent implements OnInit {
       "mobileTimeout": ['', Validators.compose([
         Validators.required,
         Validators.max(500)
-      ])]
+      ])],
+      "siteKey": ['', Validators.required]
     });
 
     document.querySelectorAll('input[name=basic]').forEach(ele => {
