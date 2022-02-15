@@ -171,9 +171,7 @@ export class RegisterComponent implements OnInit {
   }
   public resolved(captchaResponseToken: string) {
     this.reCaptchaToken =  captchaResponseToken;
-    console.log(`Resolved captcha with response: ${captchaResponseToken}`); 
-    // Write your logic here about once human verified what action you want to perform 
-    }
+  }
   registerUser(form: NgForm) {
     let user;
     this.loading = true;
