@@ -135,14 +135,21 @@ public class UserService {
 	public ResponseEntity<JsonNode> createUser(User user, boolean enableMFAWidgetFlow) throws Exception {
 		try {
 			UserMgmt userMgmt = new UserMgmt(settingsService.getTenantURL());
-			SignUpRequest signUpRequest = userMgmt.signUpWithCaptcha(user.ReCaptchaToken)
-					.setUserName(GetMFAUserName(user.getName()))
-					.setPassword(String.valueOf(user.getPassword()));
+
+			SignUpRequest signUpRequest = null;
+			if (settingsService.isCaptchaEnabledInSettings()) {
+				signUpRequest = userMgmt.signUpWithCaptcha(user.ReCaptchaToken);
+			} else {
+				String bearerToken = receiveOAuthTokenForClientCreds();
+				signUpRequest = userMgmt.signUpWithBearerToken(bearerToken);
+			}
 
 			Map<String, Object> attributes = new HashMap<>();
 			attributes.put("Mail", user.getMail());
 			attributes.put("MobileNumber", user.getMobileNumber());
-			SignUpResponse signUpResponse = signUpRequest.setAdditionalAttributes(attributes)
+			SignUpResponse signUpResponse = signUpRequest.setUserName(GetMFAUserName(user.getName()))
+					.setPassword(String.valueOf(user.getPassword()))
+					.setAdditionalAttributes(attributes)
 					.execute();
 
 			if (!signUpResponse.isSuccess() && signUpResponse.getResult().isNull()) {

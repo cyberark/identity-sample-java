@@ -73,6 +73,7 @@ public class SettingsService {
 
 	public String getSiteKey() { return settings.get("siteKey").textValue(); }
 
+	public boolean isCaptchaEnabledInSettings() { return settings.get("isCaptchaEnabledInSettings").asBoolean(); }
 
 	/** Updates Settings to settings.json file.
 	 * @param body as Settings JSON
