@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 */
 
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators, FormControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserService } from '../user/user.service';
@@ -195,7 +195,7 @@ export class RegisterComponent implements OnInit {
       this.userService.update(user, getStorage("userId")).subscribe({
         next: data => {
           this.loading = false;
-          if (data.success == true) {
+          if (data.success == true || data.Success == true) {
             setStorage("mfaUsername", data.UserName);
             this.setMessage("info", "User information updated successfully");
             this.router.navigate(['/user']);
@@ -311,8 +311,8 @@ export class RegisterComponent implements OnInit {
   // #TODO Move in common util
   validateFormFields(controls: Array<string>): boolean {
     let valid = true;
-    for (let i = 0; i < controls.length; i++) {
-      let field = this.registerForm.get(controls[i]);
+    for (let index in controls) {
+      let field = this.registerForm.get(controls[index]);
       field.markAsTouched({ onlySelf: true });
       if (field.invalid) {
         valid = false;

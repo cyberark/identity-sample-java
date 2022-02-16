@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cyberark.client.UserMgmt;
+import com.cyberark.client.UserManagement;
 import com.cyberark.entities.SignUpResponse;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.requestBuilders.SignUpRequest;
@@ -134,14 +134,14 @@ public class UserService {
 
 	public ResponseEntity<JsonNode> createUser(User user, boolean enableMFAWidgetFlow) throws Exception {
 		try {
-			UserMgmt userMgmt = new UserMgmt(settingsService.getTenantURL());
+			UserManagement userManagement = new UserManagement(settingsService.getTenantURL());
 
 			SignUpRequest signUpRequest = null;
 			if (settingsService.isCaptchaEnabledInSettings()) {
-				signUpRequest = userMgmt.signUpWithCaptcha(user.ReCaptchaToken);
+				signUpRequest = userManagement.signUpWithCaptcha(user.ReCaptchaToken);
 			} else {
 				String bearerToken = receiveOAuthTokenForClientCreds();
-				signUpRequest = userMgmt.signUpWithBearerToken(bearerToken);
+				signUpRequest = userManagement.signUpWithBearerToken(bearerToken);
 			}
 
 			Map<String, Object> attributes = new HashMap<>();

@@ -24,6 +24,9 @@ import com.sampleapp.entity.VerifyTotpReq;
 import com.sampleapp.repos.TokenStoreRepository;
 import com.sampleapp.repos.UserRepository;
 
+import com.cyberark.client.UserManagement;
+import com.cyberark.entities.SignUpResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,14 +80,9 @@ public class UserOpsService {
 		ObjectMapper mapper = new ObjectMapper();
 		String name = user.getName();
 		user.setName(GetMFAUserName(name));
-		try {
-			String json =  mapper.writeValueAsString(user);
-			user.setName(name);
-			return json;
-		} catch (Exception e) {
-			logger.error("Exception occurred : ", e);
-			throw e;
-		}
+		String json =  mapper.writeValueAsString(user);
+		user.setName(name);
+		return json;
 	}
 
 	private HttpHeaders setHeaders(String token) {
@@ -100,30 +99,40 @@ public class UserOpsService {
 	}
 
 	//This method updates user information in Idaptive Cloud directory.
-	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user, Boolean enableMFAWidgetFlow) throws JsonProcessingException {
+	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user, Boolean enableMFAWidgetFlow) throws IOException {
+		
+		Response response;
+		
 		user.setUuid(uuid);
 		String userJson = getJson(user);
-		HttpHeaders headers = prepareForRequest(token);
-		HttpEntity<String> request = new HttpEntity<>(userJson, headers);
-		String updateUserUrl = settingsService.getTenantURL() + "/user/UpdateProfile";
+		UserManagement userManagement = new UserManagement(settingsService.getTenantURL());
+		SignUpResponse signUpResponse = userManagement.updateProfile(token, userJson).execute();
+		
 		try {
-			ResponseEntity<JsonNode> result = restTemplate.exchange(updateUserUrl, HttpMethod.POST, request, JsonNode.class);
-			JsonNode response = result.getBody();
-			ObjectNode objNode = (ObjectNode) response;
+			if(signUpResponse.isSuccess()) {
+				response = new Response();
+			} else {
+				response = new Response(false, signUpResponse.getMessage());
+			}
+
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode node = mapper.convertValue(response, JsonNode.class);
+			
+			ObjectNode objNode = (ObjectNode) node;
 			objNode.put("UserName",  GetMFAUserName(user.getName()));
 
 			if(enableMFAWidgetFlow) {
 				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", RequestAttributes.SCOPE_REQUEST);
-				DBUser dbUser = repo.getOne(tokenStore.getUserId());
+				DBUser dbUser = repo.getById(tokenStore.getUserId());
 				dbUser.setName(user.getName());
 				dbUser.setDisplayName(user.getDisplayName());
 				dbUser.setMail(user.getMail());
 				dbUser.setMobileNumber((user.getMobileNumber()));
 				repo.save(dbUser);
 			}
-			return new ResponseEntity(response, HttpStatus.OK);
-		} catch (RestClientException e) {
-			logger.error("Exception occurred : ", e);
+			return new ResponseEntity(objNode, HttpStatus.OK);
+		} catch (NullPointerException | RestClientException e) {
+			logger.error("updateUser Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -136,7 +145,7 @@ public class UserOpsService {
 			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Exception occurred : ", e);
+			logger.error("getTotpQR Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -152,12 +161,12 @@ public class UserOpsService {
 			String name = response.get("Result").get("Name").asText();
 			String[] nameArr = name.split("@");
 			ObjectNode objNode = (ObjectNode) result;
-			objNode.remove("Name");
 			objNode.put("Name", nameArr[0]);
 			objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
+			logger.info("Get User Response {}", response);
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex){
-			logger.error("Exception occurred : ", ex);
+			logger.error("getUser Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -188,7 +197,7 @@ public class UserOpsService {
 			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception e) {
-			logger.error("Exception occurred : ", e);
+			logger.error("verifyTotp Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -212,7 +221,7 @@ public class UserOpsService {
 			return new ResponseEntity(response, HttpStatus.OK);
 
 		} catch (Exception ex) {
-			logger.error("Exception occurred : ", ex);
+			logger.error("getChallengeID Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

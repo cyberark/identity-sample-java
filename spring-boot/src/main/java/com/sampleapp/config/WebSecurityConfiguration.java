@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private static final String[] CSRF_IGNORE = {"/auth/beginAuth", "/BasicLogin", "/user/register", "/updateSettings", "/tokenSet"};
 
-	@Value("${demoAppBaseURL}")
-	public String demoAppBaseURL;
+	@Value("${demoAppBaseUrl}")
+	public String demoAppBaseUrl;
 
 	@Value("${frontendServerPort}")
 	public String frontendServerPort;
@@ -57,7 +57,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		List<String> allowedOrigins = new ArrayList<>();
 		// TODO - Remove null value from list
 		allowedOrigins.add("null");
-		allowedOrigins.add(this.demoAppBaseURL + ":" + this.frontendServerPort);
+		allowedOrigins.add(this.demoAppBaseUrl + ":" + this.frontendServerPort);
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	    final CorsConfiguration config = new CorsConfiguration();

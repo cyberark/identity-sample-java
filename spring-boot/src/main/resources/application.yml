@@ -35,6 +35,6 @@ server:
   servlet:
     context-path: /api
 
-demoAppBaseURL: https://identitydemo.acmeinc.com
+demoAppBaseUrl: https://identitydemo.acmeinc.com
 backendServerPort: 8080
 frontendServerPort: 4200

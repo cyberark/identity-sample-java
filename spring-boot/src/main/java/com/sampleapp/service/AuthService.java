@@ -72,8 +72,8 @@ public class AuthService {
 	@LoadBalanced
 	private final RestTemplate restTemplate;
 
-	@Value("${demoAppBaseURL}")
-	public String demoAppBaseURL;
+	@Value("${demoAppBaseUrl}")
+	public String demoAppBaseUrl;
 
 	@Value("${backendServerPort}")
 	public String backendServerPort;
@@ -249,7 +249,7 @@ public class AuthService {
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 			map.add("code", advanceLoginRequest.getAuthorizationCode());
 			map.add("grant_type", GrantType.authorization_code.name());
-			map.add("redirect_uri", this.demoAppBaseURL + ":" + this.backendServerPort + "/api/RedirectResource");
+			map.add("redirect_uri", this.demoAppBaseUrl + ":" + this.backendServerPort + "/api/RedirectResource");
 			map.add("client_id", advanceLoginRequest.getClientId());
 			map.add("code_verifier", advanceLoginRequest.getCodeVerifier());
 

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ export class LoginWidgetComponent implements OnInit {
       "showSignup": this.showSignUpWidget,
       "allowSignUpLink": true,
       "signUpLinkText": "Sign Up",
-      "apiFqdn": settings.tenantURL.split("/")[2],
+      "apiFqdn": settings.tenantUrl.split("/")[2],
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
     };
 
