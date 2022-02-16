@@ -134,11 +134,11 @@
                 <span *ngIf="hasError('MobileNumber', 'pattern')">Must be valid phonenumber(+CCNNNNNNNNNN)</span>
               </div>
               <div class="form-group" *ngIf="isCaptchaEnabled">
-                <re-captcha (resolved)="resolved($event)" siteKey="{{siteKey}}">
+                <re-captcha (resolved)="resolved($event)" (error)="errored($event)" errorMode="handled" siteKey="{{siteKey}}">
                 </re-captcha>
               </div>
               <div class="d-flex">
-                <button class="container btn btn-secondary w-50 submit " data-target="#userConsent" type="submit"
+                <button [disabled]="disableSignUp" class="container btn btn-secondary w-50 submit " data-target="#userConsent" type="submit"
                   (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
               </div>
             </form>
