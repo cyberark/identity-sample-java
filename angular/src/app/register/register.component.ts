@@ -50,6 +50,7 @@ export class RegisterComponent implements OnInit {
   reCaptchaToken: string;
   siteKey: string = "";
   isCaptchaEnabled: boolean;
+  disableSignUp: boolean;
 
   @ViewChild('divToScroll', { static: true }) divToScroll: ElementRef;
  
@@ -92,7 +93,8 @@ export class RegisterComponent implements OnInit {
     this.appImage = getAppImgStr();
     this.siteKey = getSiteKey();
     this.isCaptchaEnabled = getCaptchaStatus();
-    
+    this.disableSignUp = false;
+
     if (getStorage("userId") !== null) {
       this.loading = true;
       this.heartBeatService.checkHeartBeat(this);
@@ -172,9 +174,16 @@ export class RegisterComponent implements OnInit {
       this.registerUser(form);
     }
   }
+
   public resolved(captchaResponseToken: string) {
+    this.disableSignUp = false;
     this.reCaptchaToken =  captchaResponseToken;
   }
+
+  public errored() {
+    this.disableSignUp = true;
+  }
+
   registerUser(form: NgForm) {
     let user;
     this.loading = true;
