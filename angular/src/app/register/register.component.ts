@@ -195,7 +195,7 @@ export class RegisterComponent implements OnInit {
       this.userService.update(user, getStorage("userId")).subscribe({
         next: data => {
           this.loading = false;
-          if (data.success == true || data.Success == true) {
+          if (data.success == true) {
             setStorage("mfaUsername", data.UserName);
             this.setMessage("info", "User information updated successfully");
             this.router.navigate(['/user']);

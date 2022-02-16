@@ -23,8 +23,9 @@ import com.sampleapp.entity.User;
 import com.sampleapp.entity.VerifyTotpReq;
 import com.sampleapp.repos.TokenStoreRepository;
 import com.sampleapp.repos.UserRepository;
-
+import com.cyberark.client.Authentication;
 import com.cyberark.client.UserManagement;
+import com.cyberark.entities.AuthResponse;
 import com.cyberark.entities.SignUpResponse;
 
 import org.slf4j.Logger;
@@ -80,7 +81,7 @@ public class UserOpsService {
 		ObjectMapper mapper = new ObjectMapper();
 		String name = user.getName();
 		user.setName(GetMFAUserName(name));
-		String json =  mapper.writeValueAsString(user);
+		String json = mapper.writeValueAsString(user);
 		user.setName(name);
 		return json;
 	}
@@ -98,31 +99,27 @@ public class UserOpsService {
 		return setHeaders(token);
 	}
 
-	//This method updates user information in Idaptive Cloud directory.
-	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user, Boolean enableMFAWidgetFlow) throws IOException {
-		
+	// This method updates user information in Idaptive Cloud directory.
+	public ResponseEntity<JsonNode> updateUser(String token, String uuid, User user, Boolean enableMFAWidgetFlow)
+			throws IOException {
+
 		Response response;
-		
+
 		user.setUuid(uuid);
 		String userJson = getJson(user);
 		UserManagement userManagement = new UserManagement(settingsService.getTenantURL());
 		SignUpResponse signUpResponse = userManagement.updateProfile(token, userJson).execute();
-		
+
 		try {
-			if(signUpResponse.isSuccess()) {
-				response = new Response();
-			} else {
-				response = new Response(false, signUpResponse.getMessage());
-			}
-
 			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = mapper.convertValue(response, JsonNode.class);
-			
-			ObjectNode objNode = (ObjectNode) node;
-			objNode.put("UserName",  GetMFAUserName(user.getName()));
+			JsonNode node = mapper.convertValue(signUpResponse, JsonNode.class);
 
-			if(enableMFAWidgetFlow) {
-				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes().getAttribute("UserTokenStore", RequestAttributes.SCOPE_REQUEST);
+			ObjectNode objNode = (ObjectNode) node;
+			objNode.put("UserName", GetMFAUserName(user.getName()));
+
+			if (enableMFAWidgetFlow.booleanValue()) {
+				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes()
+						.getAttribute("UserTokenStore", RequestAttributes.SCOPE_REQUEST);
 				DBUser dbUser = repo.getById(tokenStore.getUserId());
 				dbUser.setName(user.getName());
 				dbUser.setDisplayName(user.getDisplayName());
@@ -139,20 +136,18 @@ public class UserOpsService {
 
 	public ResponseEntity<JsonNode> getTotpQR(String token) {
 		try {
-			HttpHeaders headers = prepareForRequest(token);
-			HttpEntity<String> request = new HttpEntity<>("{\"DeviceId\":\"" + null + "\"}", headers);
-			String url = settingsService.getTenantURL() + "/mobile/GetUserThirdPartyOtp";
-			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
-			return new ResponseEntity(response, HttpStatus.OK);
+			Authentication authentication = new Authentication(settingsService.getTenantURL());
+			AuthResponse authResponse = authentication.getTotpQr(token).execute();
+			return new ResponseEntity(authResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("getTotpQR Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	//Get user information using specified UUID
+
+	// Get user information using specified UUID
 	public ResponseEntity<JsonNode> getUser(String uuid, String token) {
-		try{
+		try {
 			HttpHeaders headers = prepareForRequest(token);
 			HttpEntity<String> request = new HttpEntity<>("{\"ID\":\"" + uuid + "\"}", headers);
 			String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
@@ -163,15 +158,14 @@ public class UserOpsService {
 			ObjectNode objNode = (ObjectNode) result;
 			objNode.put("Name", nameArr[0]);
 			objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
-			logger.info("Get User Response {}", response);
 			return new ResponseEntity(response, HttpStatus.OK);
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			logger.error("getUser Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	public String GetMFAUserName(String name){
+	public String GetMFAUserName(String name) {
 		return name + "@" + settingsService.getLoginSuffix();
 	}
 
@@ -191,11 +185,10 @@ public class UserOpsService {
 
 	public ResponseEntity<JsonNode> verifyTotp(String token, VerifyTotpReq req) {
 		try {
-			HttpHeaders headers = prepareForRequest(token);
-			HttpEntity<String> request = new HttpEntity<>(req.toJSONString(), headers);
-			String url = settingsService.getTenantURL() + "/mobile/ValidateAndSetUserThirdPartyOtp";
-			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
-			return new ResponseEntity(response, HttpStatus.OK);
+			String verifyTotpJson = req.toJSONString();
+			Authentication authentication = new Authentication(settingsService.getTenantURL());
+			AuthResponse authResponse = authentication.validateTotp(token, verifyTotpJson).execute();
+			return new ResponseEntity(authResponse, HttpStatus.OK);
 		} catch (Exception e) {
 			logger.error("verifyTotp Exception occurred : ", e);
 			return new ResponseEntity(new Response(false, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -230,9 +223,11 @@ public class UserOpsService {
 		HttpHeaders headers = prepareForRequest(token);
 
 		// Get OIDC App Details
-		HttpEntity<String> appDetailsRequest = new HttpEntity<>("{\"_RowKey\":\"" + settingsService.getOIDCClientID() + "\"}", headers);
+		HttpEntity<String> appDetailsRequest = new HttpEntity<>(
+				"{\"_RowKey\":\"" + settingsService.getOIDCClientID() + "\"}", headers);
 		String appDetailsUrl = settingsService.getTenantURL() + "/saasManage/GetApplication";
-		JsonNode appResponse = restTemplate.exchange(appDetailsUrl, HttpMethod.POST, appDetailsRequest, JsonNode.class).getBody();
+		JsonNode appResponse = restTemplate.exchange(appDetailsUrl, HttpMethod.POST, appDetailsRequest, JsonNode.class)
+				.getBody();
 
 		List<String> defaultProfileOptions = new ArrayList<>(Arrays.asList("AlwaysAllowed", "-1", "--"));
 
@@ -253,7 +248,8 @@ public class UserOpsService {
 
 		HttpEntity<String> getProfileRequest = new HttpEntity<>("{\"uuid\":\"" + profileID + "\"}", headers);
 		String getProfileUrl = settingsService.getTenantURL() + "/AuthProfile/GetProfile";
-		JsonNode response = restTemplate.exchange(getProfileUrl, HttpMethod.POST, getProfileRequest, JsonNode.class).getBody();
+		JsonNode response = restTemplate.exchange(getProfileUrl, HttpMethod.POST, getProfileRequest, JsonNode.class)
+				.getBody();
 
 		if (response.get("success").asBoolean()) {
 			return response.get("Result").get("Name").asText();
@@ -267,12 +263,13 @@ public class UserOpsService {
 
 		HttpEntity<String> challengeRequest = new HttpEntity<>("{\"profileName\":\"" + profileName + "\"}", headers);
 		String challengeUrl = settingsService.getTenantURL() + "/Security/ChallengeUser";
-		JsonNode response = restTemplate.exchange(challengeUrl, HttpMethod.POST, challengeRequest, JsonNode.class).getBody();
+		JsonNode response = restTemplate.exchange(challengeUrl, HttpMethod.POST, challengeRequest, JsonNode.class)
+				.getBody();
 
-		if (!response.get("success").asBoolean()){
-			if(response.get("Result") != null) {
+		if (!response.get("success").asBoolean()) {
+			if (response.get("Result") != null) {
 				return response.get("Result").get("ChallengeId").asText();
-			} else{
+			} else {
 				throw new Exception(response.get("Message").asText());
 			}
 		}
