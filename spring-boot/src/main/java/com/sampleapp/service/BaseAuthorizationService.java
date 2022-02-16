@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,10 +44,12 @@ import java.util.Arrays;
 @Service
 public abstract class BaseAuthorizationService<T extends OAuthClient> {
 
+    private static final String TOKEN = "Token";
+
     private final Logger logger = LoggerFactory.getLogger(BaseAuthorizationService.class);
 
-    @Value("${demoAppBaseURL}")
-    public String demoAppBaseURL;
+    @Value("${demoAppBaseUrl}")
+    public String demoAppBaseUrl;
 
     @Value("${frontendServerPort}")
     public String frontendServerPort;
@@ -78,7 +80,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     private final String codeChallengeMethod = "S256";
 
     private String getAuthorizationRedirectURL(){
-        return this.demoAppBaseURL + ":" + this.frontendServerPort + "/RedirectResource";
+        return this.demoAppBaseUrl + ":" + this.frontendServerPort + "/RedirectResource";
     }
 
     public BaseAuthorizationService() { }
@@ -163,7 +165,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
             pkceMetaData.codeChallenge = PKCEUtil.generateCodeChallenge(pkceMetaData.codeVerifier);
             return pkceMetaData;
         }
-        catch (UnsupportedEncodingException | NoSuchAlgorithmException ex){
+        catch (NoSuchAlgorithmException ex){
             logger.error("Exception occurred at getPKCEMetaData() : ", ex);
             throw new Exception("Unable to get PKCE Metadata");
         }
@@ -202,7 +204,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
             {
                 case authorization_code:
                     requestPreview.apiEndPoint = this.getClient(metadataRequest.clientId, metadataRequest.clientSec)
-                        .buildAPIEndpoint("Token", this.getAppId());
+                        .buildOAuthApiEndpoint(TOKEN, this.getAppId());
                     requestPreview.payload.clientId = this.getClientId(metadataRequest.clientId);
                     requestPreview.payload.clientSec = this.getClientSecret(metadataRequest.clientSec);
                     requestPreview.payload.redirectUrl = this.getAuthorizationRedirectURL();
@@ -211,14 +213,14 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
                     break;
                 case client_credentials:
                     requestPreview.apiEndPoint = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
-                        .buildAPIEndpoint("Token", this.getAppId());
+                        .buildOAuthApiEndpoint(TOKEN, this.getAppId());
                     requestPreview.payload.clientId = settingsService.getOauthServiceUserName();
                     requestPreview.payload.clientSec = settingsService.getOauthServiceUserPass();
                     requestPreview.payload.scope = this.getScopesSupported();
                     break;
                 case password:
                     requestPreview.apiEndPoint = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
-                        .buildAPIEndpoint("Token", this.getAppId());
+                        .buildOAuthApiEndpoint(TOKEN, this.getAppId());
                     requestPreview.payload.clientId = settingsService.getOauthServiceUserName();
                     requestPreview.payload.clientSec = settingsService.getOauthServiceUserPass();
                     requestPreview.payload.userName = metadataRequest.userName;

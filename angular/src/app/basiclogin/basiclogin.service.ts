@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ export class BasicLoginService {
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + authentication_token);
 
-    let url = `https://${settings.tenantURL.split("/")[2]}/oauth2/authorize/${settings.oauthAppId}?scope=${settings.oauthScopesSupported}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/api/RedirectResource`;
+    let url = `https://${settings.tenantUrl.split("/")[2]}/oauth2/authorize/${settings.oauthAppId}?scope=${settings.oauthScopesSupported}&client_id=${clientId}&code_challenge=${codeChallenge}&code_challenge_method=S256&response_type=code&redirect_uri=${environment.baseUrl}:${environment.serverPort}/api/RedirectResource`;
 
     return this.http.get<any>(url, { headers: head, withCredentials: true});
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class SettingsService {
 		LoadUserSettings();
 	}
 
-	public String getTenantURL() { return settings.get("tenantURL").textValue(); }
+	public String getTenantURL() { return settings.get("tenantUrl").textValue(); }
 
 	public String getLoginSuffix() { return settings.get("loginSuffix").textValue(); }
 

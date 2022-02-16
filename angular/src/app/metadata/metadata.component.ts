@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -191,7 +191,7 @@ export class Metadata implements OnInit {
       "grant_type": "refresh_token",
       "refresh_token": this.tokenSet['refresh_token']
     };
-    this.refreshTokenPostCall = `POST ${settings.tenantURL}/oauth2/token/${settings.oauthAppId}`;
+    this.refreshTokenPostCall = `POST ${settings.tenantUrl}/oauth2/token/${settings.oauthAppId}`;
     this.refreshTokenPostCallBody = postCallBody;
     this.proceedBtn.nativeElement.disabled = false;
   }

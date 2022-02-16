@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ export class AppComponent {
     if (getStorage("settings") === null) {
       this.userService.getSettings().subscribe({
         next: data => {
-          if (!data.Result.tenantURL) {
+          if (!data.Result.tenantUrl) {
             this.router.navigate(["settings"]);
           } else {
             setStorage("settings", JSON.stringify(data.Result));
@@ -59,7 +59,7 @@ export class AppComponent {
       });
     } else {
       const settings = JSON.parse(getStorage("settings"));
-      if(!settings.tenantURL) this.router.navigate(["settings"]);
+      if(!settings.tenantUrl) this.router.navigate(["settings"]);
     }
   }
 }

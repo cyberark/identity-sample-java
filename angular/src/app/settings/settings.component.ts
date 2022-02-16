@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit {
     $('[data-toggle="tooltip"]').tooltip();
     this.settingsForm = this.formBuilder.group({
       "appImage": ['',],
-      "tenantURL": ['', Validators.compose([
+      "tenantUrl": ['', Validators.compose([
         Validators.required,
         Validators.maxLength(80),
         Validators.pattern('^((https)|(HTTPS))://.*\\..+')

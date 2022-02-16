@@ -33,11 +33,10 @@
             </div>
             <div class="form-group">
               <label class="required label">URL</label>
-              <input class="form-control" formControlName="tenantURL" required
-                placeholder="https://YOUR_TENANT.idaptive.app">
-              <span *ngIf="hasError('tenantURL', 'required')">Required</span>
-              <span *ngIf="hasError('tenantURL', 'maxlength')">URL should not be longer than 80 characters</span>
-              <span *ngIf="hasError('tenantURL', 'pattern')">Invalid URL</span>
+              <input class="form-control" formControlName="tenantUrl" required placeholder="https://YOUR_TENANT.idaptive.app">
+              <span *ngIf="hasError('tenantUrl', 'required')">Required</span>
+              <span *ngIf="hasError('tenantUrl', 'maxlength')">URL should not be longer than 80 characters</span>
+              <span *ngIf="hasError('tenantUrl', 'pattern')">Invalid URL</span>
             </div>
             <div class="form-group">
               <label class="required label">Login Suffix</label>

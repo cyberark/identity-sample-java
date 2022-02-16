@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ export class PKCEMetaData {
 
 export class Settings {
   appImage: string;
-  tenantURL: string;
+  tenantUrl: string;
   loginSuffix: string;
   roleName: string;
   mfaWidgetId: string;
@@ -180,13 +180,13 @@ export const validateAllFormFields = (form: FormGroup): boolean => {
  */
 export const addChildNodes = (settings: Settings, callback: (this: GlobalEventHandlers, ev: Event) => any) => {
   let node = document.createElement('script');
-  node.src = settings.tenantURL + "/vfslow/lib/uibuild/standalonelogin/login.js";
+  node.src = settings.tenantUrl + "/vfslow/lib/uibuild/standalonelogin/login.js";
   node.type = 'text/javascript';
   node.onload = callback;
   document.getElementsByTagName('head')[0].appendChild(node);
 
   let linkNode = document.createElement('link');
-  linkNode.href = settings.tenantURL + "/vfslow/lib/uibuild/standalonelogin/css/login.css";
+  linkNode.href = settings.tenantUrl + "/vfslow/lib/uibuild/standalonelogin/css/login.css";
   linkNode.type = 'text/css';
   linkNode.rel = 'stylesheet';
   document.getElementsByTagName('head')[0].appendChild(linkNode);
