@@ -49,6 +49,10 @@ body {
   color: #000;
 }
 
+.tooltip-inner {
+  max-width: 100%;
+}
+
 .app-page {
   margin-top: 82px;
   height: calc(100vh - 97px);
