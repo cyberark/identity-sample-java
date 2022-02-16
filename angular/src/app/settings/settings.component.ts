@@ -21,6 +21,7 @@ import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
 import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
 import { UserService } from '../user/user.service';
+declare var $:any;
 
 @Component({
   selector: 'app-settings',
@@ -50,6 +51,7 @@ export class SettingsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    $('[data-toggle="tooltip"]').tooltip();
     this.settingsForm = this.formBuilder.group({
       "appImage": ['',],
       "tenantURL": ['', Validators.compose([
