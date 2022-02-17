@@ -147,6 +147,7 @@ public class UserService {
 			Map<String, Object> attributes = new HashMap<>();
 			attributes.put("Mail", user.getMail());
 			attributes.put("MobileNumber", user.getMobileNumber());
+			attributes.put("DisplayName", user.getDisplayName());
 			SignUpResponse signUpResponse = signUpRequest.setUserName(GetMFAUserName(user.getName()))
 					.setPassword(String.valueOf(user.getPassword()))
 					.setAdditionalAttributes(attributes)
