@@ -77,6 +77,7 @@ export class LoginWidgetComponent implements OnInit {
       "allowSignUpLink": true,
       "signUpLinkText": "Sign Up",
       "apiFqdn": settings.tenantUrl.split("/")[2],
+      "widgetId": settings.loginWidgetId,
       success: function (AuthData) { me.loginSuccessHandler(AuthData, me) },
     };
 
@@ -85,7 +86,6 @@ export class LoginWidgetComponent implements OnInit {
     }
     else {
       const username = getStorage('username');
-      config["widgetId"] = settings.loginWidgetId;
       config["username"] = username;
       config["autoSubmitUsername"] = username ? true : false;
     }
