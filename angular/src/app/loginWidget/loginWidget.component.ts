@@ -96,7 +96,7 @@ export class LoginWidgetComponent implements OnInit {
   }
 
   onRetry(): void {
-    this.router.navigate(['flow2']);
+    window.location.reload();
   }
 
   showError(context, error) {
