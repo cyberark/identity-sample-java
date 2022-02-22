@@ -74,7 +74,6 @@ export class LoginWidgetComponent implements OnInit {
     let config = {
       "containerSelector": "#cyberark-login",
       "showSignup": this.showSignUpWidget,
-      "allowSignUpLink": true,
       "signUpLinkText": "Sign Up",
       "apiFqdn": settings.tenantUrl.split("/")[2],
       "widgetId": settings.loginWidgetId,

@@ -83,7 +83,7 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     public TokenHolder getTokenSetWithClientCreds(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
+            tokenHolder = (TokenHolder) this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithClientCreds()
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
@@ -104,7 +104,7 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     public TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            tokenHolder = this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
+            tokenHolder = (TokenHolder) this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithPassword(tokenMetadataRequest.userName, String.valueOf(tokenMetadataRequest.password))
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
