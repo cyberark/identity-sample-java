@@ -43,8 +43,6 @@ public class SettingsService {
 
 	public String getTenantURL() { return settings.get("tenantUrl").textValue(); }
 
-	public String getLoginSuffix() { return settings.get("loginSuffix").textValue(); }
-
 	public String getRoleName() { return settings.get("roleName").textValue(); }
 
 	public String getMFAWidgetID() { return settings.get("mfaWidgetId").textValue(); }

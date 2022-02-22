@@ -68,6 +68,8 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
 
     public abstract Boolean revokeToken(OIDCTokens oidcTokens) throws IOException;
 
+    public abstract JsonNode introspect(String accessToken) throws IOException;
+
     protected abstract String getAppId();
 
     protected abstract String getClientId(String clientId);
@@ -85,7 +87,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     public BaseAuthorizationService() { }
 
     /**
-     *  Builds the /authorize URL using CyberArkIdentityAuth client
+     *  Builds the /authorize URL using OAuthClient
      *  @param metadataRequest Request Metadata
      *  @return authorize URL string
      */
@@ -109,7 +111,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     }
 
     /**
-     *  Get Tokens using CyberArkIdentityOAuthClient client
+     *  Get Tokens using OAuthClient
      *  @param tokenMetadataRequest Input parameter
      *  @return TokenHolder An Object that holds access_token, id_token, refresh_token, token_type, scope, expires_in
      */
@@ -133,7 +135,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     }
 
     /**
-     *  Get refresh token using CyberArkIdentityOAuthClient client
+     *  Get refresh token using OAuthClient
      *  @param tokenMetadataRequest Input parameter
      *  @return TokenHolder An Object that holds access_token, id_token, refresh_token, token_type, scope, expires_in
      */
@@ -154,7 +156,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     }
 
     /**
-     *  Get PKCEMetaData which holds PKCEMetaData and CodeChallenge using CyberArkIdentityAuth client
+     *  Get PKCEMetaData which holds PKCEMetaData and CodeChallenge using OAuthClient
      *  @return PKCEMetaData An Object that holds PKCEMetaData and CodeChallenge
      */
     public PKCEMetaData getPKCEMetaData() throws Exception {
@@ -171,7 +173,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     }
 
     /**
-     *  Get Claims using CyberArkIdentityOAuthClient
+     *  Get Claims using OAuthClient
      *  @param token A token in JWT Format
      *  @return JsonNode An Object that holds base64 decoded token as claims
      */

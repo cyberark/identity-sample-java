@@ -95,8 +95,6 @@ public class AuthService {
 		String tenant = settingsService.getTenantURL() + "/Security/StartAuthentication";
 		HttpHeaders httpHeaders = setHeaders();
 		ObjectMapper mapper = new ObjectMapper();
-		String name = authRequest.getUsername();
-		authRequest.setUsername(name + "@" + settingsService.getLoginSuffix());
 		String beginAuth = mapper.writeValueAsString(authRequest);
 		HttpEntity<String> request = new HttpEntity<>(beginAuth, httpHeaders);
 		boolean success = false;
@@ -220,7 +218,7 @@ public class AuthService {
 
 		this.heartBeat(token.getSessionUuid(), httpServletResponse);
 
-		if(userService.GetMFAUserName(dbuser.getName()).equalsIgnoreCase(mfaUser)){
+		if(dbuser.getName().equalsIgnoreCase(mfaUser)){
 
 			token.setMfaToken(accessToken);
 			tokenStoreRepository.save(token);
@@ -300,9 +298,6 @@ public class AuthService {
 	public ResponseEntity<JsonNode> startChallenge(String token, AuthRequest authRequest) {
 		try {
 			String url = settingsService.getTenantURL() + "/Security/StartChallenge";
-
-			String name = authRequest.getUsername();
-			authRequest.setUsername(name + "@" + settingsService.getLoginSuffix());
 
 			String req = new ObjectMapper().writeValueAsString(authRequest);
 			HttpEntity<String> request = new HttpEntity<>(req, setHeaders(token));

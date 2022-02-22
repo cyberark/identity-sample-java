@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.cyberark.client.OAuthClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
 import com.cyberark.exception.IdentityException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sampleapp.entity.OIDCTokens;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.AuthorizationFlow;
@@ -58,10 +59,10 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
 
 
     /**
-     *  Get CyberArkIdentityOAuthClient Instance to make authorized API requests.
+     *  Get OAuthClient Instance to make authorized API requests.
      *  @param clientId         OAuth App Client Id
      *  @param clientSec     OAuth App Client Secret
-     *  @return CyberArkIdentityOAuthClient Instance to make authorized API requests.
+     *  @return OAuthClient Instance to make authorized API requests.
      *  @throws IOException
      */
     @Override
@@ -75,7 +76,7 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     }
 
     /**
-     *  Get Tokens using Client Credentials Grant flow with reference to CyberArkIdentityOAuthClient.
+     *  Get Tokens using Client Credentials Grant flow with reference to OAuthClient.
      *  @param tokenMetadataRequest Input parameter
      *  @return TokenHolder An Object that holds access_token, refresh_token, token_type, scope, expires_in
      */
@@ -96,7 +97,7 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
     }
 
     /**
-     *  Get Tokens using Resource Owner Password Grant flow with reference to CyberArkIdentityOAuthClient.
+     *  Get Tokens using Resource Owner Password Grant flow with reference to OAuthClient.
      *  @param tokenMetadataRequest Input parameter
      *  @return TokenHolder An Object that holds access_token, refresh_token, token_type, scope, expires_in
      */
@@ -112,6 +113,22 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
             return tokenHolder;
         } catch (IdentityException ex) {
             logger.error("Exception at getTokenSetWithPassword() : ", ex);
+            throw ex;
+        }
+    }
+
+    /**
+     *  Validate the jwt or opaque token by introspect end point.
+     *  @param accessToken Input parameter
+     *  @return JsonNode An Object that returns token active status
+     */
+    public JsonNode introspect(String accessToken) throws IOException {
+        try {
+            return (JsonNode) this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
+                    .introspect(accessToken)
+                    .execute();
+        } catch (IdentityException ex) {
+            logger.error("Exception at introspect() : ", ex);
             throw ex;
         }
     }

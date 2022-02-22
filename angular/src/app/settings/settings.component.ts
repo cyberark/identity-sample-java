@@ -59,7 +59,6 @@ export class SettingsComponent implements OnInit {
         Validators.maxLength(80),
         Validators.pattern('^((https)|(HTTPS))://.*\\..+')
       ])],
-      "loginSuffix": ['', Validators.required],
       "roleName": ['', Validators.required],
       "loginWidgetId": ['', Validators.compose([
         Validators.required,
@@ -70,10 +69,7 @@ export class SettingsComponent implements OnInit {
         Validators.pattern('^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$')
       ])],
       "oauthAppId": ['', Validators.required],
-      "oauthServiceUserName": ['', Validators.compose([
-        Validators.required,
-        Validators.pattern(".+@.+")
-      ])],
+      "oauthServiceUserName": ['', Validators.required],
       "oauthServiceUserPassword": ['', Validators.compose([
         Validators.required,
         Validators.minLength(8),

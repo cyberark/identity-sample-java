@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -136,7 +136,7 @@ public class AuthController {
 				ObjectMapper objectMapper = new ObjectMapper();
 				ObjectNode objectNode = objectMapper.createObjectNode();
 				objectNode.put("SessionUuid",sessionUuid);
-				objectNode.put("MFAUserName",userService.GetMFAUserName(user.getName()));
+				objectNode.put("MFAUserName", user.getName());
 				objectNode.put("MobileBackgroundInactiveTimeout", settingsService.getMobileInactiveTimeInSec());
 				response.Result = objectNode;
 			}else{

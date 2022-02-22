@@ -79,11 +79,7 @@ public class UserOpsService {
 
 	private String getJson(User user) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		String name = user.getName();
-		user.setName(GetMFAUserName(name));
-		String json = mapper.writeValueAsString(user);
-		user.setName(name);
-		return json;
+		return mapper.writeValueAsString(user);
 	}
 
 	private HttpHeaders setHeaders(String token) {
@@ -115,7 +111,7 @@ public class UserOpsService {
 			JsonNode node = mapper.convertValue(signUpResponse, JsonNode.class);
 
 			ObjectNode objNode = (ObjectNode) node;
-			objNode.put("UserName", GetMFAUserName(user.getName()));
+			objNode.put("UserName", user.getName());
 
 			if (enableMFAWidgetFlow.booleanValue()) {
 				TokenStore tokenStore = (TokenStore) RequestContextHolder.currentRequestAttributes()
@@ -153,20 +149,13 @@ public class UserOpsService {
 			String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
 			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
 			JsonNode result = response.get("Result");
-			String name = response.get("Result").get("Name").asText();
-			String[] nameArr = name.split("@");
 			ObjectNode objNode = (ObjectNode) result;
-			objNode.put("Name", nameArr[0]);
 			objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex) {
 			logger.error("getUser Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	public String GetMFAUserName(String name) {
-		return name + "@" + settingsService.getLoginSuffix();
 	}
 
 	public boolean isRolePresent(String uuid, String token) {

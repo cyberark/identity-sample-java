@@ -39,11 +39,6 @@
               <span *ngIf="hasError('tenantUrl', 'pattern')">Invalid URL</span>
             </div>
             <div class="form-group">
-              <label class="required label">Login Suffix</label>
-              <input class="form-control" formControlName="loginSuffix" required placeholder="Login Suffix">
-              <span *ngIf="hasError('loginSuffix', 'required')">Required</span>
-            </div>
-            <div class="form-group">
               <label class="required label">Role Name</label>
               <input class="form-control" formControlName="roleName" required placeholder="MFA Role Name">
               <span *ngIf="hasError('roleName', 'required')">Required</span>
@@ -78,8 +73,6 @@
               <input class="form-control" formControlName="oauthServiceUserName" required
                 placeholder="Service Username">
               <span *ngIf="hasError('oauthServiceUserName', 'required')">Required</span>
-              <span *ngIf="hasError('oauthServiceUserName', 'pattern')">Invalid format, expected format:
-                loginName@Suffix</span>
             </div>
             <div class="form-group">
               <label class="required label">Password</label>
