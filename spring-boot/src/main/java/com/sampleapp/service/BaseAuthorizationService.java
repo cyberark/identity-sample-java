@@ -116,7 +116,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     public TokenHolder getTokenSet(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
+            TokenRequest tokenRequest = (TokenRequest) this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
                     .requestToken(tokenMetadataRequest.authorizationCode, this.getAuthorizationRedirectURL())
                     .setGrantType(tokenMetadataRequest.grantType.name());
 
@@ -140,7 +140,7 @@ public abstract class BaseAuthorizationService<T extends OAuthClient> {
     public TokenHolder getRefreshToken(TokenMetadataRequest tokenMetadataRequest) throws IOException {
         TokenHolder tokenHolder;
         try {
-            TokenRequest tokenRequest = this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
+            TokenRequest tokenRequest = (TokenRequest) this.getClient(tokenMetadataRequest.clientId, tokenMetadataRequest.clientSec)
                     .refreshToken(tokenMetadataRequest.refreshToken)
                     .setGrantType(tokenMetadataRequest.grantType.name());
                     
