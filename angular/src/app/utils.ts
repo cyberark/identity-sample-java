@@ -54,7 +54,6 @@ export class PKCEMetaData {
 export class Settings {
   appImage: string;
   tenantUrl: string;
-  loginSuffix: string;
   roleName: string;
   mfaWidgetId: string;
   loginWidgetId: string;

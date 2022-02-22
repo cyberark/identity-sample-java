@@ -15,7 +15,7 @@
                 <form [formGroup]="loginForm" autocomplete="off" *ngIf="isFormVisible">
                     <div class="form-group d-flex align-items-center mt-3">
                         <label class="required label mr-3">Username:</label>
-                        <input class="form-control" disabled [value]="username.split('@')[0]">
+                        <input class="form-control" disabled [value]="username">
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <label class="required label mr-3">Password:</label>

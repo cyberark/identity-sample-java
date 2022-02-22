@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -208,6 +208,24 @@ public class AuthorizationController {
         {
             String accessTokenString = AuthFilter.cleanIt(accessToken);
             response.Result = this.authFlows.getEnumMap().get(AuthorizationFlow.OIDC).getUserInfo(accessTokenString);
+            return new ResponseEntity(response, HttpStatus.OK);
+        }
+        catch (Exception ex) {
+            logger.error("Exception occurred : ", ex);
+            response.Success = false;
+            response.ErrorMessage = ex.getMessage();
+            return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("introspect")
+    public ResponseEntity<JsonNode> introspect(@RequestParam String accessToken) {
+        logger.info("Introspect Token");
+        Response response = new Response();
+        try
+        {
+            String accessTokenString = AuthFilter.cleanIt(accessToken);
+            response.Result = this.authFlows.getEnumMap().get(AuthorizationFlow.OAUTH).introspect(accessTokenString);
             return new ResponseEntity(response, HttpStatus.OK);
         }
         catch (Exception ex) {

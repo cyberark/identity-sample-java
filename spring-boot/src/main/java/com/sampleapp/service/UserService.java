@@ -82,20 +82,6 @@ public class UserService {
 		this.restTemplate = builder.build();
 	}
 
-	private String getJson(User user) throws JsonProcessingException {
-		ObjectMapper mapper = new ObjectMapper();
-		String name = user.getName();
-		user.setName(GetMFAUserName(name));
-		try {
-			String json = mapper.writeValueAsString(user);
-			user.setName(name);
-			return json;
-		} catch (JsonProcessingException e) {
-			logger.error("Exception occurred : ", e);
-			throw e;
-		}
-	}
-
 	public String receiveOAuthTokenForClientCreds() throws Exception {
 		TokenMetadataRequest metadataRequest = new TokenMetadataRequest();
 		metadataRequest.grantType = GrantType.client_credentials;
@@ -148,7 +134,7 @@ public class UserService {
 			attributes.put("Mail", user.getMail());
 			attributes.put("MobileNumber", user.getMobileNumber());
 			attributes.put("DisplayName", user.getDisplayName());
-			SignUpResponse signUpResponse = signUpRequest.setUserName(GetMFAUserName(user.getName()))
+			SignUpResponse signUpResponse = signUpRequest.setUserName(user.getName())
 					.setPassword(String.valueOf(user.getPassword()))
 					.setAdditionalAttributes(attributes)
 					.execute();
@@ -224,9 +210,5 @@ public class UserService {
 
 	public DBUser Get(Integer id) {
 		return repo.findById(id).get();
-	}
-
-	public String GetMFAUserName(String name) {
-		return name + "@" + settingsService.getLoginSuffix();
 	}
 }

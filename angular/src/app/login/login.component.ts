@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.isSignUpVisible = false;
       this.loginHeader = 'Additional authentication required to access this application';
       const username = getStorage("username") !== null ? getStorage("username") : getStorage("mfaUsername");
-      this.formControls.username.setValue(username.split('@')[0]);
+      this.formControls.username.setValue(username);
       this.loginUser();
     } else if (getStorage("userId")) {
       this.isSignUpVisible = true;
@@ -383,7 +383,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   modifyUserNameControl() {
     if (getStorage('challengeStateID')) {
       const username = getStorage("username") !== null ? getStorage("username") : getStorage("mfaUsername");
-      this.formControls.username.setValue(username.split('@')[0]);
+      this.formControls.username.setValue(username);
       this.loginForm.get('username').disable();
     } else {
       this.loginForm.get('username').enable();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.sampleapp.service;
 import com.cyberark.client.OIDCClient;
 import com.cyberark.entities.TokenHolder;
 import com.cyberark.entities.UserInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sampleapp.entity.TokenMetadataRequest;
 import com.sampleapp.entity.OIDCTokens;
 import com.cyberark.exception.IdentityException;
@@ -119,6 +120,11 @@ public class OIDCService extends BaseAuthorizationService<OIDCClient> {
             logger.error("Exception at revokeToken() : ", ex);
             throw ex;
         }
+    }
+
+    @Override
+    public JsonNode introspect(String accessToken) throws IOException {
+        throw new NotImplementedException();
     }
 
     @Override
