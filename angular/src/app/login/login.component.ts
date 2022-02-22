@@ -486,6 +486,11 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     this.router.navigate(['loginprotocols']);
   }
 
+  // Don't show action button only in case of QR Code
+  isNextBtnVisible() {
+    return document.getElementById('idQRCode') === null;
+  }
+
   setUserDetails(result: any) {
     setStorage("userId", result.UserId);
     setStorage("username", result.User);
