@@ -1,13 +1,15 @@
 @echo off
 
 :: OpenSSL commands in case the certificate expired or not working
-:: openssl req -x509 -nodes -new -sha256 -days 2048 -newkey rsa:2048 -keyout RootCA.key -out RootCA.pem -subj "/C=US/CN=identitydemo.acmeinc.com"
+:: openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout RootCA.key -out RootCA.pem -subj "/C=US/CN=AcmeInc"
 :: 
 :: openssl x509 -outform pem -in RootCA.pem -out RootCA.crt
 :: 
-:: openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/CN=server.local"
+:: set RANDFILE=.rnd 
+::
+:: openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/C=US/ST=TX/L=TEXAS/O=Example-Certificates/CN=identitydemo.acmeinc.com"
 :: 
-:: openssl x509 -req -sha256 -days 2048 -in server.csr -CA RootCA.pem -CAkey RootCA.key -CAcreateserial -extfile "certificate.cnf" -out server.crt
+:: openssl x509 -req -sha256 -days 1024 -in server.csr -CA RootCA.pem -CAkey RootCA.key  -CAcreateserial -extfile "domains.ext" -out server.crt
 :: 
 :: openssl pkcs12 -export -out sslkeystore.p12 -inkey server.key -in server.crt -name sampleapp -passout pass:"<PASSWORD>"
 
