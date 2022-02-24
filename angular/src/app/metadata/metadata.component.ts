@@ -43,6 +43,7 @@ export class Metadata implements OnInit {
   hasRefreshToken: boolean = false;
   refreshTokenPostCall: string = "API Request";
   refreshTokenPostCallBody: any = "";
+  introspectPostCallBody: any = "";
   password: string = "";
   refreshTokenForm: FormGroup;
   oidcTokens: OIDCTokens;
@@ -158,7 +159,20 @@ export class Metadata implements OnInit {
     this.proceedBtn.nativeElement.disabled = true;
     (<any>$('#refreshTokenPopup')).modal();
   }
-
+  onIntrospect() {
+    (<any>$('#introspectpopup')).modal();
+    this.authorizationService.getIntrospect(this.tokenSet['access_token']).subscribe({
+      next: data => {
+        if (data && data.Success) {
+          this.introspectPostCallBody = data.Result;
+        }
+      },  
+      error: error => {
+        console.error(error);
+      }
+      
+    })
+  }
   onProceed() {
     this.loading = true;
     let tokenReqMetaData: TokenMetadataRequest = new TokenMetadataRequest();
