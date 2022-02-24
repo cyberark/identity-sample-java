@@ -29,6 +29,7 @@ export const EndpointsConnector = {
     TokenSetEndPoint : `${baseUrl}/tokenSet`,
     RefreshTokenEndPoint : `${baseUrl}/refreshToken`,
     RevokeTokenEndPoint : `${baseUrl}/revokeToken`,
+    IntrospectEndPoint : `${baseUrl}/introspect`,
     TokenRequestPreviewEndPoint : `${baseUrl}/tokenRequestPreview`,
     ClaimsEndPoint : `${baseUrl}/claims`,
     OIDCUserInfoEndPoint : `${baseUrl}/oidc/userInfo`,
