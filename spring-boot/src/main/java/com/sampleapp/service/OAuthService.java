@@ -82,14 +82,12 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
      */
     @Override
     public TokenHolder getTokenSetWithClientCreds(TokenMetadataRequest tokenMetadataRequest) throws IOException {
-        TokenHolder tokenHolder;
         try {
-            tokenHolder = (TokenHolder) this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
+            return this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithClientCreds()
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
                     .execute();
-            return tokenHolder;
         } catch (IdentityException ex) {
             logger.error("Exception at getTokenSetWithClientCreds() : ", ex);
             throw ex;
@@ -103,14 +101,12 @@ public class OAuthService extends BaseAuthorizationService<OAuthClient>{
      */
     @Override
     public TokenHolder getTokenSetWithPassword(TokenMetadataRequest tokenMetadataRequest) throws IOException {
-        TokenHolder tokenHolder;
         try {
-            tokenHolder = (TokenHolder) this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
+            return this.getClient(settingsService.getOauthServiceUserName(), settingsService.getOauthServiceUserPass())
                     .requestTokenWithPassword(tokenMetadataRequest.userName, String.valueOf(tokenMetadataRequest.password))
                     .setGrantType(tokenMetadataRequest.grantType.name())
                     .setScope(this.getScopesSupported())
                     .execute();
-            return tokenHolder;
         } catch (IdentityException ex) {
             logger.error("Exception at getTokenSetWithPassword() : ", ex);
             throw ex;
