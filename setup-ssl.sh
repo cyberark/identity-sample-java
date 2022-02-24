@@ -1,6 +1,10 @@
 #!/bin/bash
 
 CERTS_DIR=./certs/
+
+# Navigate to certs directory
+cd "${CERTS_DIR}"
+
 ROOT_CA_KEY=RootCA.key
 ROOT_CA_PEM=RootCA.pem
 ROOT_CA_FILE=RootCA.crt
@@ -13,9 +17,6 @@ PWD=`pwd`
 ANGULAR_SSL_DIR=$PWD/../angular/ssl/
 SPRING_BOOT_RESOURCES_DIR=../spring-boot/src/main/resources/
 UBUNTU_CA_CERTS_DIR=/usr/share/ca-certificates
-
-# Navigate to certs directory
-cd "${CERTS_DIR}"
 
 # OpenSSL commands in case the certificate expired or not working
 openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout "$ROOT_CA_KEY" -out "$ROOT_CA_PEM" -subj "/C=US/CN=AcmeInc"
