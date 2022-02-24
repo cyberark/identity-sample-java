@@ -1,29 +1,32 @@
 #!/bin/bash
 
 CERTS_DIR=./certs/
+ROOT_CA_KEY=RootCA.key
+ROOT_CA_PEM=RootCA.pem
+ROOT_CA_FILE=RootCA.crt
+SSL_KEYSTORE_FILE=sslkeystore.p12
+SERVER_CRT_FILE=server.crt
+SERVER_CRT_KEY=server.key
+SERVER_CSR=server.csr
+SERVER_ALIAS=sampleapp
+PWD=`pwd`
+ANGULAR_SSL_DIR=$PWD/../angular/ssl/
+SPRING_BOOT_RESOURCES_DIR=../spring-boot/src/main/resources/
+UBUNTU_CA_CERTS_DIR=/usr/share/ca-certificates
 
 # Navigate to certs directory
 cd "${CERTS_DIR}"
 
 # OpenSSL commands in case the certificate expired or not working
-# openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout RootCA.key -out RootCA.pem -subj "/C=US/CN=AcmeInc"
+openssl req -x509 -nodes -new -sha256 -days 1024 -newkey rsa:2048 -keyout "$ROOT_CA_KEY" -out "$ROOT_CA_PEM" -subj "/C=US/CN=AcmeInc"
 # 
-# openssl x509 -outform pem -in RootCA.pem -out RootCA.crt
+openssl x509 -outform pem -in "$ROOT_CA_PEM" -out "$ROOT_CA_FILE"
 # 
-# openssl req -new -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/C=US/ST=TX/L=TEXAS/O=Example-Certificates/CN=identitydemo.acmeinc.com"
+openssl req -new -nodes -newkey rsa:2048 -keyout "$SERVER_CRT_KEY" -out "$SERVER_CSR" -subj "/C=US/ST=TX/L=TEXAS/O=Example-Certificates/CN=identitydemo.acmeinc.com"
 # 
-# openssl x509 -req -sha256 -days 1024 -in server.csr -CA RootCA.pem -CAkey RootCA.key  -CAcreateserial -extfile "domains.ext" -out server.crt
+openssl x509 -req -sha256 -days 1024 -in "$SERVER_CSR" -CA "$ROOT_CA_PEM" -CAkey "$ROOT_CA_KEY" -CAcreateserial -extfile "domains.ext" -out "$SERVER_CRT_FILE"
 # 
-# openssl pkcs12 -export -out sslkeystore.p12 -inkey server.key -in server.crt -name sampleapp -passout pass:"<PASSWORD>"
-
-ROOT_CA_FILE=./RootCA.crt
-SSL_KEYSTORE_FILE=./sslkeystore.p12
-SPRING_BOOT_RESOURCES_DIR=../spring-boot/src/main/resources/
-PWD=`pwd`
-ANGULAR_SSL_DIR=$PWD/../angular/ssl/
-SERVER_CRT_FILE=./server.crt
-SERVER_CRT_KEY=./server.key
-UBUNTU_CA_CERTS_DIR=/usr/share/ca-certificates
+openssl pkcs12 -export -out "$SSL_KEYSTORE_FILE" -inkey "$SERVER_CRT_KEY" -in "$SERVER_CRT_FILE" -name "$SERVER_ALIAS" -passout pass:"<PASSWORD>"
 
 # Permission changes to certificate files
 chmod -R 755 *
