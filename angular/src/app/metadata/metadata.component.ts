@@ -161,7 +161,12 @@ export class Metadata implements OnInit {
   }
   onIntrospect() {
     (<any>$('#introspectpopup')).modal();
-    this.authorizationService.getIntrospect(this.tokenSet['access_token']).subscribe({
+    let token=this.authResponse['access_token']
+    if(!token)
+    { 
+      token=this.tokenSet['access_token'];
+    }
+    this.authorizationService.getIntrospect(token).subscribe({
       next: data => {
         if (data && data.Success) {
           this.introspectPostCallBody = data.Result;
