@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -33,8 +33,9 @@ export const EndpointsConnector = {
     TokenRequestPreviewEndPoint : `${baseUrl}/tokenRequestPreview`,
     ClaimsEndPoint : `${baseUrl}/claims`,
     OIDCUserInfoEndPoint : `${baseUrl}/oidc/userInfo`,
-    GetSettingsEndpoint: `${baseUrl}/getSettings`,
-    UpdateSettingsEndpoint: `${baseUrl}/updateSettings`,
+    GetSettingsEndpoint: `${baseUrl}/getSettings/`,
+    GetUISettingsEndpoint: `${baseUrl}/getUISettings`,
+    UpdateSettingsEndpoint: `${baseUrl}/updateSettings/`,
     RegisterEndpoint: `${baseUrl}/user/register`,
     UserOpsURL: `${baseUrl}/userops/`,
     getTotpQR: `${baseUrl}/userops/getTotpQR`,

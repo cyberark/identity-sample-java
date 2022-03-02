@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+ * Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.sampleapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sampleapp.config.AuthFilter;
 import com.sampleapp.entity.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sampleapp.service.SettingsService;
-import java.io.IOException;
 
 @RestController
 public class SettingsController {
@@ -40,32 +41,35 @@ public class SettingsController {
 
 	private final Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
-	@PutMapping("updateSettings")
-	public ResponseEntity<JsonNode> updateSettings(@RequestBody JsonNode body, HttpServletRequest request) throws IOException {
+	@PutMapping("updateSettings/{uuid}/{isSettingsLocked}")
+	public ResponseEntity<JsonNode> updateSettings(HttpServletRequest request, @RequestBody JsonNode body, @PathVariable String uuid, @PathVariable boolean isSettingsLocked) throws Exception {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null || !isSettingsLocked) {
+			return settingsService.updateSettings(body, uuid, token, isSettingsLocked);
+		}
+		return new ResponseEntity(new Response(false, "Please login to access settings."), HttpStatus.FORBIDDEN);
+	}
+
+	@GetMapping("getUISettings")
+	public ResponseEntity<JsonNode> getUISettings() {
 		Response response = new Response();
-		try{
-			settingsService.updateSettings(body);
-			response.Result = "Settings updated successfully";
+		try {
+			response.Result =  settingsService.getUISettings();
 			return new ResponseEntity(response, HttpStatus.OK);
-		}catch (Exception e){
-			logger.error("Exception occurred : ", e);
+		} catch (Exception ex) {
+			logger.error("Exception occurred : ", ex);
 			response.Success = false;
-			response.ErrorMessage = "Settings not updated.";
+			response.ErrorMessage = "Failed to fetch UI settings.";
 			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@GetMapping("getSettings")
-	public ResponseEntity<JsonNode> getSettings() {
-		Response response = new Response();
-		try{
-			response.Result =  settingsService.getSettings();
-			return new ResponseEntity(response, HttpStatus.OK);
-		}catch (Exception ex){
-			logger.error("Exception occurred : ", ex);
-			response.Success = false;
-			response.ErrorMessage = "Failed to fetch settings.";
-			return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	@GetMapping("getSettings/{uuid}")
+	public ResponseEntity<JsonNode> getSettings(HttpServletRequest request, @PathVariable String uuid) {
+		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
+		if (token != null) {
+			return settingsService.getSettings(uuid, token);
 		}
+		return new ResponseEntity(new Response(false, "Please login to access settings."), HttpStatus.FORBIDDEN);
 	}
 }

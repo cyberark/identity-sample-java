@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -56,11 +56,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     if (getStorage("settings") === null) {
       this.loading = true;
-      this.userService.getSettings().subscribe({
+      this.userService.getUISettings().subscribe({
         next: data => {
           this.loading = false;
           if (data.Result.appImage) {
             this.imageSource = data.Result.appImage;
+            setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
             setStorage("settings", JSON.stringify(data.Result));
           } else {
             console.log("Incorrect data response");
@@ -73,6 +74,7 @@ export class HeaderComponent implements OnInit {
       });
     } else {
       this.imageSource = JSON.parse(getStorage("settings")).appImage;
+      setStorage("isSettingsLocked", (JSON.parse(getStorage("settings")).tenantUrl) != "" ? "true" : "false");
     }
 
     if (getStorage("displayName") !== null && getStorage("displayName") !== "") {
@@ -124,6 +126,12 @@ export class HeaderComponent implements OnInit {
 
   onTabClick(href: string) {
     if (href === 'login' && document.cookie.includes('flow3')) href = 'basiclogin';
+    else if (href === 'settings' && getStorage("isSettingsLocked") === "true")
+    {
+      this.router.navigateByUrl('/login', { state: {gotoSettingsAfterLogin: true}})
+      return false;
+    }
+    
     this.router.navigate([href]);
     return false;
   }

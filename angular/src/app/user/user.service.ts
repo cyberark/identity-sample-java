@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2021 CyberArk Software Ltd. All rights reserved.
+* Copyright (c) 2022 CyberArk Software Ltd. All rights reserved.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -47,14 +47,19 @@ export class UserService {
     return this.http.put<any>(EndpointsConnector.UserOpsURL + `${id}`, user, { headers: head, withCredentials: true });
   }
 
-  getSettings() {
+  getSettings(userId: string) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get<any>(EndpointsConnector.GetSettingsEndpoint, { headers: head, withCredentials: true });
+    return this.http.get<any>(EndpointsConnector.GetSettingsEndpoint + `${userId}`, { headers: head, withCredentials: true });
   }
 
-  setSettings(custom: any) {
+  getUISettings() {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint, custom, { headers: head, withCredentials: true });
+    return this.http.get<any>(EndpointsConnector.GetUISettingsEndpoint, { headers: head, withCredentials: true });
+  }
+
+  setSettings(settings: {}, userId: string, isSettingsLocked: boolean) {
+    let head = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint + `${userId}/${isSettingsLocked}`, settings, { headers: head, withCredentials: true });
   }
 
   getTotpQR() {

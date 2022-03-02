@@ -19,7 +19,7 @@ import { BasicLoginService } from '../basiclogin/basiclogin.service';
 import { AuthorizationService } from '../metadata/authorizationservice';
 declare let LaunchLoginView: any;
 import { ActivatedRoute, Router } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings, addChildNodes } from '../utils';
+import { getStorage, setStorage, APIErrStr, TokenMetadataRequest, GrantType, AuthorizationFlow, Settings, addChildNodes, setUserDetails } from '../utils';
 import { ajax, css } from "jquery";
 import { UserService } from '../user/user.service';
 
@@ -112,7 +112,7 @@ export class LoginWidgetComponent implements OnInit {
             this.loginService.setAuthCookie("", data.Result.AuthorizationCode, AuthData.User, pkceMetadata.Result.code_verifier).subscribe({
               next: data => {
                 if (data && data.Success == true) {
-                  context.setUserDetails(AuthData);
+                  setUserDetails(AuthData);
                   context.fromFundTransfer = JSON.parse(context.route.snapshot.queryParamMap.get('fromFundTransfer'));
                   setStorage("showSignUpWidget", "false");
                   if (context.fromFundTransfer) {
@@ -137,14 +137,5 @@ export class LoginWidgetComponent implements OnInit {
         })
       }
     });
-  }
-
-  setUserDetails(result: any) {
-    setStorage("userId", result.UserId);
-    setStorage("username", result.User);
-    setStorage("displayName", result.DisplayName);
-    setStorage("tenant", result.PodFqdn);
-    setStorage("customerId", result.CustomerID);
-    setStorage("custom", result.Custom);
   }
 }

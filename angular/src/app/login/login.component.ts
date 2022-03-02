@@ -18,7 +18,7 @@ import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoginService } from './login.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { getStorage, setStorage, APIErrStr, getAppImgStr } from '../utils';
+import { getStorage, setStorage, APIErrStr, getAppImgStr, setUserDetails } from '../utils';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   popupBtnLabel = "Start Over";
   errorMessage = APIErrStr;
   appImage = "";
+  gotoSettingsAfterLogin = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -64,6 +65,12 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   ) { }
 
   ngOnInit() {
+    const state = history.state;
+    this.gotoSettingsAfterLogin = state.gotoSettingsAfterLogin;
+
+    if (this.gotoSettingsAfterLogin) {
+      this.loginHeader = 'Additional authentication required to access settings';
+    }
 
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -333,8 +340,8 @@ export class LoginComponent implements OnInit, AfterContentChecked {
                   this.pollChallenge.unsubscribe();
                   this.redirectToNextPage(data);
                 } else if (data.Result.Summary == "LoginSuccess") {
-                  this.redirectToDashboard(data.Result);
                   this.pollChallenge.unsubscribe();
+                  this.redirectToDashboard(data.Result);
                 }
               } else {
                 if (this.router.url == '/login') {
@@ -472,7 +479,12 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   redirectToDashboard(result: any) {
-    this.setUserDetails(result);
+    if (this.gotoSettingsAfterLogin){
+      setStorage("loginUserId", result.UserId);
+      this.router.navigate(['settings']);
+      return;
+    }
+    setUserDetails(result);
     if (getStorage('challengeStateID')){
       setStorage('challengeStateID', null);
       this.router.navigate(['oidcflow']);
@@ -489,15 +501,6 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   // Don't show action button only in case of QR Code
   isNextBtnVisible() {
     return document.getElementById('idQRCode') === null;
-  }
-
-  setUserDetails(result: any) {
-    setStorage("userId", result.UserId);
-    setStorage("username", result.User);
-    setStorage("displayName", result.DisplayName);
-    setStorage("tenant", result.PodFqdn);
-    setStorage("customerId", result.CustomerID);
-    setStorage("custom", result.Custom);
   }
 
   resetFormFields(controls: Array<string>): boolean {

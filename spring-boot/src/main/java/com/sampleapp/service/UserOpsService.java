@@ -21,7 +21,6 @@ import com.sampleapp.entity.Response;
 import com.sampleapp.entity.TokenStore;
 import com.sampleapp.entity.User;
 import com.sampleapp.entity.VerifyTotpReq;
-import com.sampleapp.repos.TokenStoreRepository;
 import com.sampleapp.repos.UserRepository;
 import com.cyberark.client.Authentication;
 import com.cyberark.client.UserManagement;
@@ -62,9 +61,6 @@ public class UserOpsService {
 	private UserRepository repo;
 
 	@Autowired
-	private TokenStoreRepository tokenStoreRepository;
-
-	@Autowired
 	private SettingsService settingsService;
 
 	@Autowired
@@ -82,7 +78,7 @@ public class UserOpsService {
 		return mapper.writeValueAsString(user);
 	}
 
-	private HttpHeaders setHeaders(String token) {
+	protected static HttpHeaders setHeaders(String token) {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.set("X-IDAP-NATIVE-CLIENT", "true");
 		httpHeaders.set("content-type", "application/json");
@@ -148,28 +144,11 @@ public class UserOpsService {
 			HttpEntity<String> request = new HttpEntity<>("{\"ID\":\"" + uuid + "\"}", headers);
 			String url = settingsService.getTenantURL() + "/CDirectoryService/GetUser";
 			JsonNode response = restTemplate.exchange(url, HttpMethod.POST, request, JsonNode.class).getBody();
-			JsonNode result = response.get("Result");
-			ObjectNode objNode = (ObjectNode) result;
-			objNode.put(settingsService.getRoleName(), isRolePresent(uuid, token));
 			return new ResponseEntity(response, HttpStatus.OK);
 		} catch (Exception ex) {
 			logger.error("getUser Exception occurred : ", ex);
 			return new ResponseEntity(new Response(false, ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	public boolean isRolePresent(String uuid, String token) {
-		String url = settingsService.getTenantURL() + "/UserMgmt/GetUsersRolesAndAdministrativeRights?id=" + uuid;
-		HttpHeaders headers = prepareForRequest(token);
-		HttpEntity<String> request = new HttpEntity<>(headers);
-		JsonNode result = restTemplate.postForObject(url, request, JsonNode.class);
-		JsonNode arr = result.get("Result").get("Results");
-		for (JsonNode jsonNode : arr) {
-			if (jsonNode.get("Row").get("RoleName").asText().equals(settingsService.getRoleName())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public ResponseEntity<JsonNode> verifyTotp(String token, VerifyTotpReq req) {
