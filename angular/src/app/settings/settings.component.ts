@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import Tagify from '@yaireo/tagify';
-import { getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
+import { defaultErrStr, getStorage, setStorage, Settings, validateAllFormFields } from '../utils';
 import { UserService } from '../user/user.service';
 declare var $:any;
 
@@ -43,7 +43,9 @@ export class SettingsComponent implements OnInit {
   settings: Settings;
   hasAppLogoError = false;
   isCaptchaEnabledInSettings = false;
-  isCaptchaEnabled: boolean;
+  isCaptchaEnabled = false;
+  popUpBody = defaultErrStr;
+
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
@@ -104,16 +106,37 @@ export class SettingsComponent implements OnInit {
       });
     });
 
-    this.settings = JSON.parse(getStorage('settings'));
-    if(this.settings && this.settings.appImage){
-      this.imagePreview = this.settings.appImage;
-      this.settings.appImage = "";
-      this.settingsForm.setValue(this.settings);
-      if(this.settings.isCaptchaEnabledInSettings) 
-        this.isCaptchaEnabled = true;
-      else
-        this.isCaptchaEnabled = false;
+    if (getStorage("isSettingsLocked") === "false")
+    {
+      this.settings = JSON.parse(getStorage('settings'));
+      if (this.settings && this.settings.appImage)
+        this.imagePreview = this.settings.appImage;
+      return;
     }
+    
+    this.loading = true;
+    let userId = getStorage("loginUserId");
+    this.userService.getSettings(userId).subscribe({
+      next: data => {
+        this.loading = false;
+        this.settings = data.Result;
+        if(this.settings && this.settings.appImage){
+          this.imagePreview = this.settings.appImage;
+          this.settings.appImage = "";
+          this.settingsForm.setValue(this.settings);
+          if(this.settings.isCaptchaEnabledInSettings) 
+            this.isCaptchaEnabled = true;
+          else
+            this.isCaptchaEnabled = false;
+        }
+      }, 
+      error: error => {
+        this.loading = false;
+        this.popUpBody = error.error.ErrorMessage;
+        (<any>$('#errorPopup')).modal();
+        console.error(error);
+      }
+    });
   }
 
   onCheckCaptchaEnabled(isChecked: boolean) {
@@ -170,10 +193,11 @@ export class SettingsComponent implements OnInit {
     this.loading = true;
     let data = this.settingsForm.value;
     data.appImage = this.imagePreview;
-    this.userService.setSettings(data).subscribe({
+    let userId = getStorage("loginUserId");
+    this.userService.setSettings(data, userId, getStorage("isSettingsLocked") === "true").subscribe({
       next: d => {
         this.loading = false;
-        setStorage('settings', JSON.stringify(data));
+        this.updateUISettingsData();
         this.messageType = "info";
         this.errorMessage = d.Result;
         this.divToScroll.nativeElement.scrollTop = 0;
@@ -181,15 +205,26 @@ export class SettingsComponent implements OnInit {
       error: error => {
         console.error(error);
         this.loading = false;
-        this.messageType = "error";
-        this.errorMessage = error.error.ErrorMessage;
         this.divToScroll.nativeElement.scrollTop = 0;
+        this.popUpBody = error.error.ErrorMessage;
+        (<any>$('#errorPopup')).modal();
       }
     })
   }
 
   onCancel(){
     this.router.navigate(['home']);
+  }
+
+  updateUISettingsData() {
+    this.userService.getUISettings().subscribe({
+      next: data => {
+        setStorage("settings", JSON.stringify(data.Result));
+      }, 
+      error: error => {
+        console.error(error);
+      }
+    });
   }
 
   public hasError = (controlName: string, errorName: string) => {

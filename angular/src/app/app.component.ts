@@ -45,11 +45,12 @@ export class AppComponent {
     document.cookie = flow;
 
     if (getStorage("settings") === null) {
-      this.userService.getSettings().subscribe({
+      this.userService.getUISettings().subscribe({
         next: data => {
           if (!data.Result.tenantUrl) {
             this.router.navigate(["settings"]);
           } else {
+            setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
             setStorage("settings", JSON.stringify(data.Result));
           }
         }, 
@@ -59,6 +60,7 @@ export class AppComponent {
       });
     } else {
       const settings = JSON.parse(getStorage("settings"));
+      setStorage("isSettingsLocked", (settings.tenantUrl) != "" ? "true" : "false");
       if(!settings.tenantUrl) this.router.navigate(["settings"]);
     }
   }

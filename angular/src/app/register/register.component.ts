@@ -235,6 +235,7 @@ export class RegisterComponent implements OnInit {
                         next: auth => {
                           this.loginService.setAuthCookie("", auth.Result.AuthorizationCode, data.Result.UserId, d.Result.code_verifier).subscribe({
                             next: res => {
+                              setStorage("loginUserId", data.Result.UserId);
                               setStorage("mfaUsername", res.Result.mfaUsername);
                               setStorage("sessionUuid", res.Result.SessionUuid);
                               setStorage("userId", data.Result.UserId);

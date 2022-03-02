@@ -219,3 +219,13 @@ export const getCaptchaStatus = () => {
   }
   return false;
 }
+
+export const setUserDetails = (result: any) => {
+  setStorage("userId", result.UserId);
+  setStorage("username", result.User);
+  setStorage("displayName", result.DisplayName);
+  setStorage("tenant", result.PodFqdn);
+  setStorage("customerId", result.CustomerID);
+  setStorage("custom", result.Custom);
+  setStorage("loginUserId", result.UserId);
+}
