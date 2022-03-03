@@ -24,6 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.File;
 
+import com.cyberark.client.Authentication;
+import com.cyberark.entities.AuthResponse;
+import com.cyberark.requestBuilders.AuthRequest;
 import com.sampleapp.entity.Response;
 import com.sampleapp.entity.UISettings;
 import org.slf4j.Logger;
@@ -85,14 +88,17 @@ public class SettingsService {
 	 * @param body as Settings JSON
 	 * @throws IOException
 	 */
-	public ResponseEntity<JsonNode> updateSettings(JsonNode body, String uuid, String token, Boolean isSettingsLocked) throws IOException {
+	public ResponseEntity<JsonNode> updateSettings(JsonNode body, String uuid, String token) throws IOException {
 		Response response = new Response();
 		try {
+			boolean isSettingsLocked = !this.getTenantURL().isEmpty();
 			if (isSettingsLocked) {
+				if (token == null)
+					throw new Exception("Please login to access settings.");
+				
 				Boolean isSysAdmin = this.isSysAdmin(uuid, token);
-				if (!isSysAdmin) {
+				if (!isSysAdmin)
 					throw new Exception("User not authorized to save settings.");
-				} 
 			}
 			BufferedWriter writer = Files.newBufferedWriter(Paths.get(SETTINGS_FILE_PATH));
 			writer.write((new ObjectMapper()).writeValueAsString(body));
@@ -119,9 +125,14 @@ public class SettingsService {
 	public ResponseEntity<JsonNode> getSettings(String uuid, String token) {
 		Response response = new Response();
 		try {
-			Boolean isSysAdmin = this.isSysAdmin(uuid, token);
-			if (!isSysAdmin) {
-				throw new Exception("User not authorized to access settings.");
+			boolean isSettingsLocked = !this.getTenantURL().isEmpty();
+			if (isSettingsLocked) {
+				if (token == null)
+					throw new Exception("Please login to access settings.");
+				
+				Boolean isSysAdmin = this.isSysAdmin(uuid, token);
+				if (!isSysAdmin)
+					throw new Exception("User not authorized to access settings.");
 			}
 			response.Result = settings;
 			return new ResponseEntity(response, HttpStatus.OK);
@@ -149,11 +160,9 @@ public class SettingsService {
 
 	public boolean isSysAdmin(String uuid, String token) {
 		try {
-			String url = this.getTenantURL() + "/UserMgmt/GetUsersRolesAndAdministrativeRights?id=" + uuid;
-			HttpHeaders headers = UserOpsService.setHeaders(token);
-			HttpEntity<String> request = new HttpEntity<>(headers);
-			JsonNode result = restTemplate.postForObject(url, request, JsonNode.class);
-			JsonNode arr = result.get("Result").get("Results");
+			Authentication auth = new Authentication(this.getTenantURL());
+			AuthResponse response = auth.isSysAdmin(token, uuid).execute();
+			JsonNode arr = response.getResult().get("Results");
 			for (JsonNode jsonNode : arr) {
 				if (jsonNode.get("Row").get("RoleName").asText().equals(SYS_ADMIN_ROLE)) {
 					return true;

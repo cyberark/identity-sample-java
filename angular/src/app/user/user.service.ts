@@ -57,9 +57,9 @@ export class UserService {
     return this.http.get<any>(EndpointsConnector.GetUISettingsEndpoint, { headers: head, withCredentials: true });
   }
 
-  setSettings(settings: {}, userId: string, isSettingsLocked: boolean) {
+  setSettings(settings: {}, userId: string) {
     let head = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint + `${userId}/${isSettingsLocked}`, settings, { headers: head, withCredentials: true });
+    return this.http.put<any>(EndpointsConnector.UpdateSettingsEndpoint + `${userId}`, settings, { headers: head, withCredentials: true });
   }
 
   getTotpQR() {
