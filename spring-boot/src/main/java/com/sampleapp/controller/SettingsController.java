@@ -41,13 +41,10 @@ public class SettingsController {
 
 	private final Logger logger = LoggerFactory.getLogger(SettingsController.class);
 
-	@PutMapping("updateSettings/{uuid}/{isSettingsLocked}")
-	public ResponseEntity<JsonNode> updateSettings(HttpServletRequest request, @RequestBody JsonNode body, @PathVariable String uuid, @PathVariable boolean isSettingsLocked) throws Exception {
+	@PutMapping("updateSettings/{uuid}")
+	public ResponseEntity<JsonNode> updateSettings(HttpServletRequest request, @RequestBody JsonNode body, @PathVariable String uuid) throws Exception {
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
-		if (token != null || !isSettingsLocked) {
-			return settingsService.updateSettings(body, uuid, token, isSettingsLocked);
-		}
-		return new ResponseEntity(new Response(false, "Please login to access settings."), HttpStatus.FORBIDDEN);
+		return settingsService.updateSettings(body, uuid, token);
 	}
 
 	@GetMapping("getUISettings")
@@ -67,9 +64,6 @@ public class SettingsController {
 	@GetMapping("getSettings/{uuid}")
 	public ResponseEntity<JsonNode> getSettings(HttpServletRequest request, @PathVariable String uuid) {
 		String token = AuthFilter.findCookie(request, ".ASPXAUTH");
-		if (token != null) {
-			return settingsService.getSettings(uuid, token);
-		}
-		return new ResponseEntity(new Response(false, "Please login to access settings."), HttpStatus.FORBIDDEN);
+		return settingsService.getSettings(uuid, token);
 	}
 }

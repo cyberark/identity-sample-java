@@ -106,16 +106,8 @@ export class SettingsComponent implements OnInit {
       });
     });
 
-    if (getStorage("isSettingsLocked") === "false")
-    {
-      this.settings = JSON.parse(getStorage('settings'));
-      if (this.settings && this.settings.appImage)
-        this.imagePreview = this.settings.appImage;
-      return;
-    }
-    
     this.loading = true;
-    let userId = getStorage("loginUserId");
+    const userId = getStorage("loginUserId");
     this.userService.getSettings(userId).subscribe({
       next: data => {
         this.loading = false;
@@ -193,8 +185,8 @@ export class SettingsComponent implements OnInit {
     this.loading = true;
     let data = this.settingsForm.value;
     data.appImage = this.imagePreview;
-    let userId = getStorage("loginUserId");
-    this.userService.setSettings(data, userId, getStorage("isSettingsLocked") === "true").subscribe({
+    const userId = getStorage("loginUserId");
+    this.userService.setSettings(data, userId).subscribe({
       next: d => {
         this.loading = false;
         this.updateUISettingsData();
@@ -213,13 +205,19 @@ export class SettingsComponent implements OnInit {
   }
 
   onCancel(){
+    setStorage("loginUserId", null);
     this.router.navigate(['home']);
+  }
+
+  onRetry() {
+    this.router.navigateByUrl('/login', { state: {gotoSettingsAfterLogin: true}});
   }
 
   updateUISettingsData() {
     this.userService.getUISettings().subscribe({
       next: data => {
         setStorage("settings", JSON.stringify(data.Result));
+        setStorage("loginUserId", null);
       }, 
       error: error => {
         console.error(error);
