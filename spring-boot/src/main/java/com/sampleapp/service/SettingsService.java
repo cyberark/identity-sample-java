@@ -98,7 +98,7 @@ public class SettingsService {
 				
 				Boolean isSysAdmin = this.isSysAdmin(uuid, token);
 				if (!isSysAdmin)
-					throw new Exception("User not authorized to save settings.");
+					throw new Exception("You are not authorized to access settings. You need to be a system administrator in CyberArk Identity.");
 			}
 			BufferedWriter writer = Files.newBufferedWriter(Paths.get(SETTINGS_FILE_PATH));
 			writer.write((new ObjectMapper()).writeValueAsString(body));
@@ -132,7 +132,7 @@ public class SettingsService {
 				
 				Boolean isSysAdmin = this.isSysAdmin(uuid, token);
 				if (!isSysAdmin)
-					throw new Exception("User not authorized to access settings.");
+					throw new Exception("You are not authorized to access settings. You need to be a system administrator in CyberArk Identity.");
 			}
 			response.Result = settings;
 			return new ResponseEntity(response, HttpStatus.OK);
