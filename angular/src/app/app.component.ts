@@ -44,24 +44,18 @@ export class AppComponent {
     }
     document.cookie = flow;
 
-    if (getStorage("settings") === null) {
-      this.userService.getUISettings().subscribe({
-        next: data => {
-          if (!data.Result.tenantUrl) {
-            this.router.navigate(["settings"]);
-          } else {
-            setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
-            setStorage("settings", JSON.stringify(data.Result));
-          }
-        }, 
-        error: error => {
-          console.error(error);
+    this.userService.getUISettings().subscribe({
+      next: data => {
+        if (!data.Result.tenantUrl) {
+          this.router.navigate(["settings"]);
+        } else {
+          setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
+          setStorage("settings", JSON.stringify(data.Result));
         }
-      });
-    } else {
-      const settings = JSON.parse(getStorage("settings"));
-      setStorage("isSettingsLocked", (settings.tenantUrl) != "" ? "true" : "false");
-      if(!settings.tenantUrl) this.router.navigate(["settings"]);
-    }
+      }, 
+      error: error => {
+        console.error(error);
+      }
+    });
   }
 }
