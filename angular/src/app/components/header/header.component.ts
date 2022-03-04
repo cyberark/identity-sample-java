@@ -18,7 +18,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
-import { AuthorizationService } from '../../metadata/authorizationservice';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthorizationFlow, getStorage, revokeToken, setStorage } from '../../utils';
 
@@ -48,34 +47,31 @@ export class HeaderComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private userService: UserService,
-    private authorizationService: AuthorizationService,
     private sanitizer: DomSanitizer,
     private router: Router
   ) { }
 
   ngOnInit() {
-    if (getStorage("settings") === null) {
-      this.loading = true;
-      this.userService.getUISettings().subscribe({
-        next: data => {
-          this.loading = false;
-          if (data.Result.appImage) {
-            this.imageSource = data.Result.appImage;
-            setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
-            setStorage("settings", JSON.stringify(data.Result));
-          } else {
-            console.log("Incorrect data response");
-          }
-        }, 
-        error: error => {
-          this.loading = false;
-          console.error(error);
-        }
-      });
-    } else {
+    if (getStorage("settings"))
       this.imageSource = JSON.parse(getStorage("settings")).appImage;
-      setStorage("isSettingsLocked", (JSON.parse(getStorage("settings")).tenantUrl) != "" ? "true" : "false");
-    }
+
+    this.loading = true;
+    this.userService.getUISettings().subscribe({
+      next: data => {
+        this.loading = false;
+        if (data.Result.appImage) {
+          this.imageSource = data.Result.appImage;
+          setStorage("isSettingsLocked", (data.Result.tenantUrl) != "" ? "true" : "false");
+          setStorage("settings", JSON.stringify(data.Result));
+        } else {
+          console.log("Incorrect data response");
+        }
+      }, 
+      error: error => {
+        this.loading = false;
+        console.error(error);
+      }
+    });
 
     if (getStorage("displayName") !== null && getStorage("displayName") !== "") {
       this.name = getStorage("displayName");
