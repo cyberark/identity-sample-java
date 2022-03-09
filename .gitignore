@@ -9,9 +9,12 @@ auth.*
 .vscode/tasks.json
 .project
 
+.rnd
 *.crt
 *.key
-*.p12
+*.pem
 *.csr
+*.p12
+*.srl
 
 *.db
