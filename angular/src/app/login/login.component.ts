@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   showQRCode = false;
   isPhoneCall = false;
   QRImageSource: string;
-  loginHeader = "Login to Acme Inc !!";
+  loginHeader = "Login to Acme Inc";
   isSignUpVisible = true;
   popupBtnLabel = "Start Over";
   errorMessage = APIErrStr;
@@ -154,7 +154,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
     } else if (selectedAuthMethod && selectedAuthMethod.AnswerType == 'StartOob' && selectedAuthMethod.Name == 'PF') {
       this.answerErrorText = "Answering Phone call";
       this.isPhoneCall = true;
-    } 
+    }
     else {
       this.answerErrorText = "Code";
     }
@@ -175,7 +175,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           if (data.success) {
             if (data.Result.Summary == "LoginSuccess") {
               this.redirectToDashboard(data.Result);
-            } else if (data.success && data.Result.PodFqdn){
+            } else if (data.success && data.Result.PodFqdn) {
               this.onLoginError(`Update Tenant URL to \"${data.Result.PodFqdn}\" in <u><a href="/settings">settings page</a></u>.`);
             } else {
               this.loginForm.get('username').disable();
@@ -192,7 +192,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           this.onLoginError(this.getErrorMessage(error));
         }
       });
-    } else if (this.loginPage === "username" && getStorage('challengeStateID')){
+    } else if (this.loginPage === "username" && getStorage('challengeStateID')) {
       this.loading = true;
       this.loginService.beginChallenge(this.formControls.username.value, getStorage('challengeStateID')).subscribe({
         next: data => {
@@ -200,7 +200,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
           if (data.success) {
             if (data.Result.Summary === "LoginSuccess") {
               this.redirectToDashboard(data.Result);
-            } else if (data.success && data.Result.PodFqdn){
+            } else if (data.success && data.Result.PodFqdn) {
               this.onLoginError(`Update Tenant URL to \"${data.Result.PodFqdn}\" in <u><a href="/settings">settings page</a></u>.`);
             } else {
               this.loginForm.get('username').disable();
@@ -374,14 +374,14 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   startOver() {
-    if (this.pollChallenge){
+    if (this.pollChallenge) {
       this.pollChallenge.unsubscribe();
     }
     this.loginForm.reset();
     this.textAnswer = false;
     this.loginPage = "username";
     this.loginButtonText = "Next";
-      
+
     this.modifyUserNameControl();
     this.router.navigate(['login']);
     return false;
@@ -418,7 +418,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
       this.textAnswer = false;
     }
     this.resetFormFields(this.getFormFieldsArray(this.loginPage));
-    if(this.loginPage == "secondChallenge"){
+    if (this.loginPage == "secondChallenge") {
       this.formControls.authMethod.setValue(0);
       this.authMethodChange();
     }
@@ -427,7 +427,7 @@ export class LoginComponent implements OnInit, AfterContentChecked {
 
   getErrorMessage(error): string {
     console.error(error);
-    return APIErrStr; 
+    return APIErrStr;
   }
 
   onLoginError(message) {
@@ -479,13 +479,13 @@ export class LoginComponent implements OnInit, AfterContentChecked {
   }
 
   redirectToDashboard(result: any) {
-    if (this.gotoSettingsAfterLogin){
+    if (this.gotoSettingsAfterLogin) {
       setStorage("loginUserId", result.UserId);
       this.router.navigate(['settings']);
       return;
     }
     setUserDetails(result);
-    if (getStorage('challengeStateID')){
+    if (getStorage('challengeStateID')) {
       setStorage('challengeStateID', null);
       this.router.navigate(['oidcflow']);
     } else {

@@ -7,7 +7,7 @@
   <div #divToScroll class="app-page">
     <div class="container h-100">
       <div class="h-100 row align-items-center justify-content-center">
-        <div class="col text-center m-5">
+        <div class="col text-center">
           <div *ngIf="!update && !checkScenario3()">
             <h3 class="mt-5">
               Acme’s signup form uses the <a target="_blank"
@@ -16,20 +16,20 @@
             </h3>
             <h5 class="mt-5">
               The user can enter the details and click on signup to register to Acme Inc. The Acme will internally
-              invoke the “/Signup” API. The API creates the user in CyberArk Identity
+              invoke the “/Signup” API. The API creates the user in CyberArk Identity.
             </h5>
             <h5 class="mt-3">
               We can either use a bearer token (or) captcha to invoke this API. The bearer token can be generated with
-              the client creds flow. Use captcha if you want to anonymously call the signup API.
+              the client credential flow. Use captcha if you want to anonymously call the signup API.
             </h5>
             <h5 class="mt-3">
               The signup API can be used along with <a target="_blank"
                 href="https://docs.cyberark.com/Product-Doc/OnlineHelp/Idaptive/Latest/en/Content/Integrations/Identity-Verification-Integration.htm">Identity
-                verification</a> to prevent identity theft and consent management to get implicit consent of the user
+                verification</a> to prevent identity theft and consent management to get implicit consent of the user.
             </h5>
             <h5 class="mt-3">
-              For more information of this API please check the documentation <a target="_blank"
-                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>
+              For more information on this API, please check the documentation <a target="_blank"
+                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>.
             </h5>
           </div>
           <div *ngIf="checkScenario3()">
@@ -37,25 +37,25 @@
               Acme’s signup form uses the <a target="_blank"
                 href="https://identity-developer.cyberark.com/reference/post_cdirectoryservice-signup">“/SignUp”</a> API
               of CyberArk Identity. When the user signs up, the user is added to Acme Inc. database and CyberArk
-              Identity simultaneously
+              Identity simultaneously.
             </h3>
             <h5 class="mt-5">
               The user can enter the details and click on signup to register to Acme Inc. The Acme will internally call
               the “/Signup” API. The API creates the user in CyberArk Identity. Simultaneously the user will also be
-              created in Acme database
+              created in Acme database.
             </h5>
             <h5 class="mt-3">
               We can either use a bearer token (or) captcha to call this API. The bearer token can be generated with the
-              client creds flow. Use captcha if you want to anonymously call the signup API.
+              client credential flow. Use captcha if you want to anonymously call the signup API.
             </h5>
             <h5 class="mt-3">
               The signup API can be used along with <a target="_blank"
                 href="https://docs.cyberark.com/Product-Doc/OnlineHelp/Idaptive/Latest/en/Content/Integrations/Identity-Verification-Integration.htm">Identity
-                verification</a> to prevent identity theft and consent management to get implicit consent of the user
+                verification</a> to prevent identity theft and consent management to get implicit consent of the user.
             </h5>
             <h5 class="mt-3">
-              For more information of this API please check the documentation <a target="_blank"
-                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>
+              For more information on this API, please check the documentation <a target="_blank"
+                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>.
             </h5>
           </div>
           <div *ngIf="update">
@@ -65,16 +65,11 @@
               API of CyberArk Identity.
             </h3>
             <h5 class="mt-5">
-              The user can edit the details that the user enters at the time of registration using the “/updateProfile”
-              API.
+              The user can edit the details entered at the time of registration using the “/updateProfile” API.
             </h5>
             <h5 class="mt-3">
-              The CyberArk Identity login API generates an authentication cookie. The “/updateProfile” API request
-              contains this cookie in the request header.
-            </h5>
-            <h5 class="mt-3">
-              For more information of these APIs please check the documentation <a target="_blank"
-                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>
+              For more information on this API, please check the documentation <a target="_blank"
+                href="https://identity-developer.cyberark.com/docs/create-and-manage-cloud-directory-users-_new">here</a>.
             </h5>
           </div>
         </div>
@@ -84,7 +79,7 @@
               <img [src]="appImage" alt="appImage" class="img-responsive p-4">
             </div>
             <div class="mb-3" *ngIf="!update">
-              <h5 class="text-center">Signup to Acme Inc !!!</h5>
+              <h5 class="text-center">Signup to Acme Inc</h5>
             </div>
             <h5 class="mb-3 text-center" *ngIf="update">Update your profile</h5>
             <form [formGroup]="registerForm" autocomplete="off" class="m-4">
@@ -134,11 +129,13 @@
                 <span *ngIf="hasError('MobileNumber', 'pattern')">Must be valid phonenumber(+CCNNNNNNNNNN)</span>
               </div>
               <div class="form-group text-center" *ngIf="isCaptchaEnabled && !update">
-                <re-captcha (resolved)="resolved($event)" style="display: inline-block;" (error)="errored($event)" errorMode="handled" siteKey="{{siteKey}}">
+                <re-captcha (resolved)="resolved($event)" style="display: inline-block;" (error)="errored($event)"
+                  errorMode="handled" siteKey="{{siteKey}}">
                 </re-captcha>
               </div>
               <div class="d-flex">
-                <button [disabled]="disableSignUp" class="container btn btn-secondary w-50 submit " data-target="#userConsent" type="submit"
+                <button [disabled]="disableSignUp" class="container btn btn-secondary w-50 submit "
+                  data-target="#userConsent" type="submit"
                   (click)="validateRegisterForm(registerForm.value)">{{submitButtonText}}</button>
               </div>
             </form>

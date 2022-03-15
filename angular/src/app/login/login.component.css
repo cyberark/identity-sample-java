@@ -119,6 +119,11 @@
   color: #0381e4;
 }
 
+.forgot-password-color {
+  margin-top: 5px;
+  color: #4DB7F2;
+}
+
 .login-partition {
   text-align: center;
   width: 80%;

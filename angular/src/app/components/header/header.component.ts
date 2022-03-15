@@ -20,6 +20,7 @@ import { LoginService } from '../../login/login.service';
 import { UserService } from 'src/app/user/user.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthorizationFlow, getStorage, revokeToken, setStorage } from '../../utils';
+import { AuthorizationService } from 'src/app/metadata/authorizationservice';
 
 const imgSrc = "../../../assets/images/acme_logo.png";
 
@@ -48,7 +49,8 @@ export class HeaderComponent implements OnInit {
     private loginService: LoginService,
     private userService: UserService,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private authorizationService: AuthorizationService
   ) { }
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class HeaderComponent implements OnInit {
         } else {
           console.log("Incorrect data response");
         }
-      }, 
+      },
       error: error => {
         this.loading = false;
         console.error(error);
@@ -122,12 +124,11 @@ export class HeaderComponent implements OnInit {
 
   onTabClick(href: string) {
     if (href === 'login' && document.cookie.includes('flow3')) href = 'basiclogin';
-    else if (href === 'settings' && getStorage("isSettingsLocked") === "true")
-    {
-      this.router.navigateByUrl('/login', { state: {gotoSettingsAfterLogin: true}})
+    else if (href === 'settings' && getStorage("isSettingsLocked") === "true") {
+      this.router.navigateByUrl('/login', { state: { gotoSettingsAfterLogin: true } })
       return false;
     }
-    
+
     this.router.navigate([href]);
     return false;
   }
@@ -140,7 +141,7 @@ export class HeaderComponent implements OnInit {
     if (getStorage('oidcTokens') && getStorage('authFlow') === AuthorizationFlow.OIDC) {
       revokeToken(JSON.parse(getStorage('oidcTokens')), this);
     }
-    
+
     this.loginService.logout().subscribe({
       next: data => {
         if (data.success) {
