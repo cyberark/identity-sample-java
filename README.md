@@ -19,7 +19,7 @@ Sample App URL - https://identitydemo.acmeinc.com
 * Follow [Deployment Guide](https://identity-developer.cyberark.com/docs/sample-app-deployment-guide) to setup the sample app environment.
 
 ## Download Java SDK Library
-* Download the CyberArk Identity Java SDK form [here](https://github.com/cyberark/identity-demo-angular/raw/main/spring-boot/libs/Authorization-1.0-SNAPSHOT.jar)
+* Download the CyberArk Identity Java SDK form [here](https://github.com/cyberark/identity-demo-angular/raw/main/spring-boot/libs/Authorization-1.0-SNAPSHOT.jar).
 
 ## Code Maintainers
 CyberArk Identity Team
