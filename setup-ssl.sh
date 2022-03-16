@@ -39,13 +39,15 @@ fi
 
 # Copy SSL certificates
 if [ -d "$ANGULAR_SSL_DIR" ]; then
-    echo "Already exists!!"
+    echo "Angular SSL Directory already exists!!"
 else
   mkdir -p "$ANGULAR_SSL_DIR"
   echo "Created Angular SSL Directory!!"
-  cp "$SERVER_CRT_FILE" "$ANGULAR_SSL_DIR"
-  cp "$SERVER_CRT_KEY" "$ANGULAR_SSL_DIR"
 fi
+
+echo "Copying certificates to Angular SSL Directory"
+cp "$SERVER_CRT_FILE" "$ANGULAR_SSL_DIR"
+cp "$SERVER_CRT_KEY" "$ANGULAR_SSL_DIR"
 
 # Update hosts
 ip_address="127.0.0.1"
