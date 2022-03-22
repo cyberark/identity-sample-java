@@ -81,9 +81,8 @@
                       <span *ngIf="hasError('confirmPassword', 'required')">Required</span>
                       <span *ngIf="!matchPasswordsCheck">Confirm Password must match with the Password</span>
                     </div>
-                    <div *ngIf="showForgotPassword('password')" class="forgot-password-anchor">
-                      <a href="/login" class = "forgot-password-color" (click)="forgotPassword() ">Forgot Password?</a>
-                    </div>
+                    <div type="button" *ngIf="showForgotPassword('password')" class="btn btn-link forgot-password-anchor"
+                      (click)="forgotPassword()">Forgot Password?</div>
                     <div class="d-flex mt-4">
                       <button *ngIf="isNextBtnVisible()" class="container btn btn-secondary w-25" type="submit"
                         (click)="loginUser()">{{loginButtonText}}</button>

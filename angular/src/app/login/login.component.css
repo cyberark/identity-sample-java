@@ -115,13 +115,7 @@
 }
 
 .forgot-password-anchor {
-  margin-top: 5px;
-  color: #0381e4;
-}
-
-.forgot-password-color {
-  margin-top: 5px;
-  color: #4DB7F2;
+    padding: 0px;
 }
 
 .login-partition {

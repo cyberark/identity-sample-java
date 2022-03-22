@@ -205,7 +205,7 @@ label.required::after {
 /* scrollbar */
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 10px;
   height: 5px;
 }
 
@@ -221,5 +221,5 @@ label.required::after {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
