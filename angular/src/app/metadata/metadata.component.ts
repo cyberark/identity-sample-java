@@ -77,7 +77,8 @@ export class Metadata implements OnInit {
           this.loading = false;
           this.tokenSet = data.Result;
           this.hasRefreshToken = Object.keys(this.tokenSet).includes('refresh_token');
-          this.getClaims(this.tokenSet['access_token']);
+          const token = this.isOauthFlow ? this.tokenSet['access_token'] : this.tokenSet['id_token'];
+          this.getClaims(token);
           this.getUserInfo(this.tokenSet['access_token']);
           this.oidcTokens = JSON.parse(getStorage('oidcTokens'));
           if (this.oidcTokens) {

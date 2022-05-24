@@ -99,7 +99,7 @@ export class LoginWidgetComponent implements OnInit {
   }
 
   showError(context, error) {
-    context.errorMessage = error.error.ErrorMessage || error.error.error_description;
+    context.errorMessage = error.error.ErrorMessage || error.error.error_description || error.error.error.message;
     (<any>$('#errorPopup')).modal();
   }
 
