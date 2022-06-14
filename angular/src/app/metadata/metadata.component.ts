@@ -41,6 +41,7 @@ export class Metadata implements OnInit {
   heading: string = this.isOauthFlow ? 'OAuth Metadata' : 'OIDC Metadata';
   errorMessage: string = APIErrStr;
   hasRefreshToken: boolean = false;
+  hasIdToken: boolean = false;
   refreshTokenPostCall: string = "API Request";
   refreshTokenPostCallBody: any = "";
   introspectPostCallBody: any = "";
@@ -77,8 +78,13 @@ export class Metadata implements OnInit {
           this.loading = false;
           this.tokenSet = data.Result;
           this.hasRefreshToken = Object.keys(this.tokenSet).includes('refresh_token');
-          const token = this.isOauthFlow ? this.tokenSet['access_token'] : this.tokenSet['id_token'];
-          this.getClaims(token);
+          this.hasIdToken = Object.keys(this.tokenSet).includes('id_token');
+          const token = this.isOauthFlow ? this.tokenSet['access_token'] : (this.hasIdToken ? this.tokenSet['id_token'] : null);
+
+          if (token !== null) {
+            this.getClaims(token);
+          }
+          
           this.getUserInfo(this.tokenSet['access_token']);
           this.oidcTokens = JSON.parse(getStorage('oidcTokens'));
           if (this.oidcTokens) {
